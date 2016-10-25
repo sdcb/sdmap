@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FB5AAE70-8943-448C-83DC-138D926AAE94}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{93A94DD0-1486-4F55-A40B-CA61197D4EFD}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "sdmap", "src\sdmap\sdmap.xproj", "{D68942D4-80C5-459E-84BC-12A517495544}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{37A082F1-8179-4EEA-93D8-1C282B5AC65A}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "sdmap.test", "test\sdmap.test\sdmap.test.xproj", "{11DB9969-2584-4EAF-9E07-C98CADF605D9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D68942D4-80C5-459E-84BC-12A517495544}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D68942D4-80C5-459E-84BC-12A517495544}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D68942D4-80C5-459E-84BC-12A517495544}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D68942D4-80C5-459E-84BC-12A517495544}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11DB9969-2584-4EAF-9E07-C98CADF605D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11DB9969-2584-4EAF-9E07-C98CADF605D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11DB9969-2584-4EAF-9E07-C98CADF605D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11DB9969-2584-4EAF-9E07-C98CADF605D9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D68942D4-80C5-459E-84BC-12A517495544} = {FB5AAE70-8943-448C-83DC-138D926AAE94}
+		{11DB9969-2584-4EAF-9E07-C98CADF605D9} = {37A082F1-8179-4EEA-93D8-1C282B5AC65A}
+	EndGlobalSection
+EndGlobal

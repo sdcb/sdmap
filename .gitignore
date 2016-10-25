@@ -1,0 +1,11 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+/sdmap/.vs
+*.user
+project.lock.json
+/sdmap/src/sdmap/bin/Debug/netstandard1.6
+/sdmap/src/sdmap/obj/Debug/netstandard1.6
+/sdmap/test/sdmap.test/obj/Debug/netcoreapp1.0
+/sdmap/test/sdmap.test/bin/Debug/netcoreapp1.0
