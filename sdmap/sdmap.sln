@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FB5AAE70-894
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{93A94DD0-1486-4F55-A40B-CA61197D4EFD}"
 	ProjectSection(SolutionItems) = preProject
+		example.sdmap = example.sdmap
 		global.json = global.json
 	EndProjectSection
 EndProject

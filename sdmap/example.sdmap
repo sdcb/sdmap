@@ -1,0 +1,22 @@
+namespace Client
+{
+	sql FindByQuery
+	{
+		SELECT * FROM client_Profile
+		WHERE 1 = 1 
+
+		$ifNotEmpty(City    => AND `City`    = @City)
+		$ifNotEmpty(Zipcode => AND `Zipcode` = @Zipcode)
+
+		$include(CommonOrderBy)
+	}
+
+	sql CommonOrderBy
+	{
+		@ifNotEmpty(OrderBy => {
+			ORDER BY %OrderBy $iif(Asc, ASC, DESC)
+		}) @else {
+			ORDER BY Id DESC
+		}
+	}
+}
