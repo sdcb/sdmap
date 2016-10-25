@@ -1,0 +1,4 @@
+﻿grammar Sdmap;
+
+root:
+	'test';
