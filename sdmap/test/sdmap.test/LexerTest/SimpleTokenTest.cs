@@ -69,5 +69,17 @@ namespace sdmap.test.LexerTest
             Assert.Equal(1, tokens.Count);
             Assert.Equal(SYNTAX, tokens[0].Type);
         }
+
+        [Fact]
+        public void NamedSql()
+        {
+            var tokens = GetAllTokens("sql OrderBy{SELECT * FROM client_Profile;}");
+            Assert.Equal(new[] 
+            {
+                BeginNamedSql,
+                SQLText, 
+                EndSql
+            }, tokens.Select(x => x.Type));
+        }
     }
 }
