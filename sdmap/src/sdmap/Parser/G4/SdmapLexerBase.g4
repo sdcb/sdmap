@@ -19,6 +19,9 @@ fragment INT:
 fragment EXP: 
 	[Ee] [+\-]? INT;
 
+fragment WHITE:
+	[ \t\n\r];
+
 DATE:
 	INT '-' INT '-' INT |
 	INT '/' INT '/' INT;
@@ -26,8 +29,11 @@ DATE:
 SYNTAX: 
 	[a-zA-Z_] [0-9a-zA-Z_]*;
 
+NSSyntax:
+	SYNTAX ('.' SYNTAX)*;
+
 WS: 
-	[ \t\n\r] +     -> skip;
+	WHITE +     -> skip;
 
 BlockComment: 
 	'/*' .*? '*/' -> skip;
@@ -36,12 +42,12 @@ LineComment:
 	'//' ~[\r\n]* -> skip;
 
 BeginNamedSql:
-	'sql' WS SYNTAX WS '{' -> pushMode(SQL);
+	'sql' WHITE* SYNTAX WHITE* '{' -> pushMode(SQL);
 
 BeginUnnamedSql:
-	'sql' WS '{' -> pushMode(SQL);
+	'sql' WHITE* '{' -> pushMode(SQL);
 
-ExitDirectiveMode:
+EndMacro:
 	'>' -> popMode;
 
 mode SQL;
@@ -51,5 +57,5 @@ SQLText:
 EndSql:
 	'}' -> popMode;
 
-EnterDirectiveMode:
+BeginMacro:
 	'#' SYNTAX '<' -> pushMode(DEFAULT_MODE);

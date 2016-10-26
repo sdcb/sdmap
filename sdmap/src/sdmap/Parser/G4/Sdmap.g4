@@ -6,7 +6,7 @@ root:
 	namespace | namedSql*;
 
 namespace:
-	'namespace' key 
+	'namespace' NSSyntax
 	'{'
 		namedSql* 
 	'}';
@@ -28,12 +28,12 @@ unnamedSql:
 	EndSql;
 
 directive:
-	EnterDirectiveMode
+	BeginMacro
 		directiveParameters*
-	ExitDirectiveMode;
+	EndMacro;
 
 directiveParameters:
-	key | 
+	NSSyntax | 
 	value |
 	unnamedSql;
 
@@ -41,7 +41,4 @@ value:
 	STRING |
 	NUMBER |
 	DATE;
-
-key:
-	SYNTAX ('.' SYNTAX)*;
 
