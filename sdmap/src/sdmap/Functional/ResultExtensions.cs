@@ -92,5 +92,15 @@ namespace sdmap.Functional
 
             return result;
         }
+
+        public static Result<T> OnSuccess<T>(this Result result, Func<T> action)
+        {
+            if (result.IsSuccess)
+            {
+                return Result.Ok(action());
+            }
+
+            return Result.Fail<T>(result.Error);
+        }
     }
 }
