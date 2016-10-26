@@ -1,6 +1,6 @@
 ﻿grammar Sdmap;
 
-options { tokenVocab=SdmapToken; }
+options { tokenVocab=SdmapLexerBase; }
 
 root:
 	namespace | namedSql*;
@@ -15,7 +15,7 @@ coreSql:
 	(directive | plainText)+;
 
 plainText:
-	SqlText;
+	SQLText;
 
 namedSql:
 	BeginNamedSql

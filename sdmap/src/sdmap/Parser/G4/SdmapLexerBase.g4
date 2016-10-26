@@ -1,4 +1,4 @@
-﻿lexer grammar SdmapToken;
+﻿lexer grammar SdmapLexerBase;
 
 STRING:
 	'"' (('\\' (["\\/bfnrt] | UNICODE)) | ~ ["\\])* '"' | 
@@ -20,7 +20,8 @@ fragment EXP:
 	[Ee] [+\-]? INT;
 
 DATE:
-	INT '-' INT '-' INT;
+	INT '-' INT '-' INT |
+	INT '/' INT '/' INT;
 
 SYNTAX: 
 	[a-zA-Z_] [0-9a-zA-Z_]*;
@@ -35,20 +36,20 @@ LineComment:
 	'//' ~[\r\n]* -> skip;
 
 BeginNamedSql:
-	'sql' SYNTAX '{' -> pushMode(SQL);
+	'sql' WS SYNTAX WS '{' -> pushMode(SQL);
 
 BeginUnnamedSql:
-	'sql' '{' -> pushMode(SQL);
+	'sql' WS '{' -> pushMode(SQL);
 
 ExitDirectiveMode:
 	'>' -> popMode;
 
 mode SQL;
-SqlText: 
+SQLText: 
 	~('#' | '}')+;
 
 EndSql:
-	.*? '}' -> popMode;
+	'}' -> popMode;
 
 EnterDirectiveMode:
 	'#' SYNTAX '<' -> pushMode(DEFAULT_MODE);
