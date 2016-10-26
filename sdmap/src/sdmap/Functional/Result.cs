@@ -64,7 +64,7 @@ namespace sdmap.Functional
             get
             {
                 if (!IsSuccess)
-                    throw new InvalidOperationException();
+                    throw new ResultFailedException(Error);
 
                 return _value;
             }
