@@ -12,7 +12,7 @@ namespace:
 	'}';
 
 coreSql:
-	(directive | plainText)+;
+	(macro | plainText)+;
 
 plainText:
 	SQLText;
@@ -27,12 +27,12 @@ unnamedSql:
 		coreSql
 	EndSql;
 
-directive:
+macro:
 	BeginMacro
-		directiveParameters*
+		macroParameter? (',' macroParameter)*
 	EndMacro;
 
-directiveParameters:
+macroParameter:
 	NSSyntax | 
 	value |
 	unnamedSql;
