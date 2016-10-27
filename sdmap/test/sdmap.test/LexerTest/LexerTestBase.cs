@@ -9,10 +9,10 @@ namespace sdmap.test.LexerTest
 {
     public class LexerTestBase
     {
-        protected SdmapLexerBase BuildLexer(string sourceCode)
+        protected SdmapLexer BuildLexer(string sourceCode)
         {
             var inputStream = new AntlrInputStream(sourceCode);
-            var lexer = new SdmapLexerBase(inputStream);
+            var lexer = new SdmapLexer(inputStream);
             return lexer;
         }
 

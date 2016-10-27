@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-using static sdmap.Parser.G4.SdmapLexerBase;
+using static sdmap.Parser.G4.SdmapLexer;
 
 namespace sdmap.test.LexerTest
 {
@@ -17,10 +17,10 @@ namespace sdmap.test.LexerTest
 
             Assert.Equal(new[]
             {
-                BeginUnnamedSql,
-                    BeginMacro,
-                    EndMacro,
-                EndSql
+                OpenUnnamedSql,
+                    OpenMacro,
+                    CloseMacro,
+                CloseSql
             }, tokens.Select(x => x.Type));
         }
 
@@ -31,17 +31,17 @@ namespace sdmap.test.LexerTest
                 "sql{#test< Zipcode, 65001, 'Hello World', 2015/1/1, sql { SELECT @@Version;} >}");
             Assert.Equal(new[]
             {
-                BeginUnnamedSql, 
-                    BeginMacro, 
-                        SYNTAX, 
-                        NUMBER, 
-                        STRING, 
-                        DATE, 
-                        BeginUnnamedSql, 
+                OpenUnnamedSql, 
+                    OpenMacro, 
+                        SYNTAX, Comma, 
+                        NUMBER, Comma,
+                        STRING, Comma,
+                        DATE, Comma,
+                        OpenUnnamedSql, 
                             SQLText, 
-                        EndSql, 
-                    EndMacro, 
-                EndSql
+                        CloseSql, 
+                    CloseMacro, 
+                CloseSql
             }, tokens.Select(x => x.Type));
         }
 
@@ -52,12 +52,12 @@ namespace sdmap.test.LexerTest
 
             Assert.Equal(new[]
             {
-                BeginUnnamedSql,
+                OpenUnnamedSql,
                     SQLText, 
-                    BeginMacro, 
+                    OpenMacro, 
                         SYNTAX, 
-                    EndMacro, 
-                EndSql
+                    CloseMacro, 
+                CloseSql
             }, tokens.Select(x => x.Type));
 
             Assert.Equal("SELECT * FROM `Test`; ", tokens.Single(x => x.Type == SQLText).Text);
@@ -71,11 +71,11 @@ namespace sdmap.test.LexerTest
 
             Assert.Equal(new[]
             {
-                BeginUnnamedSql,
-                    BeginMacro,
+                OpenUnnamedSql,
+                    OpenMacro,
                         NSSyntax,
-                    EndMacro,
-                EndSql
+                    CloseMacro,
+                CloseSql
             }, tokens.Select(x => x.Type));
             
             Assert.Equal("Common.OrderBy", tokens.Single(x => x.Type == NSSyntax).Text);

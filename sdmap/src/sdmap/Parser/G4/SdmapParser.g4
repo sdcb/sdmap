@@ -1,15 +1,14 @@
-﻿grammar Sdmap;
+﻿parser grammar SdmapParser;
 
-options { tokenVocab=SdmapLexerBase; }
+options { tokenVocab=SdmapLexer; }
 
 root:
 	namespace | namedSql*;
 
 namespace:
-	'namespace' NSSyntax
-	'{'
+	OpenNamespace
 		namedSql* 
-	'}';
+	Close;
 
 coreSql:
 	(macro | plainText)+;
@@ -18,19 +17,19 @@ plainText:
 	SQLText;
 
 namedSql:
-	BeginNamedSql
+	OpenNamedSql
 		coreSql
-	EndSql;
+	CloseSql;
 
 unnamedSql:
-	BeginUnnamedSql
+	OpenUnnamedSql
 		coreSql
-	EndSql;
+	CloseSql;
 
 macro:
-	BeginMacro
-		macroParameter? (',' macroParameter)*
-	EndMacro;
+	OpenMacro
+		macroParameter? (Comma macroParameter)*
+	CloseMacro;
 
 macroParameter:
 	NSSyntax | 

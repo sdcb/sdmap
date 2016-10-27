@@ -6,7 +6,7 @@ using Xunit;
 
 using static sdmap.Parser.Utils.NumberUtil;
 
-namespace sdmap.test.LexerUtilTest
+namespace sdmap.test.UtilTest
 {
     public class NumberTest
     {

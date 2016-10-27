@@ -1,4 +1,4 @@
-﻿lexer grammar SdmapLexerBase;
+﻿lexer grammar SdmapLexer;
 
 STRING:
 	'"' (('\\' (["\\/bfnrt] | UNICODE)) | ~ ["\\])* '"' | 
@@ -41,21 +41,30 @@ BlockComment:
 LineComment: 
 	'//' ~[\r\n]* -> skip;
 
-BeginNamedSql:
-	'sql' WHITE* SYNTAX WHITE* '{' -> pushMode(SQL);
+OpenNamedSql:
+	'sql' WHITE+ SYNTAX WHITE* '{' -> pushMode(SQL);
 
-BeginUnnamedSql:
+OpenUnnamedSql:
 	'sql' WHITE* '{' -> pushMode(SQL);
 
-EndMacro:
+OpenNamespace:
+	'namespace' WHITE+ NSSyntax WHITE* '{';
+
+Close:
+	'}';
+
+Comma:
+	',';
+
+CloseMacro:
 	'>' -> popMode;
 
 mode SQL;
 SQLText: 
 	~('#' | '}')+;
 
-EndSql:
+CloseSql:
 	'}' -> popMode;
 
-BeginMacro:
+OpenMacro:
 	'#' SYNTAX '<' -> pushMode(DEFAULT_MODE);

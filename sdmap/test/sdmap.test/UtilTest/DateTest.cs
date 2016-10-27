@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace sdmap.test.LexerUtilTest
+namespace sdmap.test.UtilTest
 {
     public class DateTest
     {

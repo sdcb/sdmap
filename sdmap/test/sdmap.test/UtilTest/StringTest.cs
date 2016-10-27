@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Xunit;
 using static sdmap.Parser.Utils.StringUtil;
 
-namespace sdmap.test.LexerUtilTest
+namespace sdmap.test.UtilTest
 {
     public class StringTest
     {

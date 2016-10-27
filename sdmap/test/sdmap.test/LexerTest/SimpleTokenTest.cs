@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-using static sdmap.Parser.G4.SdmapLexerBase;
+using static sdmap.Parser.G4.SdmapLexer;
 
 namespace sdmap.test.LexerTest
 {
@@ -57,9 +57,9 @@ namespace sdmap.test.LexerTest
         {
             var tokens = GetAllTokens("sql { SELECT * FROM client_Profile; }");
             Assert.Equal(3, tokens.Count);
-            Assert.Equal(BeginUnnamedSql, tokens[0].Type);
+            Assert.Equal(OpenUnnamedSql, tokens[0].Type);
             Assert.Equal(SQLText, tokens[1].Type);
-            Assert.Equal(EndSql, tokens[2].Type);
+            Assert.Equal(CloseSql, tokens[2].Type);
         }
 
         [Fact]
@@ -76,9 +76,9 @@ namespace sdmap.test.LexerTest
             var tokens = GetAllTokens("sql OrderBy{SELECT * FROM client_Profile;}");
             Assert.Equal(new[] 
             {
-                BeginNamedSql,
+                OpenNamedSql,
                 SQLText, 
-                EndSql
+                CloseSql
             }, tokens.Select(x => x.Type));
         }
     }
