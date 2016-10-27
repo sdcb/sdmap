@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace sdmap.Parser.Context
 {
-    public class SdmapContext
+    using ContextType = SortedDictionary<string, SqlEmiter>;
+
+    public class SdmapManager
     {
-        private SortedDictionary<string, SqlEmiter> _syntaxEmiter;
+        private readonly ContextType _context = new ContextType();
 
         public void AddSourceCode(string code)
         {
@@ -18,9 +20,9 @@ namespace sdmap.Parser.Context
         public Result<string> TryEmit(string key, object v)
         {
             SqlEmiter emiter;
-            if (_syntaxEmiter.TryGetValue(key, out emiter))
+            if (_context.TryGetValue(key, out emiter))
             {
-                return emiter.TryEmit(v, this);
+                return emiter.TryEmit(v, _context);
             }
             else
             {
@@ -35,9 +37,9 @@ namespace sdmap.Parser.Context
 
         public Result EnsureCompiled()
         {
-            foreach (var kv in _syntaxEmiter)
+            foreach (var kv in _context)
             {
-                var ok = kv.Value.EnsureCompiled(this);
+                var ok = kv.Value.EnsureCompiled(_context);
                 if (ok.IsFailure) return ok;
             }
 

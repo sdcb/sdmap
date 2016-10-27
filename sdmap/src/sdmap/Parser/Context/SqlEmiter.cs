@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace sdmap.Parser.Context
 {
+    using ContextType = SortedDictionary<string, SqlEmiter>;
+
     public class SqlEmiter
     {
         private IParseTree _parseTree;
@@ -17,12 +19,12 @@ namespace sdmap.Parser.Context
             _parseTree = parseTree;
         }
 
-        private Result<EmitFunction> Compile(SdmapContext context)
+        private Result<EmitFunction> Compile(ContextType context)
         {
             throw new NotImplementedException();
         }
 
-        public Result EnsureCompiled(SdmapContext context)
+        public Result EnsureCompiled(ContextType context)
         {
             if (_emiter != null)
                 return Result.Ok();
@@ -31,13 +33,13 @@ namespace sdmap.Parser.Context
                 .OnSuccess(v => _emiter = v);
         }
 
-        public Result<string> TryEmit(object v, SdmapContext context)
+        public Result<string> TryEmit(object v, ContextType context)
         {
             return EnsureCompiled(context)
                 .OnSuccess(() => _emiter(v));
         }
 
-        public string Emit(object v, SdmapContext context)
+        public string Emit(object v, ContextType context)
         {
             return TryEmit(v, context).Value;
         }
