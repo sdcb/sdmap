@@ -27,7 +27,18 @@ namespace sdmap.test.VisitorTest
             Assert.Equal("ns.sql", ctx.Context.First().Key);
         }
 
-        public RootContext GetParseTree(string sourceCode)
+        public void CanDetect2Namespaces()
+        {
+            var pt = GetParseTree("namespace ns{sql sql{} sql sql2{}}");
+            var ctx = SqlItemVisitorContext.Create();
+            var result = ctx.Visitor.Visit(pt);
+
+            Assert.Equal(2, ctx.Context.Count);
+            Assert.Equal("ns.sql", ctx.Context.First().Key);
+            Assert.Equal("ns.sql2", ctx.Context.Last().Key);
+        }
+
+        private RootContext GetParseTree(string sourceCode)
         {
             var inputStream = new AntlrInputStream(sourceCode);
             var baseLexer = new SdmapLexer(inputStream);
