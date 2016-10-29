@@ -30,7 +30,11 @@ namespace sdmap.Parser.Context
                 return Result.Ok();
 
             return Compile(context)
-                .OnSuccess(v => _emiter = v);
+                .OnSuccess(v =>
+                {
+                    _emiter = v;
+                    _parseTree = null;
+                });
         }
 
         public Result<string> TryEmit(object v, ContextType context)
