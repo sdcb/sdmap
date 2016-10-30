@@ -1,18 +1,16 @@
-﻿using sdmap.Parser.Context;
+﻿using Antlr4.Runtime;
+using sdmap.Parser.Context;
+using sdmap.Parser.G4;
+using sdmap.Parser.Visitor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Xunit;
+using static sdmap.Parser.G4.SdmapParser;
 
 namespace sdmap.test.VisitorTest
 {
-    using Antlr4.Runtime;
-    using Antlr4.Runtime.Tree;
-    using Parser.G4;
-    using Parser.Visitor;
-    using Xunit;
-    using static Parser.G4.SdmapParser;
-
     public class SqlItemVisitorTest
     {
         [Fact]
@@ -40,9 +38,9 @@ namespace sdmap.test.VisitorTest
         private RootContext GetParseTree(string sourceCode)
         {
             var inputStream = new AntlrInputStream(sourceCode);
-            var baseLexer = new SdmapLexer(inputStream);
-            var baseTokenStream = new CommonTokenStream(baseLexer);
-            var parser = new SdmapParser(baseTokenStream);
+            var lexer = new SdmapLexer(inputStream);
+            var tokenStream = new CommonTokenStream(lexer);
+            var parser = new SdmapParser(tokenStream);
             return parser.root();
         }
     }

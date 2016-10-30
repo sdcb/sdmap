@@ -9,19 +9,18 @@ namespace sdmap.Parser.Context
 {
     using Visitor;
     using static G4.SdmapParser;
-    using ContextType = SortedDictionary<string, SqlEmiter>;
 
     public class SqlEmiter
     {
-        private CoreSqlContext _parseTree;
+        private NamedSqlContext _parseTree;
         private EmitFunction _emiter;
 
-        private SqlEmiter(CoreSqlContext parseTree)
+        private SqlEmiter(NamedSqlContext parseTree)
         {
             _parseTree = parseTree;
         }
 
-        public Result EnsureCompiled(ContextType context)
+        public Result EnsureCompiled(SdmapContext context)
         {
             if (_emiter != null)
                 return Result.Ok();
@@ -34,23 +33,23 @@ namespace sdmap.Parser.Context
                 });
         }
 
-        public Result<string> TryEmit(object v, ContextType context)
+        public Result<string> TryEmit(object v, SdmapContext context)
         {
             return EnsureCompiled(context)
                 .OnSuccess(() => _emiter(v));
         }
 
-        public string Emit(object v, ContextType context)
+        public string Emit(object v, SdmapContext context)
         {
             return TryEmit(v, context).Value;
         }
 
-        public static SqlEmiter Create(CoreSqlContext parseTree)
+        public static SqlEmiter Create(NamedSqlContext parseTree)
         {
             return new SqlEmiter(parseTree);
         }
 
-        public static Result<EmitFunction> Compile(CoreSqlContext parseTree, ContextType context)
+        public static Result<EmitFunction> Compile(NamedSqlContext parseTree, SdmapContext context)
         {
             return CoreSqlVisitor.Compile(parseTree, context);
         }
