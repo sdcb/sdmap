@@ -7,21 +7,18 @@ using System.Threading.Tasks;
 
 namespace sdmap.Parser.Context
 {
+    using Visitor;
+    using static G4.SdmapParser;
     using ContextType = SortedDictionary<string, SqlEmiter>;
 
     public class SqlEmiter
     {
-        private IParseTree _parseTree;
+        private CoreSqlContext _parseTree;
         private EmitFunction _emiter;
 
-        private SqlEmiter(IParseTree parseTree)
+        private SqlEmiter(CoreSqlContext parseTree)
         {
             _parseTree = parseTree;
-        }
-
-        private Result<EmitFunction> Compile(ContextType context)
-        {
-            throw new NotImplementedException();
         }
 
         public Result EnsureCompiled(ContextType context)
@@ -29,7 +26,7 @@ namespace sdmap.Parser.Context
             if (_emiter != null)
                 return Result.Ok();
 
-            return Compile(context)
+            return Compile(_parseTree, context)
                 .OnSuccess(v =>
                 {
                     _emiter = v;
@@ -48,9 +45,14 @@ namespace sdmap.Parser.Context
             return TryEmit(v, context).Value;
         }
 
-        public static SqlEmiter Create(IParseTree parseTree)
+        public static SqlEmiter Create(CoreSqlContext parseTree)
         {
             return new SqlEmiter(parseTree);
+        }
+
+        public static Result<EmitFunction> Compile(CoreSqlContext parseTree, ContextType context)
+        {
+            return CoreSqlVisitor.Compile(parseTree, context);
         }
     }
 

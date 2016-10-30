@@ -12,7 +12,6 @@ namespace sdmap.test.VisitorTest
     using Parser.Visitor;
     using Xunit;
     using static Parser.G4.SdmapParser;
-    using ContextType = SortedDictionary<string, SqlEmiter>;
 
     public class SqlItemVisitorTest
     {
@@ -20,22 +19,22 @@ namespace sdmap.test.VisitorTest
         public void CanDetectNamespace()
         {
             var pt = GetParseTree("namespace ns{sql sql{}}");
-            var ctx = SqlItemVisitorContext.Create();
-            var result = ctx.Visitor.Visit(pt);
+            var visitor = SqlItemVisitor.CreateEmpty();
+            var result = visitor.Visit(pt);
 
-            Assert.Equal(1, ctx.Context.Count);
-            Assert.Equal("ns.sql", ctx.Context.First().Key);
+            Assert.Equal(1, visitor.Context.Emiters.Count);
+            Assert.Equal("ns.sql", visitor.Context.Emiters.First().Key);
         }
 
         public void CanDetect2Namespaces()
         {
             var pt = GetParseTree("namespace ns{sql sql{} sql sql2{}}");
-            var ctx = SqlItemVisitorContext.Create();
-            var result = ctx.Visitor.Visit(pt);
+            var visitor = SqlItemVisitor.CreateEmpty();
+            var result = visitor.Visit(pt);
 
-            Assert.Equal(2, ctx.Context.Count);
-            Assert.Equal("ns.sql", ctx.Context.First().Key);
-            Assert.Equal("ns.sql2", ctx.Context.Last().Key);
+            Assert.Equal(2, visitor.Context.Emiters.Count);
+            Assert.Equal("ns.sql", visitor.Context.Emiters.First().Key);
+            Assert.Equal("ns.sql2", visitor.Context.Emiters.Last().Key);
         }
 
         private RootContext GetParseTree(string sourceCode)
@@ -45,22 +44,6 @@ namespace sdmap.test.VisitorTest
             var baseTokenStream = new CommonTokenStream(baseLexer);
             var parser = new SdmapParser(baseTokenStream);
             return parser.root();
-        }
-    }
-
-    public class SqlItemVisitorContext
-    {
-        public Stack<string> NsStack { get; set; } = new Stack<string>();
-
-        public ContextType Context { get; set; } = new ContextType();
-
-        public SqlItemVisitor Visitor { get; set; }
-
-        public static SqlItemVisitorContext Create()
-        {
-            var ctx = new SqlItemVisitorContext();
-            ctx.Visitor = SqlItemVisitor.Create(ctx.Context, ctx.NsStack);
-            return ctx;
         }
     }
 }

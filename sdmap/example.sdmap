@@ -18,8 +18,8 @@
 	sql CommonOrderBy
 	{
 		#ifNotEmpty<OrderBy, sql{
-			ORDER BY %OrderBy <#iif<Asc, sql{ ASC }, sql{ DESC }>)
-		}> #else< sql{
+			ORDER BY %OrderBy #iif<Asc, sql{ ASC }, sql{ DESC }>)
+		}, sql{
 			ORDER BY Id DESC
 		}>
 	}
