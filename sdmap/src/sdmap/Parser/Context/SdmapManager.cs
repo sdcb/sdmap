@@ -11,7 +11,7 @@ namespace sdmap.Parser.Context
 {
     public class SdmapManager
     {
-        private readonly SdmapContext _context;
+        private readonly SdmapContext _context = SdmapContext.CreateEmpty();
 
         public Result AddSourceCode(string sourceCode)
         {

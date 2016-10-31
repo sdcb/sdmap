@@ -16,7 +16,7 @@ namespace sdmap.Parser.Visitor
     public class CoreSqlVisitor : SdmapParserBaseVisitor<Result>
     {
         private readonly SdmapContext _context;
-        private readonly EmitFunction _function;
+        private EmitFunction _function;
         private readonly ILGenerator _il;
 
         private CoreSqlVisitor(SdmapContext context)
@@ -31,7 +31,9 @@ namespace sdmap.Parser.Visitor
             var fullName = _context.GetFullName(id);
 
             var method = new DynamicMethod(fullName, typeof(string), new[] { typeof(object) });
-            return base.VisitNamedSql(context);
+            _il = method.GetILGenerator();
+            _function = (EmitFunction)method.CreateDelegate(typeof(EmitFunction));
+            return Result.Ok();
         }
 
         public static CoreSqlVisitor Create(SdmapContext context)
