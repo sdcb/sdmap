@@ -79,5 +79,21 @@ namespace sdmap.test.MacroTest
 
             Assert.True(ok.IsSuccess);
         }
+
+        [Fact]
+        public void IsSyntax()
+        {
+            var mockedMacro = new SdmapMacro
+            {
+                Name = "Test",
+                Arguments = new[]
+                {
+                    SdmapTypes.Syntax
+                }
+            };
+            var ok = RuntimeCheck(new object[] { "ZipCode" }, mockedMacro);
+
+            Assert.True(ok.IsSuccess);
+        }
     }
 }
