@@ -11,6 +11,7 @@ using Antlr4.Runtime.Misc;
 using sdmap.Parser.Utils;
 using System.Text;
 using sdmap.Runtime;
+using sdmap.Macros;
 
 namespace sdmap.Parser.Visitor
 {
@@ -52,22 +53,71 @@ namespace sdmap.Parser.Visitor
         public override Result VisitMacro([NotNull] MacroContext context)
         {
             var openMacro = context.GetToken(OpenMacro, 0);
-            var parameters = context.GetChild<MacroParameterContext>(0);
 
             var macroName = LexerUtil.GetOpenMacroId(openMacro.GetText());
+            var arguments = context.GetRuleContexts<MacroParameterContext>()
+                .Select<MacroParameterContext, object>(x =>
+                {
+                    if (x.SYNTAX() != null)
+                    {
+                        return x.SYNTAX().GetText();
+                    }
+                    else if (x.NSSyntax() != null)
+                    {
+                        return x.NSSyntax().GetText();
+                    }
+                    else if (x.STRING() != null)
+                    {
+                        return StringUtil.Parse(x.STRING().GetText());
+                    }
+                    else if (x.NUMBER() != null)
+                    {
+                        return NumberUtil.Parse(x.NUMBER().GetText());
+                    }
+                    else if (x.DATE() != null)
+                    {
+                        return DateUtil.Parse(x.DATE().GetText());
+                    }
+                    else if (x.unnamedSql() != null)
+                    {
+                        throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException();
+                    }
+                }).ToArray();
+
+            var macroManagerType = typeof(MacroManager).GetTypeInfo();
+            _il.Emit(OpCodes.Call, macroManagerType.GetMethod(
+                nameof(MacroManager.GetDefaultInstance)));
+            _il.Emit(OpCodes.Ldstr, macroName);
+            
+            _il.Emit(OpCodes.Call, macroManagerType.GetMethod(
+                nameof(MacroManager.Execute)));
 
             throw new NotImplementedException();
+            //return _context.MacroContext.Execute(macroName, _context, null, arguments)
+            //    .OnSuccess(str =>
+            //    {
+            //        PushResult(str);
+            //    });
         }
 
         public override Result VisitPlainText([NotNull] PlainTextContext context)
         {
             var sqlText = context.GetToken(SQLText, 0);
+            PushResult(sqlText.GetText());
+            return Result.Ok();
+        }
+
+        private void PushResult(string text)
+        {
             _il.Emit(OpCodes.Ldloc_0);
-            _il.Emit(OpCodes.Ldstr, sqlText.GetText());
-            _il.Emit(OpCodes.Call, 
+            _il.Emit(OpCodes.Ldstr, text);
+            _il.Emit(OpCodes.Call,
                 typeof(string).GetTypeInfo().GetMethod(
                     nameof(string.Concat), new[] { typeof(string), typeof(string) }));
-            return Result.Ok();
         }
 
         public static CoreSqlVisitor Create(SdmapContext context)

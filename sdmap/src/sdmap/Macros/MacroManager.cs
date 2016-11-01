@@ -11,11 +11,11 @@ using static sdmap.Macros.MacroUtil;
 
 namespace sdmap.Macros
 {
-    public class SdmapMacroManager
+    public class MacroManager
     {
-        public Dictionary<string, SdmapMacro> Methods { get; } = new Dictionary<string, SdmapMacro>();
+        public Dictionary<string, Macro> Methods { get; } = new Dictionary<string, Macro>();
 
-        public SdmapMacroManager()
+        public MacroManager()
         {
             AddImplements(typeof(CommonMacros));
         }
@@ -33,7 +33,7 @@ namespace sdmap.Macros
 
         public Result<string> Execute(string name, SdmapContext context, object self, object[] arguments)
         {
-            SdmapMacro macro;
+            Macro macro;
             if (!Methods.TryGetValue(name, out macro))
             {
                 return Result.Fail<string>($"Macro: '{name}' cannot be found.");
@@ -46,6 +46,13 @@ namespace sdmap.Macros
             }
 
             return macro.Function(context, self, arguments);
+        }
+
+        private static MacroManager _defaultInstance = new MacroManager();
+
+        public static MacroManager GetDefaultInstance()
+        {
+            return _defaultInstance;
         }
     }
 }

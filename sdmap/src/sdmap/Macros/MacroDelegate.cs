@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace sdmap.Macros
 {
-    public delegate Result<string> SdmapMacroDelegate(SdmapContext context, object self, object[] arguments);
+    public delegate Result<string> MacroDelegate(SdmapContext context, object self, object[] arguments);
 }

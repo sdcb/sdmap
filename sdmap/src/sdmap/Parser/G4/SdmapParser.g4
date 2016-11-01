@@ -32,12 +32,10 @@ macro:
 	CloseMacro;
 
 macroParameter:
+	SYNTAX |
 	NSSyntax | 
-	value |
-	unnamedSql;
-
-value:
 	STRING |
 	NUMBER |
-	DATE;
+	DATE |
+	unnamedSql;
 

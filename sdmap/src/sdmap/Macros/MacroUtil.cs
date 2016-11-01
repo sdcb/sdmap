@@ -13,7 +13,7 @@ namespace sdmap.Macros
     {
         public static IEnumerable<MethodInfo> GetTypeMacroMethods(Type type)
         {
-            var target = typeof(SdmapMacroDelegate).GetTypeInfo().GetMethod("Invoke");
+            var target = typeof(MacroDelegate).GetTypeInfo().GetMethod("Invoke");
 
             return type
                 .GetTypeInfo()
@@ -28,20 +28,20 @@ namespace sdmap.Macros
                 });
         }
 
-        public static SdmapMacro ToSdmapMacro(MethodInfo method)
+        public static Macro ToSdmapMacro(MethodInfo method)
         {
             var nameAttr = method.GetCustomAttribute<MacroNameAttribute>();
             var argsAttr = method.GetCustomAttribute<MacroArgumentsAttribute>();
 
-            return new SdmapMacro
+            return new Macro
             {
                 Name = nameAttr?.Name ?? method.Name,
                 Arguments = argsAttr?.Arguments ?? new SdmapTypes[0],
-                Function = (SdmapMacroDelegate)method.CreateDelegate(typeof(SdmapMacroDelegate))
+                Function = (MacroDelegate)method.CreateDelegate(typeof(MacroDelegate))
             };
         }
 
-        public static Result RuntimeCheck(object[] arguments, SdmapMacro macro)
+        public static Result RuntimeCheck(object[] arguments, Macro macro)
         {
             if ((arguments?.Length ?? 0) != macro.Arguments.Length)
             {
@@ -85,7 +85,7 @@ namespace sdmap.Macros
             return Result.Ok();
         }
 
-        private static Result TypeCheckFail(SdmapMacro macro, int i, object arg, SdmapTypes mac)
+        private static Result TypeCheckFail(Macro macro, int i, object arg, SdmapTypes mac)
         {
             return Result.Fail($"Macro '{macro.Name}' " +
                 $"argument {i + 1} requires {mac} but provides {arg.GetType().Name}.");

@@ -13,7 +13,7 @@ namespace sdmap.test.MacroTest
         [Fact]
         public void EmptyNullOk()
         {
-            var mockedMacro = new SdmapMacro
+            var mockedMacro = new Macro
             {
                 Name = "Test", 
                 Arguments = new SdmapTypes[0]
@@ -26,7 +26,7 @@ namespace sdmap.test.MacroTest
         [Fact]
         public void IsDate()
         {
-            var mockedMacro = new SdmapMacro
+            var mockedMacro = new Macro
             {
                 Name = "Test",
                 Arguments = new[] {SdmapTypes.Date}
@@ -39,7 +39,7 @@ namespace sdmap.test.MacroTest
         [Fact]
         public void NullableTest()
         {
-            var mockedMacro = new SdmapMacro
+            var mockedMacro = new Macro
             {
                 Name = "Test",
                 Arguments = new[] { SdmapTypes.Date }
@@ -52,7 +52,7 @@ namespace sdmap.test.MacroTest
         [Fact]
         public void NotDate()
         {
-            var mockedMacro = new SdmapMacro
+            var mockedMacro = new Macro
             {
                 Name = "Test",
                 Arguments = new[] { SdmapTypes.Date }
@@ -66,7 +66,7 @@ namespace sdmap.test.MacroTest
         [Fact]
         public void IsNumber()
         {
-            var mockedMacro = new SdmapMacro
+            var mockedMacro = new Macro
             {
                 Name = "Test",
                 Arguments = new[] 
@@ -83,7 +83,7 @@ namespace sdmap.test.MacroTest
         [Fact]
         public void IsSyntax()
         {
-            var mockedMacro = new SdmapMacro
+            var mockedMacro = new Macro
             {
                 Name = "Test",
                 Arguments = new[]

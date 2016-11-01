@@ -30,7 +30,7 @@ SYNTAX:
 	[a-zA-Z_] [0-9a-zA-Z_]*;
 
 NSSyntax:
-	SYNTAX ('.' SYNTAX)*;
+	SYNTAX ('.' SYNTAX)+;
 
 WS: 
 	WHITE +     -> skip;
@@ -48,7 +48,7 @@ OpenUnnamedSql:
 	'sql' WHITE* '{' -> pushMode(SQL);
 
 OpenNamespace:
-	'namespace' WHITE+ NSSyntax WHITE* '{';
+	'namespace' WHITE+ (NSSyntax|SYNTAX) WHITE* '{';
 
 Close:
 	'}';
