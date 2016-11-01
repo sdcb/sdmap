@@ -10,19 +10,23 @@ using System.Threading.Tasks;
 using static sdmap.Parser.G4.SdmapParser;
 using Antlr4.Runtime.Misc;
 using sdmap.Parser.Utils;
+using System.Text;
 
 namespace sdmap.Parser.Visitor
 {
     public class CoreSqlVisitor : SdmapParserBaseVisitor<Result>
     {
         private readonly SdmapContext _context;
-        private EmitFunction _function;
         private ILGenerator _il;
+
+        public EmitFunction Function { get; private set; }
 
         private CoreSqlVisitor(SdmapContext context)
         {
             _context = context;
         }
+
+        
 
         public override Result VisitNamedSql([NotNull] NamedSqlContext context)
         {
@@ -32,7 +36,34 @@ namespace sdmap.Parser.Visitor
 
             var method = new DynamicMethod(fullName, typeof(string), new[] { typeof(object) });
             _il = method.GetILGenerator();
-            _function = (EmitFunction)method.CreateDelegate(typeof(EmitFunction));
+
+            var coreSqlContext = context.GetChild<CoreSqlContext>(0);
+            
+            _il.DeclareLocal(typeof(string));
+            _il.Emit(OpCodes.Ldstr, string.Empty);
+            _il.Emit(OpCodes.Stloc_0);
+
+            return Visit(coreSqlContext)
+                .OnSuccess(() =>
+                {
+                    _il.Emit(OpCodes.Ret);
+                    Function = (EmitFunction)method.CreateDelegate(typeof(EmitFunction));
+                });
+        }
+
+        public override Result VisitMacro([NotNull] MacroContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Result VisitPlainText([NotNull] PlainTextContext context)
+        {
+            var sqlText = context.GetToken(SQLText, 0);
+            _il.Emit(OpCodes.Ldloc_0);
+            _il.Emit(OpCodes.Ldstr, sqlText.GetText());
+            _il.Emit(OpCodes.Call, 
+                typeof(string).GetTypeInfo().GetMethod(
+                    nameof(string.Concat), new[] { typeof(string), typeof(string) }));
             return Result.Ok();
         }
 
@@ -45,7 +76,12 @@ namespace sdmap.Parser.Visitor
         {
             var visitor = Create(context);
             return visitor.Visit(parseTree)
-                .OnSuccess(() => visitor._function);
+                .OnSuccess(() => visitor.Function);
+        }
+
+        public static CoreSqlVisitor CreateEmpty()
+        {
+            return new CoreSqlVisitor(SdmapContext.CreateEmpty());
         }
     }
 }
