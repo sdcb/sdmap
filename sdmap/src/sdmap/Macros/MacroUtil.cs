@@ -36,7 +36,7 @@ namespace sdmap.Macros
             return new SdmapMacro
             {
                 Name = nameAttr?.Name ?? method.Name,
-                Arguments = argsAttr?.Arguments ?? new SdmapTypes[0], 
+                Arguments = argsAttr?.Arguments ?? new SdmapTypes[0],
                 Function = (SdmapMacroDelegate)method.CreateDelegate(typeof(SdmapMacroDelegate))
             };
         }
@@ -45,11 +45,11 @@ namespace sdmap.Macros
         {
             if ((arguments?.Length ?? 0) != macro.Arguments.Length)
             {
-                return Result.Fail($"Macro '{macro.Name}' need" + 
+                return Result.Fail($"Macro '{macro.Name}' need" +
                     $"{macro.Arguments.Length} arguments but provides {arguments?.Length ?? 0}.");
             }
 
-            for (var i = 0; i < arguments.Length; ++i)
+            for (var i = 0; i < macro.Arguments.Length; ++i)
             {
                 var arg = arguments[i];
                 var mac = macro.Arguments[i];
@@ -61,7 +61,10 @@ namespace sdmap.Macros
                             return TypeCheckFail(macro, i, arg, mac);
                         break;
                     case SdmapTypes.Number:
-                        if (!(arg is decimal))
+                        if (!(arg is decimal || 
+                            arg is int || arg is short || arg is long || 
+                            arg is uint || arg is ushort || arg is ulong ||
+                            arg is float || arg is double))
                             return TypeCheckFail(macro, i, arg, mac);
                         break;
                     case SdmapTypes.String:
@@ -85,7 +88,7 @@ namespace sdmap.Macros
         private static Result TypeCheckFail(SdmapMacro macro, int i, object arg, SdmapTypes mac)
         {
             return Result.Fail($"Macro '{macro.Name}' " +
-                $"argument {i} requires {mac} but provides {arg.GetType().Name}.");
+                $"argument {i + 1} requires {mac} but provides {arg.GetType().Name}.");
         }
     }
 }
