@@ -17,7 +17,7 @@ namespace sdmap.Parser.Visitor
     {
         private readonly SdmapContext _context;
         private EmitFunction _function;
-        private readonly ILGenerator _il;
+        private ILGenerator _il;
 
         private CoreSqlVisitor(SdmapContext context)
         {
