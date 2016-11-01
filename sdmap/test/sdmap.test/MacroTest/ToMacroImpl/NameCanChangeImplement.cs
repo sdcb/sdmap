@@ -1,6 +1,6 @@
 ﻿using sdmap.Functional;
 using sdmap.Macros.Attributes;
-using sdmap.Parser.Context;
+using sdmap.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace sdmap.test.MacroTest.ToMacroImpl
     public static class NameCanChangeImpl
     {
         [MacroName("NiceName")]
-        public static Result<string> HelloWorld(SdmapContext context, object[] arguments)
+        public static Result<string> HelloWorld(SdmapContext context, object self, object[] arguments)
         {
             return Result.Ok("Hello World");
         }

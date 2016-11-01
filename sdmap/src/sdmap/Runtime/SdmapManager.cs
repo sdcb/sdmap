@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace sdmap.Parser.Context
+namespace sdmap.Runtime
 {
     public class SdmapManager
     {

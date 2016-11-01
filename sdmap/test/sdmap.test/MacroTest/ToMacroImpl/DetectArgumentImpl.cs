@@ -1,7 +1,7 @@
 ﻿using sdmap.Functional;
 using sdmap.Macros;
 using sdmap.Macros.Attributes;
-using sdmap.Parser.Context;
+using sdmap.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace sdmap.test.MacroTest.ToMacroImpl
     public static class DetectArgumentImpl
     {
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.UnnamedSql)]
-        public static Result<string> DetectMe(SdmapContext context, object[] arguments)
+        public static Result<string> DetectMe(SdmapContext context, object self, object[] arguments)
         {
             return Result.Ok("Hello World");
         }

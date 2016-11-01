@@ -1,7 +1,7 @@
 ﻿using sdmap.Functional;
 using sdmap.Macros.Attributes;
 using sdmap.Macros.Implements;
-using sdmap.Parser.Context;
+using sdmap.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +31,7 @@ namespace sdmap.Macros
             }
         }
 
-        public Result<string> Execute(string name, SdmapContext context, object[] arguments)
+        public Result<string> Execute(string name, SdmapContext context, object self, object[] arguments)
         {
             SdmapMacro macro;
             if (!Methods.TryGetValue(name, out macro))
@@ -39,7 +39,13 @@ namespace sdmap.Macros
                 return Result.Fail<string>($"Macro: '{name}' cannot be found.");
             }
 
-            return macro.Function(context, arguments);
+            var rtCheck = RuntimeCheck(arguments, macro);
+            if (rtCheck.IsFailure)
+            {
+                return Result.Fail<string>(rtCheck.Error);
+            }
+
+            return macro.Function(context, self, arguments);
         }
     }
 }

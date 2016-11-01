@@ -1,5 +1,4 @@
 ﻿using sdmap.Functional;
-using sdmap.Parser.Context;
 using sdmap.Parser.G4;
 using System;
 using System.Collections.Generic;
@@ -11,6 +10,7 @@ using static sdmap.Parser.G4.SdmapParser;
 using Antlr4.Runtime.Misc;
 using sdmap.Parser.Utils;
 using System.Text;
+using sdmap.Runtime;
 
 namespace sdmap.Parser.Visitor
 {
@@ -24,9 +24,7 @@ namespace sdmap.Parser.Visitor
         private CoreSqlVisitor(SdmapContext context)
         {
             _context = context;
-        }
-
-        
+        }        
 
         public override Result VisitNamedSql([NotNull] NamedSqlContext context)
         {
@@ -53,6 +51,11 @@ namespace sdmap.Parser.Visitor
 
         public override Result VisitMacro([NotNull] MacroContext context)
         {
+            var openMacro = context.GetToken(OpenMacro, 0);
+            var parameters = context.GetChild<MacroParameterContext>(0);
+
+            var macroName = LexerUtil.GetOpenMacroId(openMacro.GetText());
+
             throw new NotImplementedException();
         }
 

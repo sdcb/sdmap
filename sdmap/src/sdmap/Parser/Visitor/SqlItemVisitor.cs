@@ -1,19 +1,16 @@
-﻿using sdmap.Functional;
-using sdmap.Parser.Context;
+﻿using Antlr4.Runtime.Misc;
+using sdmap.Functional;
 using sdmap.Parser.G4;
+using sdmap.Parser.Utils;
+using sdmap.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static sdmap.Parser.G4.SdmapLexer;
 
 namespace sdmap.Parser.Visitor
 {
-    using Antlr4.Runtime;
-    using Antlr4.Runtime.Misc;
-    using static SdmapLexer;
-    using System.Text.RegularExpressions;
-    using Utils;
-
     public class SqlItemVisitor : SdmapParserBaseVisitor<Result>
     {
         public SdmapContext Context { get; }

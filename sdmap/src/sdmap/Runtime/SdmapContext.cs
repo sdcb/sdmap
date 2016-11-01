@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace sdmap.Parser.Context
+namespace sdmap.Runtime
 {
     public class SdmapContext
     {
@@ -18,11 +18,33 @@ namespace sdmap.Parser.Context
             NsStack = nsStacks;
         }
 
-        public string CurrentNs => 
+        public string CurrentNs =>
             NsStack.Count == 0 ? string.Empty : NsStack.Peek();
 
-        public string GetFullName(string contextId) => 
-            CurrentNs == string.Empty ? contextId : $"{CurrentNs}.{contextId}";
+        public string GetFullName(string contextId)
+        {
+            if (contextId.Contains(".") || CurrentNs == string.Empty)
+            {
+                return contextId;
+            }
+            else 
+            {
+                return $"{CurrentNs}.{contextId}";
+            }
+        }
+
+        public Result<SqlEmiter> TryGetEmiter(string contextId)
+        {
+            var fullName = GetFullName(contextId);
+            if (Emiters.ContainsKey(fullName))
+            {
+                return Result.Ok(Emiters[fullName]);
+            }
+            else
+            {
+                return Result.Fail<SqlEmiter>($"Syntax '{contextId}' not found in current scope.");
+            }
+        }
 
         public Result TryAdd(string contextId, SqlEmiter emiter)
         {

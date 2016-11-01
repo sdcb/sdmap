@@ -67,4 +67,4 @@ CloseSql:
 	'}' -> popMode;
 
 OpenMacro:
-	'#' SYNTAX '<' -> pushMode(DEFAULT_MODE);
+	'#' SYNTAX WHITE* '<' -> pushMode(DEFAULT_MODE);

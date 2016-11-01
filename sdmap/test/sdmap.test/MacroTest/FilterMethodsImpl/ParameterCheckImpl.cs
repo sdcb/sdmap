@@ -1,5 +1,5 @@
 ﻿using sdmap.Functional;
-using sdmap.Parser.Context;
+using sdmap.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,22 +9,22 @@ namespace sdmap.test.MacroTest.FilterMethodsImpl
 {
     public class ParameterCheckImpl
     {
-        public static Result<string> Ok(SdmapContext context, object[] arguments)
+        public static Result<string> Ok(SdmapContext context, object self, object[] arguments)
         {
             return Result.Ok("Hello World");
         }
 
-        public static Result<string> More(SdmapContext context, object[] arguments, int v)
+        public static Result<string> More(SdmapContext context, object self, object[] arguments, int v)
         {
             return Result.Ok("Hello World");
         }
 
-        public static Result<string> Less(SdmapContext context)
+        public static Result<string> Less(SdmapContext context, object self)
         {
             return Result.Ok("Hello World");
         }
 
-        public static Result<string> Changed(SdmapContext context, int[] arguments)
+        public static Result<string> Changed(SdmapContext context, object self, int[] arguments)
         {
             return Result.Ok("Hello World");
         }
