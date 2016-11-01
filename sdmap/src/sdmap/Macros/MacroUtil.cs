@@ -1,4 +1,5 @@
-﻿using sdmap.Macros.Attributes;
+﻿using sdmap.Functional;
+using sdmap.Macros.Attributes;
 using sdmap.Parser.Context;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace sdmap.Macros
 {
     public static class MacroUtil
     {
-        public static IEnumerable<MethodInfo> GetTypeAvailableMethods(Type type)
+        public static IEnumerable<MethodInfo> GetTypeMacroMethods(Type type)
         {
             var target = typeof(SdmapMacroDelegate).GetTypeInfo().GetMethod("Invoke");
 
@@ -30,14 +31,61 @@ namespace sdmap.Macros
         public static SdmapMacro ToSdmapMacro(MethodInfo method)
         {
             var nameAttr = method.GetCustomAttribute<MacroNameAttribute>();
-            var argsAttr = method.GetCustomAttributes<MacroArgumentsAttribute>();
+            var argsAttr = method.GetCustomAttribute<MacroArgumentsAttribute>();
 
             return new SdmapMacro
             {
                 Name = nameAttr?.Name ?? method.Name,
-                ArgumentsGroups = argsAttr.Select(x => x.Arguments), 
+                Arguments = argsAttr?.Arguments ?? new SdmapTypes[0], 
                 Function = (SdmapMacroDelegate)method.CreateDelegate(typeof(SdmapMacroDelegate))
             };
+        }
+
+        public static Result RuntimeCheck(object[] arguments, SdmapMacro macro)
+        {
+            if ((arguments?.Length ?? 0) != macro.Arguments.Length)
+            {
+                return Result.Fail($"Macro '{macro.Name}' need" + 
+                    $"{macro.Arguments.Length} arguments but provides {arguments?.Length ?? 0}.");
+            }
+
+            for (var i = 0; i < arguments.Length; ++i)
+            {
+                var arg = arguments[i];
+                var mac = macro.Arguments[i];
+
+                switch (mac)
+                {
+                    case SdmapTypes.Date:
+                        if (!(arg is DateTime))
+                            return TypeCheckFail(macro, i, arg, mac);
+                        break;
+                    case SdmapTypes.Number:
+                        if (!(arg is decimal))
+                            return TypeCheckFail(macro, i, arg, mac);
+                        break;
+                    case SdmapTypes.String:
+                        if (!(arg is string))
+                            return TypeCheckFail(macro, i, arg, mac);
+                        break;
+                    case SdmapTypes.Syntax:
+                        if (!(arg is string))
+                            return TypeCheckFail(macro, i, arg, mac);
+                        break;
+                    case SdmapTypes.UnnamedSql:
+                        if (!(arg is EmitFunction))
+                            return TypeCheckFail(macro, i, arg, mac);
+                        break;
+                }
+            }
+
+            return Result.Ok();
+        }
+
+        private static Result TypeCheckFail(SdmapMacro macro, int i, object arg, SdmapTypes mac)
+        {
+            return Result.Fail($"Macro '{macro.Name}' " +
+                $"argument {i} requires {mac} but provides {arg.GetType().Name}.");
         }
     }
 }

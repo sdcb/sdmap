@@ -10,7 +10,7 @@ namespace sdmap.Macros
     {
         public string Name { get; set; }
 
-        public IEnumerable<int[]> ArgumentsGroups { get; set; }
+        public SdmapTypes[] Arguments { get; set; }
 
         public SdmapMacroDelegate Function { get; set; }
     }

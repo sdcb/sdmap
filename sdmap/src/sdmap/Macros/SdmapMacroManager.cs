@@ -13,7 +13,7 @@ namespace sdmap.Macros
 {
     public class SdmapMacroManager
     {
-        private readonly Dictionary<string, SdmapMacro> _methods = new Dictionary<string, SdmapMacro>();
+        public Dictionary<string, SdmapMacro> Methods { get; } = new Dictionary<string, SdmapMacro>();
 
         public SdmapMacroManager()
         {
@@ -22,19 +22,19 @@ namespace sdmap.Macros
 
         public void AddImplements(Type type)
         {
-            var methods = GetTypeAvailableMethods(type)
+            var methods = GetTypeMacroMethods(type)
                 .Select(ToSdmapMacro);
 
             foreach (var method in methods)
             {
-                _methods.Add(method.Name, method);
+                Methods.Add(method.Name, method);
             }
         }
 
         public Result<string> Execute(string name, SdmapContext context, object[] arguments)
         {
             SdmapMacro macro;
-            if (!_methods.TryGetValue(name, out macro))
+            if (!Methods.TryGetValue(name, out macro))
             {
                 return Result.Fail<string>($"Macro: '{name}' cannot be found.");
             }

@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace sdmap.Macros.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class MacroArgumentsAttribute : Attribute
     {
-        public int[] Arguments { get; }
+        public SdmapTypes[] Arguments { get; }
 
-        public MacroArgumentsAttribute(params int[] arguments)
+        public MacroArgumentsAttribute(params SdmapTypes[] arguments)
         {
             Arguments = arguments;
         }
