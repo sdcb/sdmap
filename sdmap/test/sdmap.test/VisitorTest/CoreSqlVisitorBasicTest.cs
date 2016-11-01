@@ -27,7 +27,7 @@ namespace sdmap.test.VisitorTest
         public void SqlInNamespaceTest()
         {
             var sql = "SELECT * FROM `client_WOReactive`;";
-            var code = $"namespace ns{{sql sql{{{sql}}}";
+            var code = $"namespace ns{{sql sql{{{sql}}}}}";
             var visitor = CoreSqlVisitor.CreateEmpty();
             var parseTree = GetParseTree(code);
             visitor.Visit(parseTree);
@@ -46,7 +46,7 @@ namespace sdmap.test.VisitorTest
                 "   *                    \r\n" +
                 "FROM                    \r\n" +
                 "   `client_WOReactive`; \r\n";
-            var code = $"namespace ns{{sql sql{{{sql}}}";
+            var code = $"sql sql{{{sql}}}";
             var visitor = CoreSqlVisitor.CreateEmpty();
             var parseTree = GetParseTree(code);
             visitor.Visit(parseTree);
