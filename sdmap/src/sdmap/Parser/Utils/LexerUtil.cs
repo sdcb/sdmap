@@ -21,5 +21,12 @@ namespace sdmap.Parser.Utils
             // sql test{
             return Regex.Replace(openSql, @"sql\s+([_\w]+)\s*\{", "$1");
         }
+
+        public static string GetOpenMacroId(string openMacro)
+        {
+            // #include<
+            // #include <
+            return Regex.Replace(openMacro, @"#([_\w]+)\s*<", "$1");
+        }
     }
 }

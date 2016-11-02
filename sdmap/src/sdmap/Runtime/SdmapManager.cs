@@ -7,11 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace sdmap.Parser.Context
+namespace sdmap.Runtime
 {
     public class SdmapManager
     {
-        private readonly SdmapContext _context;
+        private readonly SdmapContext _context = SdmapContext.CreateEmpty();
 
         public Result AddSourceCode(string sourceCode)
         {

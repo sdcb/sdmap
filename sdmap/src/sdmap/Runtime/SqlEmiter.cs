@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static sdmap.Parser.G4.SdmapParser;
 
-namespace sdmap.Parser.Context
+namespace sdmap.Runtime
 {
     public class SqlEmiter
     {

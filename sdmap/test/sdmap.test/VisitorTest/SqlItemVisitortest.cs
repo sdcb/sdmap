@@ -1,17 +1,10 @@
-﻿using Antlr4.Runtime;
-using sdmap.Parser.Context;
-using sdmap.Parser.G4;
-using sdmap.Parser.Visitor;
-using System;
-using System.Collections.Generic;
+﻿using sdmap.Parser.Visitor;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
-using static sdmap.Parser.G4.SdmapParser;
 
 namespace sdmap.test.VisitorTest
 {
-    public class SqlItemVisitorTest
+    public class SqlItemVisitorTest : VisitorTestBase
     {
         [Fact]
         public void CanDetectNamespace()
@@ -33,15 +26,6 @@ namespace sdmap.test.VisitorTest
             Assert.Equal(2, visitor.Context.Emiters.Count);
             Assert.Equal("ns.sql", visitor.Context.Emiters.First().Key);
             Assert.Equal("ns.sql2", visitor.Context.Emiters.Last().Key);
-        }
-
-        private RootContext GetParseTree(string sourceCode)
-        {
-            var inputStream = new AntlrInputStream(sourceCode);
-            var lexer = new SdmapLexer(inputStream);
-            var tokenStream = new CommonTokenStream(lexer);
-            var parser = new SdmapParser(tokenStream);
-            return parser.root();
         }
     }
 }
