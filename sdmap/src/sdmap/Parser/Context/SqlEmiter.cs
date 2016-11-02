@@ -1,15 +1,14 @@
 ﻿using Antlr4.Runtime.Tree;
 using sdmap.Functional;
+using sdmap.Parser.Visitor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static sdmap.Parser.G4.SdmapParser;
 
 namespace sdmap.Parser.Context
 {
-    using Visitor;
-    using static G4.SdmapParser;
-
     public class SqlEmiter
     {
         private NamedSqlContext _parseTree;
