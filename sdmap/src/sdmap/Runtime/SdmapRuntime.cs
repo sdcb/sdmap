@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace sdmap.Runtime
 {
-    public class SdmapManager
+    public class SdmapRuntime
     {
         private readonly SdmapContext _context = SdmapContext.CreateEmpty();
 

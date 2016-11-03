@@ -31,10 +31,10 @@ namespace sdmap.Macros
             }
         }
 
-        public Result<string> Execute(string name, SdmapContext context, object self, object[] arguments)
+        public static Result<string> Execute(SdmapContext context, string name, object self, object[] arguments)
         {
             Macro macro;
-            if (!Methods.TryGetValue(name, out macro))
+            if (!context.MacroManager.Methods.TryGetValue(name, out macro))
             {
                 return Result.Fail<string>($"Macro: '{name}' cannot be found.");
             }
@@ -46,13 +46,6 @@ namespace sdmap.Macros
             }
 
             return macro.Function(context, self, arguments);
-        }
-
-        private static MacroManager _defaultInstance = new MacroManager();
-
-        public static MacroManager GetDefaultInstance()
-        {
-            return _defaultInstance;
         }
     }
 }

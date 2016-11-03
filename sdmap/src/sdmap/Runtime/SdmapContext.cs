@@ -13,6 +13,8 @@ namespace sdmap.Runtime
 
         public Stack<string> NsStack { get; }
 
+        public MacroManager MacroManager { get; } = new MacroManager();
+
         private SdmapContext(SortedDictionary<string, SqlEmiter> emiters, Stack<string> nsStacks)
         {
             Emiters = emiters;

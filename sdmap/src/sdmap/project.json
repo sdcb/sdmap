@@ -5,7 +5,8 @@
     "NETStandard.Library": "1.6.0",
     "Antlr4.Runtime": "4.5.4-beta001",
     "Antlr4": "4.5.4-beta001",
-    "System.Reflection.Emit.Lightweight": "4.0.1"
+    "System.Reflection.Emit.Lightweight": "4.0.1", 
+    "System.Reflection.Emit": "4.0.1"
   },
 
   "frameworks": {

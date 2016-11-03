@@ -1,4 +1,5 @@
 ﻿using sdmap.Parser.Visitor;
+using sdmap.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +20,8 @@ namespace sdmap.test.VisitorTest
             
             Assert.NotNull(visitor.Function);
 
-            var output = visitor.Function(null);
-            Assert.Equal("Hello World", output);
+            var output = visitor.Function(SdmapContext.CreateEmpty(), null);
+            Assert.Equal("Hello World", output.Value);
         }
 
         [Fact]
@@ -34,8 +35,8 @@ namespace sdmap.test.VisitorTest
             
             Assert.NotNull(visitor.Function);
 
-            var output = visitor.Function(null);
-            Assert.Equal(sql, output);
+            var output = visitor.Function(SdmapContext.CreateEmpty(), null);
+            Assert.Equal(sql, output.Value);
         }
 
         [Fact]
@@ -53,8 +54,8 @@ namespace sdmap.test.VisitorTest
 
             Assert.NotNull(visitor.Function);
 
-            var output = visitor.Function(null);
-            Assert.Equal(sql, output);
+            var output = visitor.Function(SdmapContext.CreateEmpty(), null);
+            Assert.Equal(sql, output.Value);
         }
     }
 }

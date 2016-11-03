@@ -35,7 +35,8 @@ namespace sdmap.Runtime
         public Result<string> TryEmit(object v, SdmapContext context)
         {
             return EnsureCompiled(context)
-                .OnSuccess(() => _emiter(v));
+                .OnSuccess(() => _emiter(context, v))
+                .Unwrap();
         }
 
         public string Emit(object v, SdmapContext context)
@@ -54,5 +55,5 @@ namespace sdmap.Runtime
         }
     }
 
-    public delegate string EmitFunction(object obj);
+    public delegate Result<string> EmitFunction(SdmapContext context, object obj);
 }

@@ -102,5 +102,15 @@ namespace sdmap.Functional
 
             return Result.Fail<T>(result.Error);
         }
+
+        public static Result<T> Unwrap<T>(this Result<Result<T>> result)
+        {
+            if (result.IsSuccess)
+            {
+                return result.Value;
+            }
+
+            return Result.Fail<T>(result.Error);
+        }
     }
 }
