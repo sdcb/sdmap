@@ -15,7 +15,7 @@ namespace sdmap.test.SelfTest
         {
             var attr = typeof(GetCustomAttributeTest)
                 .GetMethod(nameof(GetCustomAttributeCanBeNull))
-                .GetCustomAttribute<MacroNameAttribute>();
+                .GetCustomAttribute<MacroAttribute>();
             Assert.Null(attr);
         }
     }

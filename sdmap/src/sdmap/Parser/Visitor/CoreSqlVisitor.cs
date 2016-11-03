@@ -173,7 +173,6 @@ namespace sdmap.Parser.Visitor
                 nameof(string.Concat), new[] { typeof(string), typeof(string) })); // str+str
             _il.Emit(OpCodes.Stloc_0);                                             // [stored]
             return Result.Ok();
-
         }
 
         protected override Result AggregateResult(Result aggregate, Result nextResult)

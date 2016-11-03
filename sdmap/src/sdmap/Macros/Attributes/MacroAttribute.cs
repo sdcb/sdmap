@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 namespace sdmap.Macros.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class MacroNameAttribute : Attribute
+    public class MacroAttribute : Attribute
     {
         public string Name { get; }
 
-        public MacroNameAttribute(string name)
+        public bool StrictArgumentCheck { get; } = true;
+
+        public MacroAttribute(string name)
         {
             Name = name;
         }

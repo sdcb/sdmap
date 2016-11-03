@@ -30,7 +30,7 @@ namespace sdmap.Macros
 
         public static Macro ToSdmapMacro(MethodInfo method)
         {
-            var nameAttr = method.GetCustomAttribute<MacroNameAttribute>();
+            var nameAttr = method.GetCustomAttribute<MacroAttribute>();
             var argsAttr = method.GetCustomAttribute<MacroArgumentsAttribute>();
 
             return new Macro

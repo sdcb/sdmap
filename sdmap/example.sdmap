@@ -18,7 +18,7 @@
 	sql CommonOrderBy
 	{
 		#ifNotEmpty<OrderBy, sql{
-			ORDER BY %OrderBy #iif<Asc, sql{ ASC }, sql{ DESC }>)
+			ORDER BY #prop<OrderBy> #iif<Asc, sql{ ASC }, sql{ DESC }>)
 		}, sql{
 			ORDER BY Id DESC
 		}>

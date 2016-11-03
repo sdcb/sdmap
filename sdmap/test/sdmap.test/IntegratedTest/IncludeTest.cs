@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace sdmap.test.VisitorTest
+namespace sdmap.test.IntegratedTest
 {
-    public class CoreSqlParameterTest : VisitorTestBase
+    public class IncludeTest
     {
         [Fact]
         public void Include()
@@ -43,6 +43,19 @@ namespace sdmap.test.VisitorTest
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", null);
             Assert.Equal("Life is good Nice!", result);
+        }
+
+        [Fact]
+        public void IncludeNested()
+        {
+            var code =
+                "sql v1{#include<v2>#include<v3>}" +
+                "sql v2{2#include<v3>}" +
+                "sql v3{3}";
+            var rt = new SdmapRuntime();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("v1", null);
+            Assert.Equal("233", result);
         }
     }
 }
