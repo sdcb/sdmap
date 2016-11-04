@@ -51,7 +51,7 @@ namespace sdmap.Runtime
 
         public static Result<EmitFunction> Compile(NamedSqlContext parseTree, SdmapContext context)
         {
-            return CoreSqlVisitor.Compile(parseTree, context);
+            return NamedSqlVisitor.Compile(parseTree, context);
         }
     }
 

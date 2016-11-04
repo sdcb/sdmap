@@ -15,7 +15,7 @@ namespace sdmap.test.VisitorTest
         {
             var code = "sql sql{Hello World}";
             var parseTree = GetParseTree(code);
-            var visitor = CoreSqlVisitor.CreateEmpty();
+            var visitor = NamedSqlVisitor.CreateEmpty();
             visitor.Visit(parseTree);
             
             Assert.NotNull(visitor.Function);
@@ -29,7 +29,7 @@ namespace sdmap.test.VisitorTest
         {
             var sql = "SELECT * FROM `client_WOReactive`;";
             var code = "sql sql{" + sql + "}";
-            var visitor = CoreSqlVisitor.CreateEmpty();
+            var visitor = NamedSqlVisitor.CreateEmpty();
             var parseTree = GetParseTree(code);
             visitor.Visit(parseTree);
             
@@ -48,7 +48,7 @@ namespace sdmap.test.VisitorTest
                 "FROM                    \r\n" +
                 "   `client_WOReactive`; \r\n";
             var code = $"sql sql{{{sql}}}";
-            var visitor = CoreSqlVisitor.CreateEmpty();
+            var visitor = NamedSqlVisitor.CreateEmpty();
             var parseTree = GetParseTree(code);
             visitor.Visit(parseTree);
 
