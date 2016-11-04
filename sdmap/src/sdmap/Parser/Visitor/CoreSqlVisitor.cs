@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 using System.Threading.Tasks;
 using static sdmap.Parser.G4.SdmapParser;
 
@@ -50,22 +51,27 @@ namespace sdmap.Parser.Visitor
 
             var coreSqlContext = parseRule.GetChild<CoreSqlContext>(0);
 
-            _il.DeclareLocal(typeof(string));
-            _il.Emit(OpCodes.Ldstr, string.Empty);            // ""
-            _il.Emit(OpCodes.Stloc_0);                        // [empty]
-
-            return Visit(coreSqlContext)
-                .OnSuccess(() =>                              // [must be empty]
-                {
-                    _il.Emit(OpCodes.Ldloc_0);                // str
+            _il.DeclareLocal(typeof(StringBuilder));
+            _il.Emit(OpCodes.Newobj, typeof(StringBuilder)
+                .GetTypeInfo()
+                .GetConstructor(Type.EmptyTypes));                                    // sb
+            _il.Emit(OpCodes.Stloc_0);                                                // [empty]
+                                                                                      
+            return Visit(coreSqlContext)                                              
+                .OnSuccess(() =>                                                      // [must be empty]
+                {                                                                     
+                    _il.Emit(OpCodes.Ldloc_0);                                        // sb
                     var okMethod = typeof(Result)
                         .GetTypeInfo()
                         .GetMethods()
                         .Single(x => x.IsGenericMethod && x.Name == "Ok")
                         .MakeGenericMethod(typeof(string));
-                    _il.Emit(OpCodes.Call, okMethod);         // result<str>
+                    _il.Emit(OpCodes.Callvirt, typeof(StringBuilder)
+                        .GetTypeInfo()
+                        .GetMethod(nameof(StringBuilder.ToString), Type.EmptyTypes)); // str
+                    _il.Emit(OpCodes.Call, okMethod);                                 // result<str>
 
-                    _il.Emit(OpCodes.Ret);                    // [returned]
+                    _il.Emit(OpCodes.Ret);                                            // [returned]
                     Function = (EmitFunction)method.CreateDelegate(typeof(EmitFunction));
                 });
         }
@@ -164,12 +170,12 @@ namespace sdmap.Parser.Visitor
                 .GetMethod("get_" + nameof(Result<string>.Value)));         // str
             var strValue = _il.DeclareLocal(typeof(string));
             _il.Emit(OpCodes.Stloc, strValue);                              // [empty]
-            _il.Emit(OpCodes.Ldloc_0);                                      // result
-            _il.Emit(OpCodes.Ldloc, strValue);                              // result str
-            _il.Emit(OpCodes.Call, typeof(string).GetTypeInfo().GetMethod(
-                nameof(string.Concat),
-                new[] { typeof(string), typeof(string) }));                 // result+str
-            _il.Emit(OpCodes.Stloc_0);                                      // [stored]
+            _il.Emit(OpCodes.Ldloc_0);                                      // sb
+            _il.Emit(OpCodes.Ldloc, strValue);                              // sb str
+            _il.Emit(OpCodes.Call, typeof(StringBuilder)
+                .GetTypeInfo().GetMethod(nameof(StringBuilder.Append),
+                new[] { typeof(string), }));                                // sb+str
+            _il.Emit(OpCodes.Pop);                                          // [empty]
 
             return Result.Ok();
         }
@@ -178,11 +184,12 @@ namespace sdmap.Parser.Visitor
         {
             var text = context.GetToken(SQLText, 0);
 
-            _il.Emit(OpCodes.Ldloc_0);                                             // str
-            _il.Emit(OpCodes.Ldstr, text.GetText());                               // str str
-            _il.Emit(OpCodes.Call, typeof(string).GetTypeInfo().GetMethod(
-                nameof(string.Concat), new[] { typeof(string), typeof(string) })); // str+str
-            _il.Emit(OpCodes.Stloc_0);                                             // [stored]
+            _il.Emit(OpCodes.Ldloc_0);                                             // sb
+            _il.Emit(OpCodes.Ldstr, text.GetText());                               // sb str
+            _il.Emit(OpCodes.Call, typeof(StringBuilder)
+                .GetTypeInfo().GetMethod(nameof(StringBuilder.Append),
+                new[] { typeof(string), }));                                       // sb+str
+            _il.Emit(OpCodes.Pop);                                                 // [empty]
             return Result.Ok();
         }
 
