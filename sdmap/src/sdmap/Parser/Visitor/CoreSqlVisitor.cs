@@ -66,7 +66,7 @@ namespace sdmap.Parser.Visitor
                         .GetMethods()
                         .Single(x => x.IsGenericMethod && x.Name == "Ok")
                         .MakeGenericMethod(typeof(string));
-                    _il.Emit(OpCodes.Callvirt, typeof(StringBuilder)
+                    _il.Emit(OpCodes.Call, typeof(StringBuilder)
                         .GetTypeInfo()
                         .GetMethod(nameof(StringBuilder.ToString), Type.EmptyTypes)); // str
                     _il.Emit(OpCodes.Call, okMethod);                                 // result<str>
@@ -158,7 +158,7 @@ namespace sdmap.Parser.Visitor
             _il.Emit(OpCodes.Call, typeof(MacroManager).GetTypeInfo()
                 .GetMethod(nameof(MacroManager.Execute)));                  // result<str>
             _il.Emit(OpCodes.Dup);                                          // result<str> x 2
-            _il.Emit(OpCodes.Callvirt, typeof(Result).GetTypeInfo()
+            _il.Emit(OpCodes.Call, typeof(Result).GetTypeInfo()
                 .GetMethod("get_" + nameof(Result.IsSuccess)));             // result<str> bool
             _il.Emit(OpCodes.Ldc_I4_1);                                     // result<str> bool true
             var ifIsSuccess = _il.DefineLabel();
@@ -166,7 +166,7 @@ namespace sdmap.Parser.Visitor
             _il.Emit(OpCodes.Ret);                                          // [exit-returned]
 
             _il.MarkLabel(ifIsSuccess);                                     // ifIsSuccess:
-            _il.Emit(OpCodes.Callvirt, typeof(Result<string>).GetTypeInfo()
+            _il.Emit(OpCodes.Call, typeof(Result<string>).GetTypeInfo()
                 .GetMethod("get_" + nameof(Result<string>.Value)));         // str
             var strValue = _il.DeclareLocal(typeof(string));
             _il.Emit(OpCodes.Stloc, strValue);                              // [empty]
