@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace sdmap.Parser.Utils
+namespace sdmap.Utils
 {
     public static class LexerUtil
     {

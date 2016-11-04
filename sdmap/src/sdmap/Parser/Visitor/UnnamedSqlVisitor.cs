@@ -16,20 +16,16 @@ using Antlr4.Runtime;
 
 namespace sdmap.Parser.Visitor
 {
-    public class NamedSqlVisitor : CoreSqlVisitor
+    public class UnnamedSqlVisitor : CoreSqlVisitor
     {
-        public NamedSqlVisitor(SdmapContext context)
+        public UnnamedSqlVisitor(SdmapContext context)
             : base(context)
         {
         }
 
         protected override string GetFunctionName(ParserRuleContext parseRule)
         {
-            var context = (NamedSqlContext)parseRule;
-            var openSql = context.GetToken(OpenNamedSql, 0);
-            var id = LexerUtil.GetOpenSqlId(openSql.GetText());
-            var fullName = _context.GetFullName(id);
-            return fullName;
+            return "Unnamed" + Convert.ToBase64String(Guid.NewGuid().ToByteArray());
         }
 
         public static NamedSqlVisitor Create(SdmapContext context)

@@ -1,4 +1,4 @@
-﻿using sdmap.Parser.Utils;
+﻿using sdmap.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,7 +1,7 @@
 ﻿using Antlr4.Runtime.Misc;
 using sdmap.Functional;
 using sdmap.Parser.G4;
-using sdmap.Parser.Utils;
+using sdmap.Utils;
 using sdmap.Runtime;
 using System;
 using System.Collections.Generic;
