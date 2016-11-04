@@ -145,6 +145,18 @@ namespace sdmap.Parser.Visitor
                 }
                 else if (arg.unnamedSql() != null)
                 {
+                    var id = NameUtil.GetFunctionName(arg.unnamedSql());
+                    var emiter = _context.TryGetEmiter(id);
+
+                    if (emiter.IsFailure)
+                    {
+                        //var ctx = UnnamedSqlVisitor.Create(_context);
+                        //var result = ctx.Visit(arg.unnamedSql());
+                        //if (result.IsSuccess)
+                        //{
+                        //    _context.TryAdd(id, SqlEmiter.Create())
+                        //}
+                    }
                     throw new NotImplementedException();
                 }
                 else

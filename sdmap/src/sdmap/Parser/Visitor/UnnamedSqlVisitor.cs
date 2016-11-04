@@ -25,7 +25,7 @@ namespace sdmap.Parser.Visitor
 
         protected override string GetFunctionName(ParserRuleContext parseRule)
         {
-            return "Unnamed" + Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            return NameUtil.GetFunctionName((UnnamedSqlContext)parseRule);
         }
 
         public static NamedSqlVisitor Create(SdmapContext context)

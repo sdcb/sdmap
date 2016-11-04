@@ -30,7 +30,7 @@ namespace sdmap.Runtime
             {
                 return contextId;
             }
-            else 
+            else
             {
                 return $"{CurrentNs}.{contextId}";
             }
