@@ -39,7 +39,5 @@ namespace sdmap.Macros.Implements
                 return Result.Fail<string>($"Query object requires property '{syntax}' in macro 'prop'.");
             return Result.Ok(prop.GetValue(self)?.ToString() ?? string.Empty);
         }
-
-        
     }
 }
