@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace sdmap.test.MacroImplTest
+namespace sdmap.test.MacroImplTest  
 {
     public class ValTest
     {
@@ -17,6 +17,15 @@ namespace sdmap.test.MacroImplTest
             var actual = CommonMacros.ValueItSelf(SdmapContext.CreateEmpty(), val, null);
             Assert.True(actual.IsSuccess);
             Assert.Equal(val, actual.Value);
+        }
+
+        [Fact]
+        public void InputNullWillBeEmpty()
+        {
+            string val = null;
+            var actual = CommonMacros.ValueItSelf(SdmapContext.CreateEmpty(), val, null);
+            Assert.True(actual.IsSuccess);
+            Assert.Equal(string.Empty, actual.Value);
         }
     }
 }
