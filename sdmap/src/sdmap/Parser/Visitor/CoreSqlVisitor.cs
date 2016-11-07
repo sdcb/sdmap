@@ -145,19 +145,46 @@ namespace sdmap.Parser.Visitor
                 }
                 else if (arg.unnamedSql() != null)
                 {
-                    var id = NameUtil.GetFunctionName(arg.unnamedSql());
-                    var emiter = _context.TryGetEmiter(id);
+                    var parseTree = arg.unnamedSql();
+                    var id = NameUtil.GetFunctionName(parseTree);
+                    var result = _context.TryGetEmiter(id);
 
-                    if (emiter.IsFailure)
+                    UnnamedSqlEmiter emiter;
+                    if (result.IsSuccess)
                     {
-                        //var ctx = UnnamedSqlVisitor.Create(_context);
-                        //var result = ctx.Visit(arg.unnamedSql());
-                        //if (result.IsSuccess)
-                        //{
-                        //    _context.TryAdd(id, SqlEmiter.Create())
-                        //}
+                        emiter = (UnnamedSqlEmiter)result.Value;
                     }
+                    else
+                    {
+                        emiter = UnnamedSqlEmiter.Create(parseTree);
+                        var ok = _context.TryAdd(id, emiter);
+                        if (ok.IsFailure) return ok;
+                    }
+
+                    var compileResult = emiter.EnsureCompiled(_context);
+                    if (compileResult.IsFailure)
+                    {
+                        return compileResult;
+                    }
+
+                    _il.Emit(OpCodes.Ldarg_0);                             // .. -> .. -> ctx
+                    _il.Emit(OpCodes.Ldstr, id);                           // .. -> .. -> ctx id
+                    _il.Emit(OpCodes.Ldarg_1);                             // .. -> .. -> ctx id self
+                    _il.Emit(OpCodes.Call, typeof(UnnamedSqlEmiter).GetTypeInfo()
+                        .GetMethod(nameof(UnnamedSqlEmiter.Execute)));     // .. -> .. -> result<str>
+                    _il.Emit(OpCodes.Dup);                                 // .. -> .. -> result<str> x 2
+                    _il.Emit(OpCodes.Call, typeof(Result).GetTypeInfo()
+                        .GetMethod("get_" + nameof(Result.IsSuccess)));    // .. -> .. -> result<str> bool
+                    var unnamedResultOk = _il.DefineLabel();
+                    _il.Emit(OpCodes.Ldc_I4_1);                            // .. -> .. -> result<str> bool true
+                    _il.Emit(OpCodes.Beq, unnamedResultOk);                // ctx name self args
+                                                                           // -> args idx result<str>
                     throw new NotImplementedException();
+                    //_il.Emit(OpCodes.Ret);                                 // 
+
+                    _il.MarkLabel(unnamedResultOk);
+                    _il.Emit(OpCodes.Call, typeof(Result<string>).GetTypeInfo()
+                        .GetMethod("get_" + nameof(Result<string>.Value)));// .. -> args idx ele(str)
                 }
                 else
                 {

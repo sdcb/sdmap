@@ -49,7 +49,7 @@ namespace sdmap.Runtime
             }
         }
 
-        public Result TryAdd(string contextId, SqlEmiter emiter)
+        public Result TryAdd(string contextId, SqlEmiterBase emiter)
         {
             var fullName = GetFullName(contextId);
             if (Emiters.ContainsKey(fullName))

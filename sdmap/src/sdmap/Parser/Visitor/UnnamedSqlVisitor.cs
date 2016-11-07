@@ -28,9 +28,9 @@ namespace sdmap.Parser.Visitor
             return NameUtil.GetFunctionName((UnnamedSqlContext)parseRule);
         }
 
-        public static NamedSqlVisitor Create(SdmapContext context)
+        public static UnnamedSqlVisitor Create(SdmapContext context)
         {
-            return new NamedSqlVisitor(context);
+            return new UnnamedSqlVisitor(context);
         }
 
         public static Result<EmitFunction> Compile(UnnamedSqlContext parseTree, SdmapContext context)
@@ -40,9 +40,9 @@ namespace sdmap.Parser.Visitor
                 .OnSuccess(() => visitor.Function);
         }
 
-        public static NamedSqlVisitor CreateEmpty()
+        public static UnnamedSqlVisitor CreateEmpty()
         {
-            return new NamedSqlVisitor(SdmapContext.CreateEmpty());
+            return new UnnamedSqlVisitor(SdmapContext.CreateEmpty());
         }
     }
 }

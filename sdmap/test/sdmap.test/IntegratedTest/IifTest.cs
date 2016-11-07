@@ -61,5 +61,16 @@ namespace sdmap.test.IntegratedTest
             var result = rt.TryEmit("v1", new { B = true });
             Assert.False(result.IsSuccess);
         }
+
+        [Fact]
+        public void CanNestUnnamedSql()
+        {
+            var code = "sql v1{#iif<A, sql{Hello}, sql{World}";
+            var rt = new SdmapRuntime();
+            rt.AddSourceCode(code);
+            var result = rt.TryEmit("v1", new { A = true });
+            Assert.True(result.IsSuccess);
+            Assert.Equal("Hello", result.Value);
+        }
     }
 }
