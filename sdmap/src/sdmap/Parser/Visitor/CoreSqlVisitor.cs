@@ -121,7 +121,7 @@ namespace sdmap.Parser.Visitor
                     if (result.IsSuccess)
                     {
                         _il.Emit(OpCodes.Ldc_R8, result.Value);             // .. -> args idx vele
-                        _il.Emit(OpCodes.Box);                              // .. -> args idx rele
+                        _il.Emit(OpCodes.Box, typeof(double));              // .. -> args idx rele
                     }
                     else
                     {
@@ -136,7 +136,7 @@ namespace sdmap.Parser.Visitor
                         _il.Emit(OpCodes.Ldc_I8, result.Value.ToBinary());  // .. -> args idx int64
                         var ctor = typeof(DateTime).GetTypeInfo().GetConstructor(new[] { typeof(long) });
                         _il.Emit(OpCodes.Newobj, ctor);                     // .. -> args idx date
-                        _il.Emit(OpCodes.Box);                              // .. -> args idx rele
+                        _il.Emit(OpCodes.Box, typeof(DateTime));            // .. -> args idx rele
                     }
                     else
                     {

@@ -61,10 +61,7 @@ namespace sdmap.Macros
                             return TypeCheckFail(macro, i, arg, mac);
                         break;
                     case SdmapTypes.Number:
-                        if (!(arg is decimal || 
-                            arg is int || arg is short || arg is long || 
-                            arg is uint || arg is ushort || arg is ulong ||
-                            arg is float || arg is double))
+                        if (!(arg is double))
                             return TypeCheckFail(macro, i, arg, mac);
                         break;
                     case SdmapTypes.String:

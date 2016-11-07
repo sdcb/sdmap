@@ -64,23 +64,6 @@ namespace sdmap.test.MacroTest
         }
 
         [Fact]
-        public void IsNumber()
-        {
-            var mockedMacro = new Macro
-            {
-                Name = "Test",
-                Arguments = new[] 
-                {
-                    SdmapTypes.Number, SdmapTypes.Number,
-                    SdmapTypes.Number, SdmapTypes.Number
-                }
-            };
-            var ok = RuntimeCheck(new object[] { 3m, 3.14, 3L, 3f }, mockedMacro);
-
-            Assert.True(ok.IsSuccess);
-        }
-
-        [Fact]
         public void IsSyntax()
         {
             var mockedMacro = new Macro
