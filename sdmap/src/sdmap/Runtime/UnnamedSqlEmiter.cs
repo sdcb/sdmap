@@ -1,5 +1,4 @@
-﻿using Antlr4.Runtime.Tree;
-using sdmap.Functional;
+﻿using sdmap.Functional;
 using sdmap.Parser.Visitor;
 using System;
 using System.Collections.Generic;
@@ -9,21 +8,21 @@ using static sdmap.Parser.G4.SdmapParser;
 
 namespace sdmap.Runtime
 {
-    public class SqlEmiter : SqlEmiterBase
+    public class UnnamedSqlEmiter : SqlEmiterBase
     {
-        public SqlEmiter(NamedSqlContext parseTree)
+        public UnnamedSqlEmiter(UnnamedSqlContext parseTree)
             : base(parseTree)
         {
         }
 
-        public static SqlEmiter Create(NamedSqlContext parseTree)
+        public static UnnamedSqlEmiter Create(UnnamedSqlContext parseTree)
         {
-            return new SqlEmiter(parseTree);
+            return new UnnamedSqlEmiter(parseTree);
         }
 
         public override Result<EmitFunction> Compile(SdmapContext context)
         {
-            return NamedSqlVisitor.Compile((NamedSqlContext)_parseTree, context);
+            return UnnamedSqlVisitor.Compile((UnnamedSqlContext)_parseTree, context);
         }
     }
 }

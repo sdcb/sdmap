@@ -33,7 +33,7 @@ namespace sdmap.Parser.Visitor
             return new NamedSqlVisitor(context);
         }
 
-        public static Result<EmitFunction> Compile(NamedSqlContext parseTree, SdmapContext context)
+        public static Result<EmitFunction> Compile(UnnamedSqlContext parseTree, SdmapContext context)
         {
             var visitor = Create(context);
             return visitor.Visit(parseTree)
