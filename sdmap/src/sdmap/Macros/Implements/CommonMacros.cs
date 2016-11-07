@@ -63,7 +63,7 @@ namespace sdmap.Macros.Implements
             else
             {
                 return Result.Fail<string>($"Query property '{syntax}' expect type bool " + 
-                    "but given '{prop.PropertyType.FullName}' in macro 'iif'.");
+                    $"but given '{prop.PropertyType.FullName}' in macro 'iif'.");
             }
         }
     }

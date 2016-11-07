@@ -1,5 +1,5 @@
 ﻿{
-  "version": "0.1.4",
+  "version": "0.2.1",
   "description": "A template engine for writing dynamic sql.",
 
   "dependencies": {
@@ -23,7 +23,7 @@
   "packOptions": {
     "owners": [ "sdcb" ],
     "summary": "A template engine for writing dynamic sql.",
-    "releaseNotes": "Drop requirement for netstandard1.6",
+    "releaseNotes": "Add support for iif function.",
     "repository": {
       "type": "git",
       "url": "https://github.com/sdcb/sdmap"
