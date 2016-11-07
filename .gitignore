@@ -11,3 +11,5 @@ project.lock.json
 /sdmap/test/sdmap.test/bin/Debug/netcoreapp1.0
 /sdmap/src/sdmap/Parser/G4/Sdmap*.cs
 /sdmap/src/sdmap/Parser/G4/Sdmap*.tokens
+obj/
+bin/

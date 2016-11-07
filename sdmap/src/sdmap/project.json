@@ -1,17 +1,34 @@
 ﻿{
-  "version": "1.0.0-*",
+  "version": "0.1.4",
+  "description": "A template engine for writing dynamic sql.",
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0",
-    "Antlr4.Runtime": "4.5.4-beta001",
-    "Antlr4": "4.5.4-beta001",
-    "System.Reflection.Emit.Lightweight": "4.0.1", 
-    "System.Reflection.Emit": "4.0.1"
   },
 
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": [ "dnxcore50" ],
+      "dependencies": {
+        "System.Reflection.Emit.Lightweight": "4.0.1", 
+        "Antlr4.Runtime": "4.5.4-beta001"
+      }
+    },
+    "net452": {
+      "dependencies": {
+        "Antlr4.Runtime": "4.5.3"
+      }
     }
+  },
+
+  "packOptions": {
+    "owners": [ "sdcb" ],
+    "summary": "A template engine for writing dynamic sql.",
+    "releaseNotes": "Drop requirement for netstandard1.6",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/sdcb/sdmap"
+    },
+    "licenseUrl": "https://github.com/sdcb/sdmap/blob/master/LICENSE",
+    "tags": [ "dynamic sql", "ibatis" ]
   }
 }
