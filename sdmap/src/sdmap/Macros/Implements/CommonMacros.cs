@@ -22,7 +22,7 @@ namespace sdmap.Macros.Implements
         }
 
         [Macro("val")]
-        public static Result<string> ValueItSelf(SdmapContext context, object self, object[] arguments)
+        public static Result<string> Val(SdmapContext context, object self, object[] arguments)
         {
             return Result.Ok(self?.ToString() ?? string.Empty);
         }
@@ -32,12 +32,39 @@ namespace sdmap.Macros.Implements
         public static Result<string> Prop(SdmapContext context, object self, object[] arguments)
         {
             if (self == null)
-                return Result.Fail<string>("Query object requires not null in macro 'prop'.");
+                return Result.Fail<string>($"Query requires not null in macro '{nameof(Prop)}'.");
             var syntax = (string)arguments[0];
             var prop = self.GetType().GetTypeInfo().GetProperty(syntax);
             if (prop == null)
-                return Result.Fail<string>($"Query object requires property '{syntax}' in macro 'prop'.");
+                return Result.Fail<string>($"Query requires property '{syntax}' in macro '{nameof(Prop)}'.");
             return Result.Ok(prop.GetValue(self)?.ToString() ?? string.Empty);
+        }
+
+        [Macro("iif")]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.String, SdmapTypes.String)]
+        public static Result<string> Iif(SdmapContext context, object self, object[] arguments)
+        {
+            if (self == null)
+                return Result.Fail<string>(
+                    "Query requires not null in macro 'prop'.");
+            var syntax = (string)arguments[0];
+            var prop = self.GetType().GetTypeInfo().GetProperty(syntax);
+            if (prop == null)
+                return Result.Fail<string>(
+                    $"Query requires property '{syntax}' in macro 'prop'.");
+
+            if (prop.PropertyType == typeof(bool) || prop.PropertyType == typeof(bool?))
+            {
+                var result1 = (string)arguments[1];
+                var result2 = (string)arguments[2];
+                var result = ((bool?)prop.GetValue(self) ?? false ? result1 : result2);
+                return Result.Ok(result);
+            }
+            else
+            {
+                return Result.Fail<string>($"Query property '{syntax}' expect type bool " + 
+                    "but given '{prop.PropertyType.FullName}' in macro 'iif'.");
+            }
         }
     }
 }

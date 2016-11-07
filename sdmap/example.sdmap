@@ -1,26 +1,25 @@
-	namespace Client
+namespace Client
+{
+	sql FindByQuery
 	{
-		sql FindByQuery
-		{
-			SELECT * FROM client_Profile
-			WHERE 1 = 1 
+		SELECT * FROM client_Profile
+		WHERE 1 = 1 
 
-			#ifNotEmpty<City,    sql{ AND `City`    = @City }>
-			#ifNotEmpty<Zipcode, sql{ AND `Zipcode` = @Zipcode }>
+		#ifNotEmpty<City,    sql{ AND `City`    = @City }>
+		#ifNotEmpty<Zipcode, sql{ AND `Zipcode` = @Zipcode }>
 
-			#ifNotEqual<State,   "NY", sql{ AND `State` = @State }>
-			#ifEqual<IsReactive, 1   , sql{ AND `WONum` LIKE CONCAT('B%', @WONum) }>
+		#ifNotEqual<State,   "NY", sql{ AND `State` = @State }>
+		#ifEqual<IsReactive, 1   , sql{ AND `WONum` LIKE CONCAT('B%', @WONum) }>
 
-			#include<CommonOrderBy>
-		}
+		#include<CommonOrderBy>
 	}
+}
 
-	sql CommonOrderBy
-	{
-		#ifNotEmpty<OrderBy, sql{
-			ORDER BY #prop<OrderBy> #iif<Asc, sql{ ASC }, sql{ DESC }>)
-		}, sql{
-			ORDER BY Id DESC
-		}>
-	}
+sql CommonOrderBy
+{
+	#ifNotEmpty<OrderBy, sql{
+		ORDER BY #prop<OrderBy> #iif<Asc, sql{ ASC }, sql{ DESC }>)
+	}, sql{
+		ORDER BY Id DESC
+	}>
 }
