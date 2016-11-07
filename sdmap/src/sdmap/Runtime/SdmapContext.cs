@@ -9,13 +9,13 @@ namespace sdmap.Runtime
 {
     public class SdmapContext
     {
-        public SortedDictionary<string, SqlEmiter> Emiters { get; }
+        public SortedDictionary<string, SqlEmiterBase> Emiters { get; }
 
         public Stack<string> NsStack { get; }
 
         public MacroManager MacroManager { get; } = new MacroManager();
 
-        private SdmapContext(SortedDictionary<string, SqlEmiter> emiters, Stack<string> nsStacks)
+        private SdmapContext(SortedDictionary<string, SqlEmiterBase> emiters, Stack<string> nsStacks)
         {
             Emiters = emiters;
             NsStack = nsStacks;
@@ -36,7 +36,7 @@ namespace sdmap.Runtime
             }
         }
 
-        public Result<SqlEmiter> TryGetEmiter(string contextId)
+        public Result<SqlEmiterBase> TryGetEmiter(string contextId)
         {
             var fullName = GetFullName(contextId);
             if (Emiters.ContainsKey(fullName))
@@ -45,7 +45,7 @@ namespace sdmap.Runtime
             }
             else
             {
-                return Result.Fail<SqlEmiter>($"Syntax '{contextId}' not found in current scope.");
+                return Result.Fail<SqlEmiterBase>($"Syntax '{contextId}' not found in current scope.");
             }
         }
 
@@ -63,15 +63,15 @@ namespace sdmap.Runtime
 
         public static SdmapContext CreateEmpty()
         {
-            return CreateByContext(new SortedDictionary<string, SqlEmiter>());
+            return CreateByContext(new SortedDictionary<string, SqlEmiterBase>());
         }
 
-        public static SdmapContext CreateByContext(SortedDictionary<string, SqlEmiter> context)
+        public static SdmapContext CreateByContext(SortedDictionary<string, SqlEmiterBase> context)
         {
             return Create(context, new Stack<string>());
         }
 
-        public static SdmapContext Create(SortedDictionary<string, SqlEmiter> emiters, Stack<string> nsStack)
+        public static SdmapContext Create(SortedDictionary<string, SqlEmiterBase> emiters, Stack<string> nsStack)
         {
             return new SdmapContext(emiters, nsStack);
         }

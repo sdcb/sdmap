@@ -26,7 +26,7 @@ namespace sdmap.Runtime
 
         public Result<string> TryEmit(string key, object v)
         {
-            SqlEmiter emiter;
+            SqlEmiterBase emiter;
             if (_context.Emiters.TryGetValue(key, out emiter))
             {
                 return emiter.TryEmit(v, _context);
