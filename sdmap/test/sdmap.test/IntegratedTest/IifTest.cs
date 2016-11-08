@@ -62,15 +62,27 @@ namespace sdmap.test.IntegratedTest
             Assert.False(result.IsSuccess);
         }
 
-        [Fact]
-        public void CanNestUnnamedSql()
+        [InlineData(true, "Yes#")]
+        [InlineData(false, "No!<>")]
+        public void CanNestUnnamedSql(bool input, string expected)
         {
-            var code = "sql v1{#iif<A, sql{Hello}, sql{World}";
+            var code = "sql v1{#iif<A, sql{Yes#}, sql{No!<>}";
+            var rt = new SdmapRuntime();
+            rt.AddSourceCode(code);
+            var result = rt.TryEmit("v1", new { A = input });
+            Assert.True(result.IsSuccess);
+            Assert.Equal(expected, result.Value);
+        }
+
+        [Fact]
+        public void CanRunInnerMacro()
+        {
+            var code = "sql v1{#iif<A, sql{#prop<A>}, sql{}}";
             var rt = new SdmapRuntime();
             rt.AddSourceCode(code);
             var result = rt.TryEmit("v1", new { A = true });
             Assert.True(result.IsSuccess);
-            Assert.Equal("Hello", result.Value);
+            Assert.Equal(true.ToString(), result.Value);
         }
     }
 }

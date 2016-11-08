@@ -56,23 +56,34 @@ namespace sdmap.Parser.Visitor
                 .GetTypeInfo()
                 .GetConstructor(Type.EmptyTypes));                                    // sb
             _il.Emit(OpCodes.Stloc_0);                                                // [empty]
+
+            Action returnBlock = () =>
+            {
+                _il.Emit(OpCodes.Ldloc_0);                                        // sb
+                var okMethod = typeof(Result)
+                    .GetTypeInfo()
+                    .GetMethods()
+                    .Single(x => x.IsGenericMethod && x.Name == "Ok")
+                    .MakeGenericMethod(typeof(string));
+                _il.Emit(OpCodes.Call, typeof(StringBuilder)
+                    .GetTypeInfo()
+                    .GetMethod(nameof(StringBuilder.ToString), Type.EmptyTypes)); // str
+                _il.Emit(OpCodes.Call, okMethod);                                 // result<str>
+
+                _il.Emit(OpCodes.Ret);                                            // [returned]
+                Function = (EmitFunction)method.CreateDelegate(typeof(EmitFunction));
+            };
+
+            if (coreSqlContext.GetText() == string.Empty)
+            {
+                returnBlock();
+                return Result.Ok();
+            }            
                                                                                       
             return Visit(coreSqlContext)                                              
                 .OnSuccess(() =>                                                      // [must be empty]
-                {                                                                     
-                    _il.Emit(OpCodes.Ldloc_0);                                        // sb
-                    var okMethod = typeof(Result)
-                        .GetTypeInfo()
-                        .GetMethods()
-                        .Single(x => x.IsGenericMethod && x.Name == "Ok")
-                        .MakeGenericMethod(typeof(string));
-                    _il.Emit(OpCodes.Call, typeof(StringBuilder)
-                        .GetTypeInfo()
-                        .GetMethod(nameof(StringBuilder.ToString), Type.EmptyTypes)); // str
-                    _il.Emit(OpCodes.Call, okMethod);                                 // result<str>
-
-                    _il.Emit(OpCodes.Ret);                                            // [returned]
-                    Function = (EmitFunction)method.CreateDelegate(typeof(EmitFunction));
+                {
+                    returnBlock();
                 });
         }
 
@@ -178,9 +189,13 @@ namespace sdmap.Parser.Visitor
                     var unnamedResultOk = _il.DefineLabel();
                     _il.Emit(OpCodes.Ldc_I4_1);                            // .. -> .. -> result<str> bool true
                     _il.Emit(OpCodes.Beq, unnamedResultOk);                // ctx name self args
-                                                                           // -> args idx result<str>
-                    throw new NotImplementedException();
-                    //_il.Emit(OpCodes.Ret);                                 // 
+                                                                           // args idx result<str>
+                    var topStack = _il.DeclareLocal(typeof(Result<string>));
+                    _il.Emit(OpCodes.Stloc, topStack);                     // ctx name self args args idx (6)
+                    for (var stack = 0; stack < 6; ++stack)
+                        _il.Emit(OpCodes.Pop);                             // [empty]
+                    _il.Emit(OpCodes.Ldloc, topStack);                     // result<str>
+                    _il.Emit(OpCodes.Ret);                                 // [returned]
 
                     _il.MarkLabel(unnamedResultOk);
                     _il.Emit(OpCodes.Call, typeof(Result<string>).GetTypeInfo()
