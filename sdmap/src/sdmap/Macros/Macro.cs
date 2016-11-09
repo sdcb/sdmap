@@ -12,6 +12,6 @@ namespace sdmap.Macros
 
         public SdmapTypes[] Arguments { get; set; }
 
-        public MacroDelegate Function { get; set; }
+        public MacroDelegate Method { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using sdmap.Functional;
+using sdmap.Macros;
 using sdmap.Parser.G4;
 using sdmap.Parser.Visitor;
 using System;
@@ -22,6 +23,21 @@ namespace sdmap.Runtime
 
             var visitor = SqlItemVisitor.Create(_context);
             return visitor.Visit(parser.root());
+        }
+
+        public void DropCleanEmiters()
+        {
+            _context.Emiters.Clear();
+        }
+
+        public Result AddMacro(string id, SdmapTypes[] arguments, MacroDelegate method)
+        {
+            return _context.MacroManager.Add(new Macro
+            {
+                Name = id, 
+                Arguments = arguments, 
+                Method = method
+            });
         }
 
         public Result<string> TryEmit(string key, object v)

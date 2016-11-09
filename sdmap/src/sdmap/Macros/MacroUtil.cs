@@ -37,7 +37,7 @@ namespace sdmap.Macros
             {
                 Name = nameAttr?.Name ?? method.Name,
                 Arguments = argsAttr?.Arguments ?? new SdmapTypes[0],
-                Function = (MacroDelegate)method.CreateDelegate(typeof(MacroDelegate))
+                Method = (MacroDelegate)method.CreateDelegate(typeof(MacroDelegate))
             };
         }
 
