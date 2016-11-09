@@ -23,7 +23,7 @@
   "packOptions": {
     "owners": [ "sdcb" ],
     "summary": "A template engine for writing dynamic sql.",
-    "releaseNotes": "Add support for iif function.",
+    "releaseNotes": "Add support for ifNotEmpty/ifNotNull.",
     "repository": {
       "type": "git",
       "url": "https://github.com/sdcb/sdmap"
