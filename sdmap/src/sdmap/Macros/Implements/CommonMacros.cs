@@ -62,9 +62,52 @@ namespace sdmap.Macros.Implements
             }
             else
             {
-                return Result.Fail<string>($"Query property '{syntax}' expect type bool " + 
+                return Result.Fail<string>($"Query property '{syntax}' expect type bool " +
                     $"but given '{prop.PropertyType.FullName}' in macro 'iif'.");
             }
+        }
+
+        [Macro("ifNotEmpty")]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.String)]
+        public static Result<string> IfNotEmpty(SdmapContext context, object self, object[] arguments)
+        {
+            if (self == null) return Result.Fail<string>(
+                    $"Query requires not null in macro '{nameof(IfNotEmpty)}'.");
+            var syntax = (string)arguments[0];
+            var prop = self.GetType().GetTypeInfo().GetProperty(syntax);
+            if (prop == null) return Result.Ok(string.Empty);
+
+            if (prop.PropertyType == typeof(string))
+            {
+                if (string.IsNullOrWhiteSpace((string)prop.GetValue(self)))
+                {
+                    return Result.Ok(string.Empty);
+                }
+            }
+            else if (prop.GetValue(self) == null)
+            {
+                return Result.Ok(string.Empty);
+            }
+
+            return Result.Ok((string)arguments[1]);
+        }
+
+        [Macro("ifNotNull")]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.String)]
+        public static Result<string> IfNotNull(SdmapContext context, object self, object[] arguments)
+        {
+            if (self == null) return Result.Fail<string>(
+                    $"Query requires not null in macro '{nameof(IfNotNull)}'.");
+            var syntax = (string)arguments[0];
+            var prop = self.GetType().GetTypeInfo().GetProperty(syntax);
+            if (prop == null) return Result.Ok(string.Empty);
+
+            if (prop.GetValue(self) == null)
+            {
+                return Result.Ok(string.Empty);
+            }
+
+            return Result.Ok((string)arguments[1]);
         }
     }
 }

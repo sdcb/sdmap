@@ -1,0 +1,42 @@
+﻿using sdmap.Runtime;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace sdmap.test.IntegratedTest
+{
+    public class IfEmptyTest
+    {
+        [Fact]
+        public void IfNotEmpty()
+        {
+            var code = "sql v1{#ifNotEmpty<A, sql{@A}}";
+            var rt = new SdmapRuntime();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("v1", new { A = "NotEmpty" });
+            Assert.Equal("@A", result);
+        }
+
+        [Fact]
+        public void IfNotNull()
+        {
+            var code = "sql v1{#ifNotEmpty<A, sql{@A}}";
+            var rt = new SdmapRuntime();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("v1", new { A = " " });
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void PropInSubSql()
+        {
+            var code = "sql v1{#ifNotEmpty<A, sql{#prop<A>}}";
+            var rt = new SdmapRuntime();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("v1", new { A = "NotEmpty" });
+            Assert.Equal("NotEmpty", result);
+        }
+    }
+}
