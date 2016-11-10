@@ -112,7 +112,7 @@ namespace sdmap.Parser.Visitor
                 }
                 else if (arg.NSSyntax() != null)
                 {
-                    _il.Emit(OpCodes.Ldstr, arg.SYNTAX().GetText());        // .. -> args idx ele
+                    _il.Emit(OpCodes.Ldstr, arg.NSSyntax().GetText());        // .. -> args idx ele
                 }
                 else if (arg.STRING() != null)
                 {
