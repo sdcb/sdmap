@@ -193,28 +193,10 @@ namespace sdmap.Parser.Visitor
                         return compileResult;
                     }
 
-                    _il.Emit(OpCodes.Ldarg_0);                             // .. -> .. -> ctx
-                    _il.Emit(OpCodes.Ldstr, id);                           // .. -> .. -> ctx id
-                    _il.Emit(OpCodes.Ldarg_1);                             // .. -> .. -> ctx id self
+                    _il.Emit(OpCodes.Ldarg_0);                             // .. -> args idx ctx
+                    _il.Emit(OpCodes.Ldstr, id);                           // .. -> args idx ctx id
                     _il.Emit(OpCodes.Call, typeof(UnnamedSqlEmiter).GetTypeInfo()
-                        .GetMethod(nameof(UnnamedSqlEmiter.Execute)));     // .. -> .. -> result<str>
-                    _il.Emit(OpCodes.Dup);                                 // .. -> .. -> result<str> x 2
-                    _il.Emit(OpCodes.Call, typeof(Result).GetTypeInfo()
-                        .GetMethod("get_" + nameof(Result.IsSuccess)));    // .. -> .. -> result<str> bool
-                    var unnamedResultOk = _il.DefineLabel();
-                    _il.Emit(OpCodes.Ldc_I4_1);                            // .. -> .. -> result<str> bool true
-                    _il.Emit(OpCodes.Beq, unnamedResultOk);                // ctx name self args
-                                                                           // args idx result<str>
-                    var topStack = _il.DeclareLocal(typeof(Result<string>));
-                    _il.Emit(OpCodes.Stloc, topStack);                     // ctx name self args args idx (6)
-                    for (var stack = 0; stack < 6; ++stack)
-                        _il.Emit(OpCodes.Pop);                             // [empty]
-                    _il.Emit(OpCodes.Ldloc, topStack);                     // result<str>
-                    _il.Emit(OpCodes.Ret);                                 // [returned]
-
-                    _il.MarkLabel(unnamedResultOk);
-                    _il.Emit(OpCodes.Call, typeof(Result<string>).GetTypeInfo()
-                        .GetMethod("get_" + nameof(Result<string>.Value)));// .. -> args idx ele(str)
+                        .GetMethod(nameof(UnnamedSqlEmiter.EmiterFromId)));// .. -> args idx emiter
                 }
                 else
                 {

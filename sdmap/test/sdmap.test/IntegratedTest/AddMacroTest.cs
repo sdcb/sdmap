@@ -31,9 +31,10 @@ namespace sdmap.test.IntegratedTest
             var code = "sql v1{#hello<sql{#val<>}>}";
             var rt = new SdmapRuntime();
             rt.AddSourceCode(code);
-            rt.AddMacro("hello", new[] { SdmapTypes.String }, (context, self, arguments) =>
+            rt.AddMacro("hello", new[] { SdmapTypes.StringOrSql }, (context, self, arguments) =>
             {
-                return Result.Ok($"Hello " + (string)arguments[0]);
+                return Result.Ok($"Hello " + 
+                    MacroUtil.EvalToString(arguments[0], context, self).Value);
             });
             var result = rt.Emit("v1", "World");
             Assert.Equal("Hello World", result);

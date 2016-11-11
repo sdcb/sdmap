@@ -25,10 +25,10 @@ namespace sdmap.Runtime
             return UnnamedSqlVisitor.Compile((UnnamedSqlContext)_parseTree, context);
         }
 
-        public static Result<string> Execute(SdmapContext context, string id, object self)
+        public static EmitFunction EmiterFromId(SdmapContext context, string id)
         {
-            return context.TryGetEmiter(id)
-                .OnSuccess(v => v.TryEmit(self, context));
+            return context.GetEmiter(id)
+                .Emiter;
         }
     }
 }

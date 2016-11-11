@@ -1,4 +1,6 @@
-﻿using sdmap.Parser.Visitor;
+﻿using sdmap.Functional;
+using sdmap.Macros;
+using sdmap.Parser.Visitor;
 using sdmap.Runtime;
 using System;
 using System.Collections.Generic;
@@ -83,6 +85,24 @@ namespace sdmap.test.IntegratedTest
             var result = rt.TryEmit("v1", new { A = true });
             Assert.True(result.IsSuccess);
             Assert.Equal(true.ToString(), result.Value);
+        }
+
+        [Fact]
+        public void OnlyRunOnce()
+        {
+            var code = "sql v1{#iif<A, sql{#record<>}, sql{#record<>}}";
+            var rt = new SdmapRuntime();
+            rt.AddSourceCode(code);
+            var times = 0;
+            rt.AddMacro("record", null, (ctx, self, args) =>
+            {
+                ++times;
+                return Result.Ok(string.Empty);
+            });
+            var result = rt.TryEmit("v1", new { A = true });
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(1, times);
         }
     }
 }

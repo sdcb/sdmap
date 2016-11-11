@@ -49,6 +49,11 @@ namespace sdmap.Runtime
             }
         }
 
+        public SqlEmiterBase GetEmiter(string contextId)
+        {
+            return TryGetEmiter(contextId).Value;
+        }
+
         public Result TryAdd(string contextId, SqlEmiterBase emiter)
         {
             var fullName = GetFullName(contextId);

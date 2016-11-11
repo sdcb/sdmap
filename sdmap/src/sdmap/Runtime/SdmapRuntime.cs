@@ -27,6 +27,7 @@ namespace sdmap.Runtime
 
         public Result AddMacro(string id, SdmapTypes[] arguments, MacroDelegate method)
         {
+            if (arguments == null) arguments = new SdmapTypes[0];
             return _context.MacroManager.Add(new Macro
             {
                 Name = id, 

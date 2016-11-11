@@ -93,5 +93,14 @@ namespace sdmap.Macros
             return Result.Fail($"Macro '{macro.Name}' " +
                 $"argument {i + 1} requires {mac} but provides {arg.GetType().Name}.");
         }
+
+        public static Result<string> EvalToString(object value, SdmapContext context, object self)
+        {
+            if (value is string)
+                return Result.Ok((string)value);
+            if (value is EmitFunction)
+                return ((EmitFunction)value)(context, self);
+            throw new ArgumentOutOfRangeException(nameof(value));
+        }
     }
 }

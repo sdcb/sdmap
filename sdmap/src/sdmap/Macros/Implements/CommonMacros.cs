@@ -55,10 +55,10 @@ namespace sdmap.Macros.Implements
 
             if (prop.PropertyType == typeof(bool) || prop.PropertyType == typeof(bool?))
             {
-                var result1 = (string)arguments[1];
-                var result2 = (string)arguments[2];
-                var result = ((bool?)prop.GetValue(self) ?? false ? result1 : result2);
-                return Result.Ok(result);
+                var test = (bool?)prop.GetValue(self) ?? false;
+                return test ?
+                    MacroUtil.EvalToString(arguments[1], context, self) :
+                    MacroUtil.EvalToString(arguments[2], context, self);
             }
             else
             {
@@ -89,7 +89,7 @@ namespace sdmap.Macros.Implements
                 return Result.Ok(string.Empty);
             }
 
-            return Result.Ok((string)arguments[1]);
+            return MacroUtil.EvalToString(arguments[1], context, self);
         }
 
         [Macro("ifNotNull")]
@@ -107,7 +107,7 @@ namespace sdmap.Macros.Implements
                 return Result.Ok(string.Empty);
             }
 
-            return Result.Ok((string)arguments[1]);
+            return MacroUtil.EvalToString(arguments[1], context, self);
         }
     }
 }
