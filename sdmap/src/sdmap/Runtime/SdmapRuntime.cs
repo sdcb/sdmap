@@ -25,11 +25,6 @@ namespace sdmap.Runtime
             return visitor.Visit(parser.root());
         }
 
-        public void DropCleanEmiters()
-        {
-            _context.Emiters.Clear();
-        }
-
         public Result AddMacro(string id, SdmapTypes[] arguments, MacroDelegate method)
         {
             return _context.MacroManager.Add(new Macro
