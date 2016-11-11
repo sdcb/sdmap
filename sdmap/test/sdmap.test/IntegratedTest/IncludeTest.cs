@@ -81,15 +81,5 @@ namespace sdmap.test.IntegratedTest
             var result = rt.Emit("v1", new { A = true });
             Assert.Equal("12", result);
         }
-
-        [Fact]
-        public void CanReferenceOtherInOneNamespace()
-        {
-            var code = "namespace ns{sql v1{1#include<v2>} sql v2{2}}";
-            var rt = new SdmapRuntime();
-            rt.AddSourceCode(code);
-            var result = rt.Emit("ns.v1", new { A = true });
-            Assert.Equal("12", result);
-        }
     }
 }

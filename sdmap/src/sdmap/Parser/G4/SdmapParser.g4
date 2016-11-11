@@ -3,7 +3,7 @@
 options { tokenVocab=SdmapLexer; }
 
 root:
-	namespace | namedSql*;
+	(namespace | namedSql)*;
 
 namespace:
 	OpenNamespace
