@@ -42,7 +42,7 @@ namespace sdmap.test.MacroTest
             Assert.Equal(new[]
             {
                 SdmapTypes.Syntax, 
-                SdmapTypes.UnnamedSql
+                SdmapTypes.Sql
             }, macro.Arguments);
         }
     }

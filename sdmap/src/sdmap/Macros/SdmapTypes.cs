@@ -11,6 +11,7 @@ namespace sdmap.Macros
         Date, 
         Number, 
         String, 
-        UnnamedSql
+        Sql, 
+        StringOrSql, 
     }
 }

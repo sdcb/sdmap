@@ -41,7 +41,7 @@ namespace sdmap.Macros.Implements
         }
 
         [Macro("iif")]
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.String, SdmapTypes.String)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql, SdmapTypes.StringOrSql)]
         public static Result<string> Iif(SdmapContext context, object self, object[] arguments)
         {
             if (self == null)
@@ -68,7 +68,7 @@ namespace sdmap.Macros.Implements
         }
 
         [Macro("ifNotEmpty")]
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.String)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql)]
         public static Result<string> IfNotEmpty(SdmapContext context, object self, object[] arguments)
         {
             if (self == null) return Result.Fail<string>(
@@ -93,7 +93,7 @@ namespace sdmap.Macros.Implements
         }
 
         [Macro("ifNotNull")]
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.String)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql)]
         public static Result<string> IfNotNull(SdmapContext context, object self, object[] arguments)
         {
             if (self == null) return Result.Fail<string>(

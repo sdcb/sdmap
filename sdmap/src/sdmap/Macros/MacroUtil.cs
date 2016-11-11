@@ -72,10 +72,16 @@ namespace sdmap.Macros
                         if (!(arg is string))
                             return TypeCheckFail(macro, i, arg, mac);
                         break;
-                    case SdmapTypes.UnnamedSql:
+                    case SdmapTypes.Sql:
                         if (!(arg is EmitFunction))
                             return TypeCheckFail(macro, i, arg, mac);
                         break;
+                    case SdmapTypes.StringOrSql:
+                        if (!(arg is string) && !(arg is EmitFunction))
+                            return TypeCheckFail(macro, i, arg, mac);
+                        break;
+                    default:
+                        return TypeCheckFail(macro, i, arg, mac);
                 }
             }
 

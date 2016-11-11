@@ -11,7 +11,7 @@ namespace sdmap.test.MacroTest.ToMacroImpl
 {
     public static class DetectArgumentImpl
     {
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.UnnamedSql)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Sql)]
         public static Result<string> DetectMe(SdmapContext context, object self, object[] arguments)
         {
             return Result.Ok("Hello World");
