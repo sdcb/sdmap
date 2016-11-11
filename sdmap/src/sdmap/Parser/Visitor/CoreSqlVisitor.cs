@@ -51,6 +51,13 @@ namespace sdmap.Parser.Visitor
 
             var coreSqlContext = parseRule.GetChild<CoreSqlContext>(0);
 
+            _il.Emit(OpCodes.Ldarg_0);                                  // _ctx
+            _il.Emit(OpCodes.Call, typeof(SdmapContext).GetTypeInfo()
+                .GetMethod("get_" + nameof(SdmapContext.NsStack)));     // nsStack
+            _il.Emit(OpCodes.Ldstr, _context.CurrentNs);                // nsStack ns
+            _il.Emit(OpCodes.Call, typeof(Stack<string>).GetTypeInfo()
+                .GetMethod(nameof(Stack<string>.Push)));                // [empty]
+
             _il.DeclareLocal(typeof(StringBuilder));
             _il.Emit(OpCodes.Newobj, typeof(StringBuilder)
                 .GetTypeInfo()
@@ -70,7 +77,15 @@ namespace sdmap.Parser.Visitor
                     .GetMethod(nameof(StringBuilder.ToString), Type.EmptyTypes)); // str
                 _il.Emit(OpCodes.Call, okMethod);                                 // result<str>
 
-                _il.Emit(OpCodes.Ret);                                            // [returned]
+                _il.Emit(OpCodes.Ldarg_0);                                        // .. _ctx
+                _il.Emit(OpCodes.Call, typeof(SdmapContext).GetTypeInfo()
+                    .GetMethod("get_" + nameof(SdmapContext.NsStack)));           // .. nsStack
+                _il.Emit(OpCodes.Call, typeof(Stack<string>).GetTypeInfo()
+                    .GetMethod(nameof(Stack<string>.Pop)));                       // .. ns
+                _il.Emit(OpCodes.Pop);                                            // result<str>
+                
+
+                _il.Emit(OpCodes.Ret);                                            // [empty-returned]
                 Function = (EmitFunction)method.CreateDelegate(typeof(EmitFunction));
             };
 
@@ -167,7 +182,7 @@ namespace sdmap.Parser.Visitor
                     }
                     else
                     {
-                        emiter = UnnamedSqlEmiter.Create(parseTree);
+                        emiter = UnnamedSqlEmiter.Create(parseTree, _context.CurrentNs);
                         var ok = _context.TryAdd(id, emiter);
                         if (ok.IsFailure) return ok;
                     }

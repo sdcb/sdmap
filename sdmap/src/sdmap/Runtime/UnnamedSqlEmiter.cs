@@ -10,17 +10,17 @@ namespace sdmap.Runtime
 {
     public class UnnamedSqlEmiter : SqlEmiterBase
     {
-        public UnnamedSqlEmiter(UnnamedSqlContext parseTree)
-            : base(parseTree)
+        public UnnamedSqlEmiter(UnnamedSqlContext parseTree, string ns)
+            : base(parseTree, ns)
         {
         }
 
-        public static UnnamedSqlEmiter Create(UnnamedSqlContext parseTree)
+        public static UnnamedSqlEmiter Create(UnnamedSqlContext parseTree, string ns)
         {
-            return new UnnamedSqlEmiter(parseTree);
+            return new UnnamedSqlEmiter(parseTree, ns);
         }
 
-        public override Result<EmitFunction> Compile(SdmapContext context)
+        protected override Result<EmitFunction> Compile(SdmapContext context)
         {
             return UnnamedSqlVisitor.Compile((UnnamedSqlContext)_parseTree, context);
         }

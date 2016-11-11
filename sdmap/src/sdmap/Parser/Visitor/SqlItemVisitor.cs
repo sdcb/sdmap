@@ -36,7 +36,7 @@ namespace sdmap.Parser.Visitor
             var openSql = context.GetToken(OpenNamedSql, 0);
             var id = LexerUtil.GetOpenSqlId(openSql.GetText());
 
-            return Context.TryAdd(id, SqlEmiter.Create(context));
+            return Context.TryAdd(id, SqlEmiter.Create(context, Context.CurrentNs));
         }
 
         public static SqlItemVisitor Create(SdmapContext context)

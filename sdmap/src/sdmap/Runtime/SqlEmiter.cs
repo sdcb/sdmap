@@ -11,17 +11,17 @@ namespace sdmap.Runtime
 {
     public class SqlEmiter : SqlEmiterBase
     {
-        public SqlEmiter(NamedSqlContext parseTree)
-            : base(parseTree)
+        public SqlEmiter(NamedSqlContext parseTree, string ns)
+            : base(parseTree, ns)
         {
         }
 
-        public static SqlEmiter Create(NamedSqlContext parseTree)
+        public static SqlEmiter Create(NamedSqlContext parseTree, string ns)
         {
-            return new SqlEmiter(parseTree);
+            return new SqlEmiter(parseTree, ns);
         }
 
-        public override Result<EmitFunction> Compile(SdmapContext context)
+        protected override Result<EmitFunction> Compile(SdmapContext context)
         {
             return NamedSqlVisitor.Compile((NamedSqlContext)_parseTree, context);
         }

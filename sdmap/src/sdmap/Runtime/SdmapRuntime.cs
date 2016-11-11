@@ -40,22 +40,23 @@ namespace sdmap.Runtime
             });
         }
 
-        public Result<string> TryEmit(string key, object v)
+        public Result<string> TryEmit(string id, object query)
         {
+            var fullName = _context.GetFullName(id);
             SqlEmiterBase emiter;
-            if (_context.Emiters.TryGetValue(key, out emiter))
+            if (_context.Emiters.TryGetValue(fullName, out emiter))
             {
-                return emiter.TryEmit(v, _context);
+                return emiter.TryEmit(query, _context);
             }
             else
             {
-                return Result.Fail<string>($"Key: '${key}' not found.");
+                return Result.Fail<string>($"Key: '{id}' not found.");
             }
         }
 
-        public string Emit(string key, object v)
+        public string Emit(string id, object query)
         {
-            return TryEmit(key, v).Value;
+            return TryEmit(id, query).Value;
         }
 
         public Result EnsureCompiled()

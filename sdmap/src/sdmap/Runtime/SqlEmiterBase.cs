@@ -12,11 +12,13 @@ namespace sdmap.Runtime
     public abstract class SqlEmiterBase
     {
         protected ParserRuleContext _parseTree;
+        protected string _ns;
         private EmitFunction _emiter;
 
-        protected SqlEmiterBase(ParserRuleContext parseTree)
+        protected SqlEmiterBase(ParserRuleContext parseTree, string ns)
         {
             _parseTree = parseTree;
+            _ns = ns;
         }
 
         public Result EnsureCompiled(SdmapContext context)
@@ -24,7 +26,7 @@ namespace sdmap.Runtime
             if (_emiter != null)
                 return Result.Ok();
 
-            return Compile(context)
+            return CompileInternal(context)
                 .OnSuccess(v =>
                 {
                     _emiter = v;
@@ -44,7 +46,15 @@ namespace sdmap.Runtime
             return TryEmit(v, context).Value;
         }
 
-        public abstract Result<EmitFunction> Compile(SdmapContext context);
+        private Result<EmitFunction> CompileInternal(SdmapContext context)
+        {
+            context.NsStack.Push(_ns);
+            var result = Compile(context);
+            context.NsStack.Pop();
+            return result;
+        }
+
+        protected abstract Result<EmitFunction> Compile(SdmapContext context);
     }
 
     public delegate Result<string> EmitFunction(SdmapContext context, object obj);
