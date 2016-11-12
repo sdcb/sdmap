@@ -22,7 +22,9 @@ namespace sdmap.test.IntegratedTest
         [Fact]
         public void CanCombineTwoNs()
         {
-            var code = "namespace ns1{sql sql{1#include<ns2.sql>}} namespace ns2{sql sql{2}}";
+            var code = 
+                "namespace ns1{sql sql{1#include<ns2.sql>}} \r\n" + 
+                "namespace ns2{sql sql{2}}";
             var rt = new SdmapRuntime();
             rt.AddSourceCode(code);
             var result = rt.Emit("ns1.sql", null);
