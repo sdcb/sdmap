@@ -12,7 +12,9 @@ namespace sdmap.test.IntegratedTest
         [Fact]
         public void CanReferenceOtherInOneNamespace()
         {
-            var code = "namespace ns{sql v1{1#include<v2>} sql v2{2}}";
+            var code = 
+                "namespace ns{sql v1{1#include<v2>} \r\n" + 
+                "sql v2{2}}";
             var rt = new SdmapRuntime();
             rt.AddSourceCode(code);
             var result = rt.Emit("ns.v1", new { A = true });
