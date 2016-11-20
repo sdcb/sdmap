@@ -9,8 +9,12 @@
     "netstandard1.6": {
       "imports": [ "dnxcore50" ],
       "dependencies": {
-        "System.Reflection.Emit.Lightweight": "4.0.1", 
-        "Antlr4.Runtime": "4.5.4-beta001"
+        "System.Reflection.Emit.Lightweight": "4.0.1",
+        "Antlr4.Runtime": "4.5.4-beta001",
+        "Antlr4.CodeGenerator": {
+          "version": "4.5.4-beta001", 
+          "type": "build"
+        }
       }
     },
     "net452": {
