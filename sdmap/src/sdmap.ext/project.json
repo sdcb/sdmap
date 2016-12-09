@@ -1,0 +1,28 @@
+﻿{
+  "version": "0.1.0",
+
+  "dependencies": {
+    "sdmap": "*",
+    "Dapper": "1.50.2"
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "System.IO.FileSystem.Watcher": "4.3.0", 
+        "System.Threading.Thread": "4.3.0"
+      }
+    },
+    "net452": {}
+  },
+  "packOptions": {
+    "owners": [ "sdcb" ],
+    "summary": "Some useful extensions to run sdmap.",
+    "releaseNotes": "intial release",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/sdcb/sdmap"
+    },
+    "licenseUrl": "https://github.com/sdcb/sdmap/blob/master/LICENSE",
+    "tags": [ "dynamic sql", "sdmap" ]
+  }
+}

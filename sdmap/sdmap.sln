@@ -18,6 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{37A082F1-8
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "sdmap.test", "test\sdmap.test\sdmap.test.xproj", "{11DB9969-2584-4EAF-9E07-C98CADF605D9}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "sdmap.ext", "src\sdmap.ext\sdmap.ext.xproj", "{678BA747-D4FC-4A27-AF8E-8A77B0443144}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "sdmap.ext.test", "test\sdmap.ext.test\sdmap.ext.test.xproj", "{01528C8C-0C82-4C00-9262-2FB21F22EE70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +36,14 @@ Global
 		{11DB9969-2584-4EAF-9E07-C98CADF605D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11DB9969-2584-4EAF-9E07-C98CADF605D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11DB9969-2584-4EAF-9E07-C98CADF605D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{678BA747-D4FC-4A27-AF8E-8A77B0443144}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{678BA747-D4FC-4A27-AF8E-8A77B0443144}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{678BA747-D4FC-4A27-AF8E-8A77B0443144}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{678BA747-D4FC-4A27-AF8E-8A77B0443144}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01528C8C-0C82-4C00-9262-2FB21F22EE70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01528C8C-0C82-4C00-9262-2FB21F22EE70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01528C8C-0C82-4C00-9262-2FB21F22EE70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01528C8C-0C82-4C00-9262-2FB21F22EE70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,5 +51,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D68942D4-80C5-459E-84BC-12A517495544} = {FB5AAE70-8943-448C-83DC-138D926AAE94}
 		{11DB9969-2584-4EAF-9E07-C98CADF605D9} = {37A082F1-8179-4EEA-93D8-1C282B5AC65A}
+		{678BA747-D4FC-4A27-AF8E-8A77B0443144} = {FB5AAE70-8943-448C-83DC-138D926AAE94}
+		{01528C8C-0C82-4C00-9262-2FB21F22EE70} = {37A082F1-8179-4EEA-93D8-1C282B5AC65A}
 	EndGlobalSection
 EndGlobal
