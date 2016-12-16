@@ -1,5 +1,5 @@
 ﻿{
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A template engine for writing dynamic sql.",
 
   "dependencies": {
@@ -27,7 +27,7 @@
   "packOptions": {
     "owners": [ "sdcb" ],
     "summary": "A template engine for writing dynamic sql.",
-    "releaseNotes": "1. Support StringOrSql type\r\n2. Support multiple namespace in single file.",
+    "releaseNotes": "https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md",
     "repository": {
       "type": "git",
       "url": "https://github.com/sdcb/sdmap"

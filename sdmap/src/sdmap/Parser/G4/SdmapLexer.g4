@@ -36,10 +36,10 @@ WS:
 	WHITE +     -> skip;
 
 BlockComment: 
-	'/*' .*? '*/' -> skip;
+	'/*' .*? '*/';
 
 LineComment: 
-	'//' ~[\r\n]* -> skip;
+	'//' ~[\r\n]*;
 
 OpenNamedSql:
 	'sql' WHITE+ SYNTAX WHITE* '{' -> pushMode(SQL);

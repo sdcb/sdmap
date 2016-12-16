@@ -32,5 +32,30 @@ namespace sdmap.test.IntegratedTest
             var result = rt.Emit("ns1.sql", null);
             Assert.Equal("12", result);
         }
+
+        [Fact]
+        public void CanNestNamespace()
+        {
+            var code =
+                "namespace ns1{namespace ns2{sql sql{Hello}}}";
+            var rt = new SdmapRuntime();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("ns1.ns2.sql", null);
+            Assert.Equal("Hello", result);
+        }
+
+        [Fact]
+        public void CanFindInParentScope()
+        {
+            var code =
+                "namespace ns1{" + 
+                " namespace ns2{sql sql{#include<test>}}" + 
+                " sql test{Hello}" +
+                "}";
+            var rt = new SdmapRuntime();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("ns1.ns2.sql", null);
+            Assert.Equal("Hello", result);
+        }
     }
 }

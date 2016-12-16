@@ -21,32 +21,41 @@ namespace sdmap.Runtime
             NsStack = nsStacks;
         }
 
-        public string CurrentNs =>
-            NsStack.Count == 0 ? string.Empty : NsStack.Peek();
+        public string CurrentNs => string.Join(".", NsStack.Reverse());
 
-        public string GetFullName(string contextId)
+        public string GetFullNameInCurrentNs(string contextId)
         {
-            if (contextId.Contains(".") || CurrentNs == string.Empty)
+            return string.Join(".", NsStack.Reverse().Concat(new List<string> { contextId }));
+        }
+
+        public void EnterNs(string ns)
+        {
+            if (ns != "")
             {
-                return contextId;
+                foreach (var item in ns.Split('.').Reverse())
+                {
+                    NsStack.Push(item);
+                }
             }
-            else
-            {
-                return $"{CurrentNs}.{contextId}";
-            }
+        }
+
+        public void LeaveNs()
+        {
+            NsStack.Clear();
         }
 
         public Result<SqlEmiterBase> TryGetEmiter(string contextId)
         {
-            var fullName = GetFullName(contextId);
-            if (Emiters.ContainsKey(fullName))
+            for (var i = 0; i <= NsStack.Count; ++i)
             {
-                return Result.Ok(Emiters[fullName]);
+                var fullName = string.Join(".",
+                    NsStack.Reverse().Skip(i).Concat(new List<string> { contextId }));
+                if (Emiters.ContainsKey(fullName))
+                {
+                    return Result.Ok(Emiters[fullName]);
+                }
             }
-            else
-            {
-                return Result.Fail<SqlEmiterBase>($"Syntax '{contextId}' not found in current scope.");
-            }
+            return Result.Fail<SqlEmiterBase>($"Syntax '{contextId}' not found in current scope.");
         }
 
         public SqlEmiterBase GetEmiter(string contextId)
@@ -56,7 +65,7 @@ namespace sdmap.Runtime
 
         public Result TryAdd(string contextId, SqlEmiterBase emiter)
         {
-            var fullName = GetFullName(contextId);
+            var fullName = GetFullNameInCurrentNs(contextId);
             if (Emiters.ContainsKey(fullName))
             {
                 return Result.Fail($"Syntax already defined: '{fullName}'.");

@@ -28,7 +28,7 @@ namespace sdmap.Parser.Visitor
             var context = (NamedSqlContext)parseRule;
             var openSql = context.GetToken(OpenNamedSql, 0);
             var id = LexerUtil.GetOpenSqlId(openSql.GetText());
-            var fullName = _context.GetFullName(id);
+            var fullName = _context.GetFullNameInCurrentNs(id);
             return fullName;
         }
 
