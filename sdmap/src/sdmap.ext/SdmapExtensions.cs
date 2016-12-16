@@ -24,7 +24,6 @@ namespace sdmap.Extensions
             if (Runtime != null && callFromUser) throw new InvalidOperationException(
                 $"Function {nameof(SetSqlDirectoryAndWatch)} can only be called once.");
 
-
             var runtime = new SdmapRuntime();
 
             var watcher = new FileSystemWatcher(sqlDirectory);
