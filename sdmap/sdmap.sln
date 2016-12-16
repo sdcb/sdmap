@@ -22,6 +22,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "sdmap.ext", "src\sdmap.ext\
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "sdmap.ext.test", "test\sdmap.ext.test\sdmap.ext.test.xproj", "{01528C8C-0C82-4C00-9262-2FB21F22EE70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sdmap.vstool", "sdmap.vstool\sdmap.vstool.csproj", "{5FDB5948-8C52-406B-96E7-8C90B43A08D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{01528C8C-0C82-4C00-9262-2FB21F22EE70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01528C8C-0C82-4C00-9262-2FB21F22EE70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01528C8C-0C82-4C00-9262-2FB21F22EE70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FDB5948-8C52-406B-96E7-8C90B43A08D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FDB5948-8C52-406B-96E7-8C90B43A08D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FDB5948-8C52-406B-96E7-8C90B43A08D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FDB5948-8C52-406B-96E7-8C90B43A08D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,5 +59,6 @@ Global
 		{11DB9969-2584-4EAF-9E07-C98CADF605D9} = {37A082F1-8179-4EEA-93D8-1C282B5AC65A}
 		{678BA747-D4FC-4A27-AF8E-8A77B0443144} = {FB5AAE70-8943-448C-83DC-138D926AAE94}
 		{01528C8C-0C82-4C00-9262-2FB21F22EE70} = {37A082F1-8179-4EEA-93D8-1C282B5AC65A}
+		{5FDB5948-8C52-406B-96E7-8C90B43A08D2} = {FB5AAE70-8943-448C-83DC-138D926AAE94}
 	EndGlobalSection
 EndGlobal

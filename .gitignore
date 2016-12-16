@@ -13,3 +13,4 @@ project.lock.json
 /sdmap/src/sdmap/Parser/G4/Sdmap*.tokens
 obj/
 bin/
+/sdmap/packages
