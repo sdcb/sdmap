@@ -8,3 +8,6 @@ A template engine for writing dynamic sql.
 4. Wait for installation complete and then remove ANTLR4.CodeGenerator
 5. Run Parser/G4/build.bat to generate ANTLR related lexer and parser
 6. Compile project and run test
+
+# Release notes: 
+https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md

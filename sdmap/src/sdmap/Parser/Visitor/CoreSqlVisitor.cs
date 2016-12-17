@@ -52,11 +52,9 @@ namespace sdmap.Parser.Visitor
             var coreSqlContext = parseRule.GetChild<CoreSqlContext>(0);
 
             _il.Emit(OpCodes.Ldarg_0);                                  // _ctx
+            _il.Emit(OpCodes.Ldstr, _context.CurrentNs);                // _ctx ns
             _il.Emit(OpCodes.Call, typeof(SdmapContext).GetTypeInfo()
-                .GetMethod("get_" + nameof(SdmapContext.NsStack)));     // nsStack
-            _il.Emit(OpCodes.Ldstr, _context.CurrentNs);                // nsStack ns
-            _il.Emit(OpCodes.Call, typeof(Stack<string>).GetTypeInfo()
-                .GetMethod(nameof(Stack<string>.Push)));                // [empty]
+                .GetMethod(nameof(SdmapContext.EnterNs)));              // [empty]
 
             _il.DeclareLocal(typeof(StringBuilder));
             _il.Emit(OpCodes.Newobj, typeof(StringBuilder)
@@ -79,10 +77,7 @@ namespace sdmap.Parser.Visitor
 
                 _il.Emit(OpCodes.Ldarg_0);                                        // .. _ctx
                 _il.Emit(OpCodes.Call, typeof(SdmapContext).GetTypeInfo()
-                    .GetMethod("get_" + nameof(SdmapContext.NsStack)));           // .. nsStack
-                _il.Emit(OpCodes.Call, typeof(Stack<string>).GetTypeInfo()
-                    .GetMethod(nameof(Stack<string>.Pop)));                       // .. ns
-                _il.Emit(OpCodes.Pop);                                            // result<str>
+                    .GetMethod(nameof(SdmapContext.LeaveNs)));                    // result<str>
                 
 
                 _il.Emit(OpCodes.Ret);                                            // [empty-returned]

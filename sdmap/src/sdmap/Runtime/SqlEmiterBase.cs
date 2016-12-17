@@ -48,9 +48,14 @@ namespace sdmap.Runtime
 
         private Result<EmitFunction> CompileInternal(SdmapContext context)
         {
-            context.NsStack.Push(_ns);
+            if (_ns != "")
+                context.NsStack.Push(_ns);
+
             var result = Compile(context);
-            context.NsStack.Pop();
+
+            if (_ns != "")
+                context.NsStack.Pop();
+
             return result;
         }
 

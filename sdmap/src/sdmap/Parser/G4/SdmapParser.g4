@@ -7,7 +7,7 @@ root:
 
 namespace:
 	OpenNamespace
-		namedSql* 
+		(namespace | namedSql)*
 	Close;
 
 coreSql:
