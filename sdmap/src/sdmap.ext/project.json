@@ -1,8 +1,8 @@
 ﻿{
-  "version": "0.1.0",
+  "version": "0.5.0",
 
   "dependencies": {
-    "sdmap": "*",
+    "sdmap": "0.5.0",
     "Dapper": "1.50.2"
   },
   "frameworks": {
@@ -16,8 +16,8 @@
   },
   "packOptions": {
     "owners": [ "sdcb" ],
-    "summary": "Some useful extensions to run sdmap.",
-    "releaseNotes": "intial release",
+    "summary": "Sdmap-dapper integration support.",
+    "releaseNotes": "https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md",
     "repository": {
       "type": "git",
       "url": "https://github.com/sdcb/sdmap"
