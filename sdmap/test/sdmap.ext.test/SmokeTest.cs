@@ -15,7 +15,7 @@ namespace sdmap.ext.test
         public void WatchSmoke()
         {
             var tempFile = @"sqls\test.sdmap";
-            SdmapExtensions.ResetSqlDirectoryAndWatch("sqls");
+            SdmapExtensions.SetSqlDirectoryAndWatch("sqls");
             try
             {
                 File.WriteAllText(tempFile, "sql Hello2{Hello2}");

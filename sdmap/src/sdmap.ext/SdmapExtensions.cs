@@ -16,7 +16,7 @@ namespace sdmap.Extensions
 
         private static FileSystemWatcher watcher = null;
 
-        public static void ResetSqlDirectory(string sqlDirectory)
+        public static void SetSqlDirectory(string sqlDirectory)
         {
             if (watcher != null)
             {
@@ -34,7 +34,7 @@ namespace sdmap.Extensions
             Runtime = runtime;
         }
 
-        public static void ResetSqlDirectoryAndWatch(string sqlDirectory)
+        public static void SetSqlDirectoryAndWatch(string sqlDirectory)
         {
             var runtime = new SdmapRuntime();
 
@@ -50,7 +50,7 @@ namespace sdmap.Extensions
                 GC.KeepAlive(watcher);
                 watcher.Dispose();
                 Thread.Sleep(1);
-                ResetSqlDirectoryAndWatch(sqlDirectory);
+                SetSqlDirectoryAndWatch(sqlDirectory);
             };
 
             foreach (var file in Directory.EnumerateFiles(sqlDirectory, "*.sdmap", SearchOption.AllDirectories))
