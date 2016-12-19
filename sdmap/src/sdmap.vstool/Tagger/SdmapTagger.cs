@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using sdmap.Parser.G4;
 using Microsoft.VisualStudio.Text.Classification;
+using static sdmap.Parser.G4.SdmapLexer;
 
 namespace sdmap.Vstool.Tagger
 {
@@ -16,7 +17,6 @@ namespace sdmap.Vstool.Tagger
         private ISdmapLexer lexer;
         private ITextBuffer buffer;
         private IStandardClassificationService standardClassificationService;
-        private Dictionary<int, IClassificationType> tagMaps;
 
 #pragma warning disable CS0067
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
@@ -27,32 +27,42 @@ namespace sdmap.Vstool.Tagger
             this.lexer = lexer;
             this.buffer = buffer;
             this.standardClassificationService = standardClassificationService;
-            tagMaps = new Dictionary<int, IClassificationType>()
-            {
-                { SdmapLexer.BlockComment, standardClassificationService.Comment },
-                { SdmapLexer.LineComment, standardClassificationService.Comment },
-                { SdmapLexer.WS, standardClassificationService.WhiteSpace },
-                { SdmapLexer.OpenNamedSql, standardClassificationService.Keyword },
-                { SdmapLexer.Close, standardClassificationService.Keyword },
-                { SdmapLexer.OpenUnnamedSql, standardClassificationService.Keyword },
-                { SdmapLexer.CloseSql, standardClassificationService.Keyword },
-                { SdmapLexer.OpenMacro, standardClassificationService.PreprocessorKeyword },
-                { SdmapLexer.SYNTAX, standardClassificationService.Identifier },
-                { SdmapLexer.NUMBER, standardClassificationService.NumberLiteral },
-                { SdmapLexer.SQLText, standardClassificationService.StringLiteral },
-                { SdmapLexer.OpenNamespace, standardClassificationService.Keyword }
-            };
         }
 
-        public IClassificationType GetClassificationByTokenType(int tokenType)
+        public static IClassificationType GetClassificationTypeByToken(int token, IStandardClassificationService svr)
         {
-            if (tagMaps.ContainsKey(tokenType))
+            switch (token)
             {
-                return tagMaps[tokenType];
-            }
-            else
-            {
-                return standardClassificationService.Other;
+                case KSql:
+                case KNamespace:
+                    return svr.Keyword;
+                case OpenCurlyBrace:
+                case CloseCurlyBrace:
+                case CloseSql:
+                    return svr.FormalLanguage;
+                case STRING:
+                    return svr.StringLiteral;
+                case NUMBER:
+                case DATE:
+                    return svr.NumberLiteral;
+                case SYNTAX:
+                case NSSyntax:
+                    return svr.Identifier;
+                case WS:
+                    return svr.WhiteSpace;
+                case BlockComment:
+                case LineComment:
+                    return svr.Comment;
+                case Comma:
+                case OpenAngleBracket:
+                case CloseAngleBracket:
+                    return svr.FormalLanguage;
+                case SQLText:
+                    return svr.StringLiteral;
+                case Hash:
+                    return svr.PreprocessorKeyword;
+                default:
+                    return svr.Other;
             }
         }
 
@@ -62,7 +72,7 @@ namespace sdmap.Vstool.Tagger
                 .Run(new []{ buffer.CurrentSnapshot.GetText() }, 0)
                 .Select(x => new TagSpan<ClassificationTag>(
                     new SnapshotSpan(buffer.CurrentSnapshot, x.Span), 
-                    new ClassificationTag(GetClassificationByTokenType(x.TokenType))));
+                    new ClassificationTag(GetClassificationTypeByToken(x.TokenType, standardClassificationService))));
         }
     }
 }

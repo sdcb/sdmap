@@ -1,7 +1,12 @@
+0.6.0:
+[core]: Separate keywords from lexer
+[ext]: (breaking change) Support ResetSqlDirectory
+[vstool]: Highlight real keywords instead of full OpenXXX syntax.
+
 0.5.0:
-1. Support nested namespace
-2. Support comment highlight in visual studio.
+[core]: Support nested namespace
+[vstool]: Support comment highlight in visual studio.
 
 0.4.0: 
-1. Support StringOrSql type
-2. Support multiple namespace in single file.
+[core]: Support StringOrSql type
+[core]: Support multiple namespace in single file.

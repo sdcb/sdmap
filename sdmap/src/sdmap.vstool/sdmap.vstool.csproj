@@ -94,8 +94,8 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="sdmap, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\sdmap.0.5.0\lib\net452\sdmap.dll</HintPath>
+    <Reference Include="sdmap, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\sdmap.0.6.0\lib\net452\sdmap.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

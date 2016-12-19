@@ -14,19 +14,40 @@ namespace sdmap.Extensions
     {
         public static SdmapRuntime Runtime { get; set; }
 
-        public static void SetSqlDirectoryAndWatch(string sqlDirectory)
+        private static FileSystemWatcher watcher = null;
+
+        static SdmapExtensions()
         {
-            SetSqlDirectoryAndWatchInternal(sqlDirectory, callFromUser: true);
+            ResetSqlDirectoryAndWatch("sqls");
         }
 
-        private static void SetSqlDirectoryAndWatchInternal(string sqlDirectory, bool callFromUser)
+        public static void ResetSqlDirectory(string sqlDirectory)
         {
-            if (Runtime != null && callFromUser) throw new InvalidOperationException(
-                $"Function {nameof(SetSqlDirectoryAndWatch)} can only be called once.");
+            if (watcher != null)
+            {
+                watcher.Dispose();
+            }
 
             var runtime = new SdmapRuntime();
 
-            var watcher = new FileSystemWatcher(sqlDirectory);
+            foreach (var file in Directory.EnumerateFiles(sqlDirectory, "*.sdmap", SearchOption.AllDirectories))
+            {
+                var code = File.ReadAllText(file);
+                runtime.AddSourceCode(code);
+            }
+
+            Runtime = runtime;
+        }
+
+        public static void ResetSqlDirectoryAndWatch(string sqlDirectory)
+        {
+            var runtime = new SdmapRuntime();
+
+            if (watcher != null)
+            {
+                watcher.Dispose();
+            }
+            watcher = new FileSystemWatcher(sqlDirectory);
             watcher.EnableRaisingEvents = true;
             watcher.NotifyFilter = NotifyFilters.LastWrite;
             watcher.Changed += (o, e) =>
@@ -34,7 +55,7 @@ namespace sdmap.Extensions
                 GC.KeepAlive(watcher);
                 watcher.Dispose();
                 Thread.Sleep(1);
-                SetSqlDirectoryAndWatchInternal(sqlDirectory, callFromUser: false);
+                ResetSqlDirectoryAndWatch(sqlDirectory);
             };
 
             foreach (var file in Directory.EnumerateFiles(sqlDirectory, "*.sdmap", SearchOption.AllDirectories))
@@ -42,22 +63,6 @@ namespace sdmap.Extensions
                 var code = File.ReadAllText(file);
                 runtime.AddSourceCode(code);
             }
-            Runtime = runtime;
-        }
-
-        public static void SetSqlDirectory(string sqlDirectory)
-        {
-            if (Runtime != null) throw new InvalidOperationException(
-                    $"Function {nameof(SetSqlDirectory)} can only be called once.");
-
-            var runtime = new SdmapRuntime();
-
-            foreach (var file in Directory.EnumerateFiles(sqlDirectory, "*.sdmap", SearchOption.AllDirectories))
-            {
-                var code = File.ReadAllText(file);
-                runtime.AddSourceCode(code);
-            }
-
             Runtime = runtime;
         }
 
