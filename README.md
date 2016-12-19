@@ -9,5 +9,5 @@ A template engine for writing dynamic sql.
 5. Run Parser/G4/build.bat to generate ANTLR related lexer and parser
 6. Compile project and run test
 
-Release notes: 
-Please refer to https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md
+# Release notes: 
+https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md

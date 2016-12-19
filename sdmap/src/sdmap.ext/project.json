@@ -16,8 +16,8 @@
   },
   "packOptions": {
     "owners": [ "sdcb" ],
-    "summary": "Some useful extensions to run sdmap.",
-    "releaseNotes": "intial release",
+    "summary": "Sdmap-dapper integration support.",
+    "releaseNotes": "https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md",
     "repository": {
       "type": "git",
       "url": "https://github.com/sdcb/sdmap"
