@@ -16,11 +16,6 @@ namespace sdmap.Extensions
 
         private static FileSystemWatcher watcher = null;
 
-        static SdmapExtensions()
-        {
-            ResetSqlDirectoryAndWatch("sqls");
-        }
-
         public static void ResetSqlDirectory(string sqlDirectory)
         {
             if (watcher != null)
