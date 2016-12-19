@@ -81,5 +81,15 @@ namespace sdmap.test.IntegratedTest
             var result = rt.Emit("v1", new { A = true });
             Assert.Equal("12", result);
         }
+
+        [Fact]
+        public void IncludeSameNs()
+        {
+            var code1 = "namespace ns{sql v1{#include<v2>#include<v2>} sql v2{v2}}";
+            var rt = new SdmapRuntime();
+            rt.AddSourceCode(code1);
+            var result = rt.Emit("ns.v1", null);
+            Assert.Equal("v2v2", result);
+        }
     }
 }

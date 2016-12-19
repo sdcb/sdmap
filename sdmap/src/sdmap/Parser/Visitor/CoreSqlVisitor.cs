@@ -48,14 +48,9 @@ namespace sdmap.Parser.Visitor
             var method = new DynamicMethod(fullName,
                 typeof(Result<string>), new[] { typeof(SdmapContext), typeof(object) });
             _il = method.GetILGenerator();
-
+            
             var coreSqlContext = parseRule.GetChild<CoreSqlContext>(0);
-
-            _il.Emit(OpCodes.Ldarg_0);                                  // _ctx
-            _il.Emit(OpCodes.Ldstr, _context.CurrentNs);                // _ctx ns
-            _il.Emit(OpCodes.Call, typeof(SdmapContext).GetTypeInfo()
-                .GetMethod(nameof(SdmapContext.EnterNs)));              // [empty]
-
+            
             _il.DeclareLocal(typeof(StringBuilder));
             _il.Emit(OpCodes.Newobj, typeof(StringBuilder)
                 .GetTypeInfo()
@@ -73,12 +68,7 @@ namespace sdmap.Parser.Visitor
                 _il.Emit(OpCodes.Call, typeof(StringBuilder)
                     .GetTypeInfo()
                     .GetMethod(nameof(StringBuilder.ToString), Type.EmptyTypes)); // str
-                _il.Emit(OpCodes.Call, okMethod);                                 // result<str>
-
-                _il.Emit(OpCodes.Ldarg_0);                                        // .. _ctx
-                _il.Emit(OpCodes.Call, typeof(SdmapContext).GetTypeInfo()
-                    .GetMethod(nameof(SdmapContext.LeaveNs)));                    // result<str>
-                
+                _il.Emit(OpCodes.Call, okMethod);                                 // result<str>                
 
                 _il.Emit(OpCodes.Ret);                                            // [empty-returned]
                 Function = (EmitFunction)method.CreateDelegate(typeof(EmitFunction));
@@ -103,11 +93,12 @@ namespace sdmap.Parser.Visitor
 
             _il.Emit(OpCodes.Ldarg_0);                                      // ctx
             _il.Emit(OpCodes.Ldstr, macroName);                             // ctx name
-            _il.Emit(OpCodes.Ldarg_1);                                      // ctx name self
+            _il.Emit(OpCodes.Ldstr, _context.CurrentNs);                    // ctx name ns
+            _il.Emit(OpCodes.Ldarg_1);                                      // ctx name ns self
 
             var contexts = context.GetRuleContexts<MacroParameterContext>();
-            _il.Emit(OpCodes.Ldc_I4, contexts.Length);                      // ctx name self
-            _il.Emit(OpCodes.Newarr, typeof(object));                       // ctx name self args
+            _il.Emit(OpCodes.Ldc_I4, contexts.Length);                      // ctx name ns self
+            _il.Emit(OpCodes.Newarr, typeof(object));                       // ctx name ns self args
             for (var i = 0; i < contexts.Length; ++i)
             {
                 var arg = contexts[i];
@@ -167,7 +158,7 @@ namespace sdmap.Parser.Visitor
                 {
                     var parseTree = arg.unnamedSql();
                     var id = NameUtil.GetFunctionName(parseTree);
-                    var result = _context.TryGetEmiter(id);
+                    var result = _context.TryGetEmiter(id, _context.CurrentNs);
 
                     UnnamedSqlEmiter emiter;
                     if (result.IsSuccess)
@@ -197,7 +188,7 @@ namespace sdmap.Parser.Visitor
                     throw new InvalidOperationException();
                 }
 
-                _il.Emit(OpCodes.Stelem_Ref);                               // -> ctx name self args
+                _il.Emit(OpCodes.Stelem_Ref);                               // -> ctx name ns self args
             }
 
             _il.Emit(OpCodes.Call, typeof(MacroManager).GetTypeInfo()

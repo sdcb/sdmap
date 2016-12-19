@@ -28,28 +28,13 @@ namespace sdmap.Runtime
             return string.Join(".", NsStack.Reverse().Concat(new List<string> { contextId }));
         }
 
-        public void EnterNs(string ns)
+        public Result<SqlEmiterBase> TryGetEmiter(string contextId, string currentNs)
         {
-            if (ns != "")
-            {
-                foreach (var item in ns.Split('.').Reverse())
-                {
-                    NsStack.Push(item);
-                }
-            }
-        }
-
-        public void LeaveNs()
-        {
-            NsStack.Clear();
-        }
-
-        public Result<SqlEmiterBase> TryGetEmiter(string contextId)
-        {
-            for (var i = NsStack.Count; i >= 0; --i)
+            var nss = currentNs.Split('.');
+            for (var i = nss.Length; i >= 0; --i)
             {
                 var fullName = string.Join(".",
-                    NsStack.Take(i).Concat(new List<string> { contextId }));
+                    nss.Take(i).Concat(new List<string> { contextId }));
                 if (Emiters.ContainsKey(fullName))
                 {
                     return Result.Ok(Emiters[fullName]);
@@ -58,9 +43,9 @@ namespace sdmap.Runtime
             return Result.Fail<SqlEmiterBase>($"Syntax '{contextId}' not found in current scope.");
         }
 
-        public SqlEmiterBase GetEmiter(string contextId)
+        public SqlEmiterBase GetEmiter(string contextId, string currentNs)
         {
-            return TryGetEmiter(contextId).Value;
+            return TryGetEmiter(contextId, currentNs).Value;
         }
 
         public Result TryAdd(string contextId, SqlEmiterBase emiter)

@@ -14,22 +14,25 @@ namespace sdmap.Macros.Implements
     {
         [Macro("include")]
         [MacroArguments(SdmapTypes.Syntax)]
-        public static Result<string> Include(SdmapContext context, object self, object[] arguments)
+        public static Result<string> Include(SdmapContext context, 
+            string ns, object self, object[] arguments)
         {
             var contextId = (string)arguments[0];
-            return context.TryGetEmiter(contextId)
+            return context.TryGetEmiter(contextId, ns)
                 .OnSuccess(emiter => emiter.Emit(self, context));
         }
 
         [Macro("val")]
-        public static Result<string> Val(SdmapContext context, object self, object[] arguments)
+        public static Result<string> Val(SdmapContext context, 
+            string ns, object self, object[] arguments)
         {
             return Result.Ok(self?.ToString() ?? string.Empty);
         }
 
         [Macro("prop")]
         [MacroArguments(SdmapTypes.Syntax)]
-        public static Result<string> Prop(SdmapContext context, object self, object[] arguments)
+        public static Result<string> Prop(SdmapContext context, 
+            string ns, object self, object[] arguments)
         {
             if (self == null)
                 return Result.Fail<string>($"Query requires not null in macro '{nameof(Prop)}'.");
@@ -42,7 +45,8 @@ namespace sdmap.Macros.Implements
 
         [Macro("iif")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql, SdmapTypes.StringOrSql)]
-        public static Result<string> Iif(SdmapContext context, object self, object[] arguments)
+        public static Result<string> Iif(SdmapContext context, 
+            string ns, object self, object[] arguments)
         {
             if (self == null)
                 return Result.Fail<string>(
@@ -69,7 +73,8 @@ namespace sdmap.Macros.Implements
 
         [Macro("ifNotEmpty")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql)]
-        public static Result<string> IfNotEmpty(SdmapContext context, object self, object[] arguments)
+        public static Result<string> IfNotEmpty(SdmapContext context, 
+            string ns, object self, object[] arguments)
         {
             if (self == null) return Result.Fail<string>(
                     $"Query requires not null in macro '{nameof(IfNotEmpty)}'.");
@@ -94,7 +99,8 @@ namespace sdmap.Macros.Implements
 
         [Macro("ifNotNull")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql)]
-        public static Result<string> IfNotNull(SdmapContext context, object self, object[] arguments)
+        public static Result<string> IfNotNull(SdmapContext context, 
+            string ns, object self, object[] arguments)
         {
             if (self == null) return Result.Fail<string>(
                     $"Query requires not null in macro '{nameof(IfNotNull)}'.");

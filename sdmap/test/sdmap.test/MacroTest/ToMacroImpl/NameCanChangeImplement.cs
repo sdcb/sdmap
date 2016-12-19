@@ -11,7 +11,7 @@ namespace sdmap.test.MacroTest.ToMacroImpl
     public static class NameCanChangeImpl
     {
         [Macro("NiceName")]
-        public static Result<string> HelloWorld(SdmapContext context, object self, object[] arguments)
+        public static Result<string> HelloWorld(SdmapContext context, string ns, object self, object[] arguments)
         {
             return Result.Ok("Hello World");
         }

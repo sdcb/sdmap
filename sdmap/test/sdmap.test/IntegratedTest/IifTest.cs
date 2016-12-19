@@ -94,7 +94,7 @@ namespace sdmap.test.IntegratedTest
             var rt = new SdmapRuntime();
             rt.AddSourceCode(code);
             var times = 0;
-            rt.AddMacro("record", null, (ctx, self, args) =>
+            rt.AddMacro("record", null, (ctx, ns, self, args) =>
             {
                 ++times;
                 return Result.Ok(string.Empty);

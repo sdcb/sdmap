@@ -14,6 +14,7 @@ namespace sdmap.test.MacroImplTest
         public void Smoke()
         {
             var val = CommonMacros.IfNotEmpty(SdmapContext.CreateEmpty(), 
+                "", 
                 new { A = "Nice" }, 
                 new object[] { "A", "Ok" });
             Assert.True(val.IsSuccess);
@@ -24,6 +25,7 @@ namespace sdmap.test.MacroImplTest
         public void EmptyStringIsEmpty()
         {
             var val = CommonMacros.IfNotEmpty(SdmapContext.CreateEmpty(),
+                "",
                 new { A = " " },
                 new object[] { "A", "Ok" });
             Assert.True(val.IsSuccess);
@@ -34,6 +36,7 @@ namespace sdmap.test.MacroImplTest
         public void EmptyStringIsNotEmptyWhenIfNull()
         {
             var val = CommonMacros.IfNotNull(SdmapContext.CreateEmpty(),
+                "",
                 new { A = " " },
                 new object[] { "A", "Ok" });
             Assert.True(val.IsSuccess);
@@ -44,6 +47,7 @@ namespace sdmap.test.MacroImplTest
         public void NullIsEmpty()
         {
             var val = CommonMacros.IfNotEmpty(SdmapContext.CreateEmpty(),
+                "",
                 new { A = (int?)null },
                 new object[] { "A", "Ok" });
             Assert.True(val.IsSuccess);
@@ -54,6 +58,7 @@ namespace sdmap.test.MacroImplTest
         public void ValueIsNotEmpty()
         {
             var val = CommonMacros.IfNotEmpty(SdmapContext.CreateEmpty(),
+                "",
                 new { A = DateTime.Now },
                 new object[] { "A", "Ok" });
             Assert.True(val.IsSuccess);

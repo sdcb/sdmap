@@ -27,7 +27,7 @@ namespace sdmap.Runtime
 
         public static EmitFunction EmiterFromId(SdmapContext context, string id)
         {
-            return context.GetEmiter(id)
+            return context.GetEmiter(id, context.CurrentNs)
                 .Emiter;
         }
     }

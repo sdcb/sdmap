@@ -17,7 +17,7 @@ namespace sdmap.test.IntegratedTest
             var code = "sql v1{#hello<>}";
             var rt = new SdmapRuntime();
             rt.AddSourceCode(code);
-            rt.AddMacro("hello", new SdmapTypes[0], (context, self, arguments) =>
+            rt.AddMacro("hello", new SdmapTypes[0], (context, ns, self, arguments) =>
             {
                 return Result.Ok("Hello World");
             });
@@ -31,7 +31,7 @@ namespace sdmap.test.IntegratedTest
             var code = "sql v1{#hello<sql{#val<>}>}";
             var rt = new SdmapRuntime();
             rt.AddSourceCode(code);
-            rt.AddMacro("hello", new[] { SdmapTypes.StringOrSql }, (context, self, arguments) =>
+            rt.AddMacro("hello", new[] { SdmapTypes.StringOrSql }, (context, ns, self, arguments) =>
             {
                 return Result.Ok($"Hello " + 
                     MacroUtil.EvalToString(arguments[0], context, self).Value);
@@ -46,7 +46,7 @@ namespace sdmap.test.IntegratedTest
             var code = "sql v1{#hello<3>}";
             var rt = new SdmapRuntime();
             rt.AddSourceCode(code);
-            rt.AddMacro("hello", new SdmapTypes[0], (context, self, arguments) =>
+            rt.AddMacro("hello", new SdmapTypes[0], (context, ns, self, arguments) =>
             {
                 return Result.Ok("Hello World");
             });

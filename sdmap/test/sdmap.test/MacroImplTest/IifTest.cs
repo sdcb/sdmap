@@ -13,7 +13,8 @@ namespace sdmap.test.MacroImplTest
         [Fact]
         public void Smoke()
         {
-            var val = CommonMacros.Iif(SdmapContext.CreateEmpty(), 
+            var val = CommonMacros.Iif(SdmapContext.CreateEmpty(),
+                "",
                 new { A = true }, 
                 new object[] { "A", "true", "false" });
             Assert.True(val.IsSuccess);
@@ -24,6 +25,7 @@ namespace sdmap.test.MacroImplTest
         public void NullableOk()
         {
             var val = CommonMacros.Iif(SdmapContext.CreateEmpty(),
+                "",
                 new { A = new bool?(true) },
                 new object[] { "A", "true", "false" });
             Assert.True(val.IsSuccess);
@@ -34,6 +36,7 @@ namespace sdmap.test.MacroImplTest
         public void EmptyNullShouldTreatFalsy()
         {
             var val = CommonMacros.Iif(SdmapContext.CreateEmpty(),
+                "",
                 new { A = new bool?() },
                 new object[] { "A", "true", "false" });
             Assert.True(val.IsSuccess);
@@ -44,6 +47,7 @@ namespace sdmap.test.MacroImplTest
         public void NotExistPropShouldFail()
         {
             var val = CommonMacros.Iif(SdmapContext.CreateEmpty(),
+                "",
                 new { A = new bool?() },
                 new object[] { "B", "true", "false" });
             Assert.False(val.IsSuccess);

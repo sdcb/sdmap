@@ -49,7 +49,8 @@ namespace sdmap.Macros
             return Result.Ok();
         }
 
-        public static Result<string> Execute(SdmapContext context, string name, object self, object[] arguments)
+        public static Result<string> Execute(SdmapContext context, string name, 
+            string ns, object self, object[] arguments)
         {
             Macro macro;
             if (!context.MacroManager.Methods.TryGetValue(name, out macro))
@@ -63,7 +64,7 @@ namespace sdmap.Macros
                 return Result.Fail<string>(rtCheck.Error);
             }
 
-            return macro.Method(context, self, arguments);
+            return macro.Method(context, ns, self, arguments);
         }
     }
 }

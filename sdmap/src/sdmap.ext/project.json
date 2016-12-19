@@ -1,8 +1,8 @@
 ﻿{
-  "version": "0.6.2",
+  "version": "0.7.0",
 
   "dependencies": {
-    "sdmap": "0.6.0",
+    "sdmap": "0.7.0",
     "Dapper": "1.50.2"
   },
   "frameworks": {
