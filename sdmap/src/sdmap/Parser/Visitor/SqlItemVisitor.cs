@@ -22,8 +22,8 @@ namespace sdmap.Parser.Visitor
 
         public override Result VisitNamespace([NotNull] SdmapParser.NamespaceContext context)
         {
-            var openNs = context.GetToken(OpenNamespace, 0);
-            var ns = LexerUtil.GetOpenNSId(openNs.GetText());
+            var nsLexler = context.GetToken(SYNTAX, 0) ?? context.GetToken(NSSyntax, 0);
+            var ns = nsLexler.GetText();
 
             Context.NsStack.Push(ns);
             var result = base.VisitNamespace(context);
@@ -33,8 +33,7 @@ namespace sdmap.Parser.Visitor
 
         public override Result VisitNamedSql([NotNull] SdmapParser.NamedSqlContext context)
         {
-            var openSql = context.GetToken(OpenNamedSql, 0);
-            var id = LexerUtil.GetOpenSqlId(openSql.GetText());
+            var id = context.GetToken(SYNTAX, 0).GetText();
 
             return Context.TryAdd(id, SqlEmiter.Create(context, Context.CurrentNs));
         }

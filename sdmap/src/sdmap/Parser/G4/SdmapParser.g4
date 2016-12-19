@@ -6,9 +6,9 @@ root:
 	(namespace | namedSql)*;
 
 namespace:
-	OpenNamespace
+	KNamespace (SYNTAX|NSSyntax) OpenCurlyBrace
 		(namespace | namedSql)*
-	Close;
+	CloseCurlyBrace;
 
 coreSql:
 	(macro | plainText)+;
@@ -17,19 +17,19 @@ plainText:
 	SQLText;
 
 namedSql:
-	OpenNamedSql
+	KSql SYNTAX OpenCurlyBrace
 		coreSql
-	CloseSql;
+	CloseCurlyBrace;
 
 unnamedSql:
-	OpenUnnamedSql
+	KSql OpenCurlyBrace
 		coreSql
-	CloseSql;
+	CloseCurlyBrace;
 
 macro:
-	OpenMacro
+	Hash SYNTAX OpenAngleBracket
 		macroParameter? (Comma macroParameter)*
-	CloseMacro;
+	CloseAngleBracket;
 
 macroParameter:
 	SYNTAX |

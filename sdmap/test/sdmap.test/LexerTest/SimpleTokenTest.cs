@@ -56,10 +56,10 @@ namespace sdmap.test.LexerTest
         public void SqlText()
         {
             var tokens = GetAllTokens("sql { SELECT * FROM client_Profile; }");
-            Assert.Equal(3, tokens.Count);
-            Assert.Equal(OpenUnnamedSql, tokens[0].Type);
-            Assert.Equal(SQLText, tokens[1].Type);
-            Assert.Equal(CloseSql, tokens[2].Type);
+            Assert.Equal(4, tokens.Count);
+            Assert.Equal(KSql, tokens[0].Type);
+            Assert.Equal(SQLText, tokens[2].Type);
+            Assert.Equal(CloseSql, tokens[3].Type);
         }
 
         [Fact]
@@ -76,8 +76,8 @@ namespace sdmap.test.LexerTest
             var tokens = GetAllTokens("sql OrderBy{SELECT * FROM client_Profile;}");
             Assert.Equal(new[] 
             {
-                OpenNamedSql,
-                SQLText, 
+                KSql, SYNTAX, OpenCurlyBrace, 
+                    SQLText, 
                 CloseSql
             }, tokens.Select(x => x.Type));
         }

@@ -1,5 +1,21 @@
 ﻿lexer grammar SdmapLexer;
 
+@lexer::members {
+private string bracePrefix = "";
+}
+
+KSql: 
+	'sql'{bracePrefix = "sql";};
+
+KNamespace:
+	'namespace'{bracePrefix = "namespace";};
+
+OpenCurlyBrace: 
+	'{'{if (bracePrefix == "sql") PushMode(SQL);};
+
+CloseCurlyBrace:
+	'}'{bracePrefix = "";};
+
 STRING:
 	'"' (('\\' (["\\/bfnrt] | UNICODE)) | ~ ["\\])* '"' | 
 	'\'' (('\\' (['\\/bfnrt] | UNICODE)) | ~ ['\\])* '\'';
@@ -41,22 +57,13 @@ BlockComment:
 LineComment: 
 	'//' ~[\r\n]*;
 
-OpenNamedSql:
-	'sql' WHITE+ SYNTAX WHITE* '{' -> pushMode(SQL);
-
-OpenUnnamedSql:
-	'sql' WHITE* '{' -> pushMode(SQL);
-
-OpenNamespace:
-	'namespace' WHITE+ (NSSyntax|SYNTAX) WHITE* '{';
-
-Close:
-	'}';
-
 Comma:
 	',';
 
-CloseMacro:
+OpenAngleBracket:
+	'<';
+
+CloseAngleBracket:
 	'>' -> popMode;
 
 mode SQL;
@@ -66,5 +73,5 @@ SQLText:
 CloseSql:
 	'}' -> popMode;
 
-OpenMacro:
-	'#' SYNTAX WHITE* '<' -> pushMode(DEFAULT_MODE);
+Hash: 
+	'#' -> pushMode(DEFAULT_MODE);

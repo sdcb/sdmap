@@ -26,8 +26,7 @@ namespace sdmap.Parser.Visitor
         protected override string GetFunctionName(ParserRuleContext parseRule)
         {
             var context = (NamedSqlContext)parseRule;
-            var openSql = context.GetToken(OpenNamedSql, 0);
-            var id = LexerUtil.GetOpenSqlId(openSql.GetText());
+            var id = context.GetToken(SYNTAX, 0).GetText();
             var fullName = _context.GetFullNameInCurrentNs(id);
             return fullName;
         }

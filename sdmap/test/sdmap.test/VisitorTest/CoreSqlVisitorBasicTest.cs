@@ -13,7 +13,7 @@ namespace sdmap.test.VisitorTest
         [Fact]
         public void HelloWorld()
         {
-            var code = "sql sql{Hello World}";
+            var code = "sql v1{Hello World}";
             var parseTree = GetParseTree(code);
             var visitor = NamedSqlVisitor.CreateEmpty();
             visitor.Visit(parseTree);
@@ -28,7 +28,7 @@ namespace sdmap.test.VisitorTest
         public void SqlInNamespaceTest()
         {
             var sql = "SELECT * FROM `client_WOReactive`;";
-            var code = "sql sql{" + sql + "}";
+            var code = "sql v1{" + sql + "}";
             var visitor = NamedSqlVisitor.CreateEmpty();
             var parseTree = GetParseTree(code);
             visitor.Visit(parseTree);
@@ -47,7 +47,7 @@ namespace sdmap.test.VisitorTest
                 "   *                    \r\n" +
                 "FROM                    \r\n" +
                 "   `client_WOReactive`; \r\n";
-            var code = $"sql sql{{{sql}}}";
+            var code = $"sql v1{{{sql}}}";
             var visitor = NamedSqlVisitor.CreateEmpty();
             var parseTree = GetParseTree(code);
             visitor.Visit(parseTree);

@@ -17,9 +17,11 @@ namespace sdmap.test.LexerTest
 
             Assert.Equal(new[]
             {
-                OpenUnnamedSql,
-                    OpenMacro,
-                    CloseMacro,
+                KSql,OpenCurlyBrace,
+                    Hash,
+                    SYNTAX, 
+                    OpenAngleBracket, 
+                    CloseAngleBracket, 
                 CloseSql
             }, tokens.Select(x => x.Type));
         }
@@ -31,16 +33,16 @@ namespace sdmap.test.LexerTest
                 "sql{#test< Zipcode, 65001, 'Hello World', 2015/1/1, sql { SELECT @@Version;} >}");
             Assert.Equal(new[]
             {
-                OpenUnnamedSql, 
-                    OpenMacro, 
+                KSql, OpenCurlyBrace, 
+                    Hash, SYNTAX, OpenAngleBracket, 
                         SYNTAX, Comma, 
                         NUMBER, Comma,
                         STRING, Comma,
                         DATE, Comma,
-                        OpenUnnamedSql, 
+                        SQL, OpenCurlyBrace, 
                             SQLText, 
                         CloseSql, 
-                    CloseMacro, 
+                    CloseAngleBracket, 
                 CloseSql
             }, tokens.Select(x => x.Type));
         }
@@ -52,16 +54,17 @@ namespace sdmap.test.LexerTest
 
             Assert.Equal(new[]
             {
-                OpenUnnamedSql,
+                KSql, OpenCurlyBrace,
                     SQLText, 
-                    OpenMacro, 
+                    Hash, SYNTAX, OpenAngleBracket, 
                         SYNTAX, 
-                    CloseMacro, 
+                    CloseAngleBracket, 
                 CloseSql
             }, tokens.Select(x => x.Type));
 
             Assert.Equal("SELECT * FROM `Test`; ", tokens.Single(x => x.Type == SQLText).Text);
-            Assert.Equal("CommonOrderBy", tokens.Single(x => x.Type == SYNTAX).Text);
+            Assert.Equal("include", tokens.First(x => x.Type == SYNTAX).Text);
+            Assert.Equal("CommonOrderBy", tokens.Last(x => x.Type == SYNTAX).Text);
         }
 
         [Fact]
@@ -71,10 +74,10 @@ namespace sdmap.test.LexerTest
 
             Assert.Equal(new[]
             {
-                OpenUnnamedSql,
-                    OpenMacro,
+                KSql, OpenCurlyBrace,
+                    Hash, SYNTAX, OpenAngleBracket,
                         NSSyntax,
-                    CloseMacro,
+                    CloseAngleBracket,
                 CloseSql
             }, tokens.Select(x => x.Type));
             

@@ -99,8 +99,7 @@ namespace sdmap.Parser.Visitor
 
         public override Result VisitMacro([NotNull] MacroContext context)
         {
-            var openMacro = context.GetToken(OpenMacro, 0);
-            var macroName = LexerUtil.GetOpenMacroId(openMacro.GetText());
+            var macroName = context.GetToken(SYNTAX, 0).GetText();
 
             _il.Emit(OpCodes.Ldarg_0);                                      // ctx
             _il.Emit(OpCodes.Ldstr, macroName);                             // ctx name
