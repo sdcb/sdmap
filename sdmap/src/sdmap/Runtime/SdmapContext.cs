@@ -46,10 +46,10 @@ namespace sdmap.Runtime
 
         public Result<SqlEmiterBase> TryGetEmiter(string contextId)
         {
-            for (var i = 0; i <= NsStack.Count; ++i)
+            for (var i = NsStack.Count; i >= 0; --i)
             {
                 var fullName = string.Join(".",
-                    NsStack.Reverse().Skip(i).Concat(new List<string> { contextId }));
+                    NsStack.Take(i).Concat(new List<string> { contextId }));
                 if (Emiters.ContainsKey(fullName))
                 {
                     return Result.Ok(Emiters[fullName]);

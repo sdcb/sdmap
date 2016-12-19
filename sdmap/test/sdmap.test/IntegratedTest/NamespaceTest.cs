@@ -45,6 +45,17 @@ namespace sdmap.test.IntegratedTest
         }
 
         [Fact]
+        public void CanNestNamespaceUsingDot()
+        {
+            var code =
+                "namespace ns1.ns2{sql v1{Hello}}";
+            var rt = new SdmapRuntime();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("ns1.ns2.v1", null);
+            Assert.Equal("Hello", result);
+        }
+
+        [Fact]
         public void CanFindInParentScope()
         {
             var code =
@@ -52,6 +63,18 @@ namespace sdmap.test.IntegratedTest
                 " namespace ns2{sql v1{#include<test>}}" + 
                 " sql test{Hello}" +
                 "}";
+            var rt = new SdmapRuntime();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("ns1.ns2.v1", null);
+            Assert.Equal("Hello", result);
+        }
+
+        [Fact]
+        public void CanFindInParentScopeUsingDot()
+        {
+            var code =
+                "namespace ns1.ns2{sql v1{#include<test>}}" +
+                "namespace ns1{sql test{Hello}}";
             var rt = new SdmapRuntime();
             rt.AddSourceCode(code);
             var result = rt.Emit("ns1.ns2.v1", null);

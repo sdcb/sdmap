@@ -79,7 +79,7 @@ namespace sdmap.test.IntegratedTest
         [Fact]
         public void CanRunInnerMacro()
         {
-            var code = "sql v1{#iif<A, sql{#prop<A>}, sql{}}";
+            var code = "sql v1{#iif<A, sql{#prop<A>}, sql{}>}";
             var rt = new SdmapRuntime();
             rt.AddSourceCode(code);
             var result = rt.TryEmit("v1", new { A = true });

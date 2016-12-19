@@ -84,11 +84,11 @@ namespace sdmap.Parser.Visitor
                 Function = (EmitFunction)method.CreateDelegate(typeof(EmitFunction));
             };
 
-            if (coreSqlContext.GetText() == string.Empty)
+            if (coreSqlContext == null)
             {
                 returnBlock();
                 return Result.Ok();
-            }            
+            }
                                                                                       
             return Visit(coreSqlContext)                                              
                 .OnSuccess(() =>                                                      // [must be empty]

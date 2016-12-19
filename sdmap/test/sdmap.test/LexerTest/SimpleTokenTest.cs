@@ -81,5 +81,21 @@ namespace sdmap.test.LexerTest
                 CloseSql
             }, tokens.Select(x => x.Type));
         }
+
+        [Fact]
+        public void EmptySqlTest()
+        {
+            var tokens = GetAllTokens("sql v1{#syntax<sql{}>}");
+            Assert.Equal(new[]
+            {
+                KSql, SYNTAX, OpenCurlyBrace,
+                    Hash, SYNTAX, OpenAngleBracket, 
+                        KSql, 
+                        OpenCurlyBrace, 
+                        CloseSql, 
+                    CloseAngleBracket, 
+                CloseSql
+            }, tokens.Select(x => x.Type));
+        }
     }
 }

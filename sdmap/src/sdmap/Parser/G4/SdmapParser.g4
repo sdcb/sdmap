@@ -18,13 +18,13 @@ plainText:
 
 namedSql:
 	KSql SYNTAX OpenCurlyBrace
-		coreSql
-	CloseCurlyBrace;
+		coreSql?
+	CloseSql;
 
 unnamedSql:
 	KSql OpenCurlyBrace
-		coreSql
-	CloseCurlyBrace;
+		coreSql?
+	CloseSql;
 
 macro:
 	Hash SYNTAX OpenAngleBracket
