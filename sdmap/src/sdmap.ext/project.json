@@ -2,7 +2,7 @@
   "version": "0.7.1",
 
   "dependencies": {
-    "sdmap": "0.7.0",
+    "sdmap": "0.7.1",
     "Dapper": "1.50.2"
   },
   "frameworks": {
