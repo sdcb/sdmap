@@ -180,6 +180,7 @@ namespace sdmap.Parser.Visitor
 
                     _il.Emit(OpCodes.Ldarg_0);                             // .. -> args idx ctx
                     _il.Emit(OpCodes.Ldstr, id);                           // .. -> args idx ctx id
+                    _il.Emit(OpCodes.Ldstr, _context.CurrentNs);           // .. -> args idx ctx id ns
                     _il.Emit(OpCodes.Call, typeof(UnnamedSqlEmiter).GetTypeInfo()
                         .GetMethod(nameof(UnnamedSqlEmiter.EmiterFromId)));// .. -> args idx emiter
                 }

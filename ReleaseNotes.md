@@ -1,23 +1,18 @@
-0.7.0:
+0.7.1: 
+[core] fix a bug causing unnamed sql cannot be found.
 
-[core]drop state in runtime.
+0.7.0: 
+[core] drop state in runtime.
 
-
-0.6.0:
-
+0.6.0: 
 [core]: Separate keywords from lexer
 [ext]: (breaking change) Support ResetSqlDirectory
 [vstool]: Highlight real keywords instead of full OpenXXX syntax.
 
-
-0.5.0:
-
+0.5.0: 
 [core]: Support nested namespace
 [vstool]: Support comment highlight in visual studio.
 
-
 0.4.0: 
-
-
 [core]: Support StringOrSql type
 [core]: Support multiple namespace in single file.
