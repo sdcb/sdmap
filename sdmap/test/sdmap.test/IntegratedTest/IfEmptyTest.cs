@@ -10,9 +10,9 @@ namespace sdmap.test.IntegratedTest
     public class IfEmptyTest
     {
         [Fact]
-        public void IfNotEmpty()
+        public void isNotEmpty()
         {
-            var code = "sql v1{#ifNotEmpty<A, sql{@A}}";
+            var code = "sql v1{#isNotEmpty<A, sql{@A}>}";
             var rt = new SdmapRuntime();
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", new { A = "NotEmpty" });
@@ -22,7 +22,7 @@ namespace sdmap.test.IntegratedTest
         [Fact]
         public void IfNotNull()
         {
-            var code = "sql v1{#ifNotEmpty<A, sql{@A}}";
+            var code = "sql v1{#isNotEmpty<A, sql{@A}>}";
             var rt = new SdmapRuntime();
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", new { A = " " });
@@ -32,7 +32,7 @@ namespace sdmap.test.IntegratedTest
         [Fact]
         public void PropInSubSql()
         {
-            var code = "sql v1{#ifNotEmpty<A, sql{#prop<A>}}";
+            var code = "sql v1{#isNotEmpty<A, sql{#prop<A>}>}";
             var rt = new SdmapRuntime();
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", new { A = "NotEmpty" });
