@@ -14,7 +14,7 @@ namespace sdmap.test.MacroImplTest
         [Fact]
         public void Smoke()
         {
-            var val = CallIsNotEmpty(new { A = "NotEmpty" }, "Ok");
+            var val = CallIsNotEmpty(new { A = "NotEmpty" }, "A", "Ok");
             Assert.True(val.IsSuccess);
             Assert.Equal("Ok", val.Value);
         }
@@ -22,7 +22,7 @@ namespace sdmap.test.MacroImplTest
         [Fact]
         public void EmptyStringIsEmpty()
         {
-            var val = CallIsNotEmpty(new { A = " " }, "Ok");
+            var val = CallIsNotEmpty(new { A = " " }, "A", "Ok");
             Assert.True(val.IsSuccess);
             Assert.Equal(string.Empty, val.Value);
         }
@@ -30,10 +30,7 @@ namespace sdmap.test.MacroImplTest
         [Fact]
         public void EmptyStringIsNotEmptyWhenIfNull()
         {
-            var val = CommonMacros.IsNotNull(SdmapContext.CreateEmpty(),
-                "",
-                new { A = " " },
-                new object[] { "A", "Ok" });
+            var val = CallIsNotNull(new { A = " " }, "A", "Ok");
             Assert.True(val.IsSuccess);
             Assert.Equal("Ok", val.Value);
         }
@@ -41,10 +38,7 @@ namespace sdmap.test.MacroImplTest
         [Fact]
         public void NullIsEmpty()
         {
-            var val = CommonMacros.IsNotEmpty(SdmapContext.CreateEmpty(),
-                "",
-                new { A = (int?)null },
-                new object[] { "A", "Ok" });
+            var val = CallIsNotEmpty(new { A = (string)null }, "A", "Ok");
             Assert.True(val.IsSuccess);
             Assert.Equal(string.Empty, val.Value);
         }
@@ -60,14 +54,19 @@ namespace sdmap.test.MacroImplTest
             Assert.Equal("Ok", val.Value);
         }
 
-        private Result<string> CallIsEmpty(object self,  string result)
+        private Result<string> CallIsEmpty(object self, string prop, string result)
         {
-            return CommonMacros.IsEmpty(SdmapContext.CreateEmpty(), "", self, new[] { result });
+            return CommonMacros.IsEmpty(SdmapContext.CreateEmpty(), "", self, new[] { prop, result });
         }
 
-        private Result<string> CallIsNotEmpty(object self, string result)
+        private Result<string> CallIsNotEmpty(object self, string prop, string result)
         {
-            return CommonMacros.IsNotEmpty(SdmapContext.CreateEmpty(), "", self, new[] { result });
+            return CommonMacros.IsNotEmpty(SdmapContext.CreateEmpty(), "", self, new[] { prop, result });
+        }
+
+        private Result<string> CallIsNotNull(object self, string prop, string result)
+        {
+            return CommonMacros.IsNotNull(SdmapContext.CreateEmpty(), "", self, new[] { prop, result });
         }
     }
 }
