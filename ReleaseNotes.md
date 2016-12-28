@@ -1,3 +1,8 @@
+## 0.8.0:
+- [core] Breaking change: rename ifNotEmpty->isNotEmpty, ifEmpty->isEmpty
+- [core] Add hasProp, isNull, isEqual, isNotEqual, isLike, isNotLike
+- [core] Add iterate/each support
+
 ## 0.7.1: 
 - [core] fix a bug causing unnamed sql cannot be found.
 
