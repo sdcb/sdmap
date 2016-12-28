@@ -1,6 +1,6 @@
 ﻿using sdmap.Functional;
 using sdmap.Macros.Attributes;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,7 +94,7 @@ namespace sdmap.Macros
                 $"argument {i + 1} requires {mac} but provides {arg.GetType().Name}.");
         }
 
-        public static Result<string> EvalToString(object value, SdmapContext context, object self)
+        public static Result<string> EvalToString(object value, SdmapCompilerContext context, object self)
         {
             if (value is string)
                 return Result.Ok((string)value);

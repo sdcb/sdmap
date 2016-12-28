@@ -8,11 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace sdmap.Runtime
+namespace sdmap.Compiler
 {
-    public class SdmapRuntime
+    public class SdmapCompiler
     {
-        private readonly SdmapContext _context = SdmapContext.CreateEmpty();
+        private readonly SdmapCompilerContext _context = SdmapCompilerContext.CreateEmpty();
 
         public Result AddSourceCode(string sourceCode)
         {

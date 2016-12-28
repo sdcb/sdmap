@@ -4,7 +4,7 @@ using sdmap.Functional;
 using sdmap.Macros;
 using sdmap.Parser.G4;
 using sdmap.Utils;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +18,13 @@ namespace sdmap.Parser.Visitor
 {
     public abstract class CoreSqlVisitor : SdmapParserBaseVisitor<Result>
     {
-        protected readonly SdmapContext _context;
+        protected readonly SdmapCompilerContext _context;
         protected ILGenerator _il;
         protected int _stackPos;
 
         public EmitFunction Function { get; protected set; }
 
-        protected CoreSqlVisitor(SdmapContext context)
+        protected CoreSqlVisitor(SdmapCompilerContext context)
         {
             _context = context;
         }
@@ -46,7 +46,7 @@ namespace sdmap.Parser.Visitor
             var fullName = GetFunctionName(parseRule);
 
             var method = new DynamicMethod(fullName,
-                typeof(Result<string>), new[] { typeof(SdmapContext), typeof(object) });
+                typeof(Result<string>), new[] { typeof(SdmapCompilerContext), typeof(object) });
             _il = method.GetILGenerator();
             
             var coreSqlContext = parseRule.GetChild<CoreSqlContext>(0);

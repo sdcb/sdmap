@@ -1,5 +1,5 @@
 ﻿using sdmap.Functional;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +9,12 @@ namespace sdmap.test.MacroTest.FilterMethodsImpl
 {
     public class ReturnCheckImpl
     {
-        public static string NotCorrect(SdmapContext context, string ns, object self, object[] arguments)
+        public static string NotCorrect(SdmapCompilerContext context, string ns, object self, object[] arguments)
         {
             return "Hello World";
         }
 
-        public static Result<string> Ok(SdmapContext context, string ns, object self, object[] arguments)
+        public static Result<string> Ok(SdmapCompilerContext context, string ns, object self, object[] arguments)
         {
             return Result.Ok("Hello World");
         }

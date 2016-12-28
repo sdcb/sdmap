@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,7 +12,7 @@ namespace sdmap.Extensions
 {
     public static partial class SdmapExtensions
     {
-        public static SdmapRuntime Runtime { get; set; }
+        public static SdmapCompiler Runtime { get; set; }
 
         private static FileSystemWatcher watcher = null;
 
@@ -23,7 +23,7 @@ namespace sdmap.Extensions
                 watcher.Dispose();
             }
 
-            var runtime = new SdmapRuntime();
+            var runtime = new SdmapCompiler();
 
             foreach (var file in Directory.EnumerateFiles(sqlDirectory, "*.sdmap", SearchOption.AllDirectories))
             {
@@ -36,7 +36,7 @@ namespace sdmap.Extensions
 
         public static void SetSqlDirectoryAndWatch(string sqlDirectory)
         {
-            var runtime = new SdmapRuntime();
+            var runtime = new SdmapCompiler();
 
             if (watcher != null)
             {

@@ -2,7 +2,7 @@
 using sdmap.Functional;
 using sdmap.Parser.G4;
 using sdmap.Utils;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +13,9 @@ namespace sdmap.Parser.Visitor
 {
     public class SqlItemVisitor : SdmapParserBaseVisitor<Result>
     {
-        public SdmapContext Context { get; }
+        public SdmapCompilerContext Context { get; }
 
-        private SqlItemVisitor(SdmapContext context)
+        private SqlItemVisitor(SdmapCompilerContext context)
         {
             Context = context;
         }
@@ -38,14 +38,14 @@ namespace sdmap.Parser.Visitor
             return Context.TryAdd(id, SqlEmiter.Create(context, Context.CurrentNs));
         }
 
-        public static SqlItemVisitor Create(SdmapContext context)
+        public static SqlItemVisitor Create(SdmapCompilerContext context)
         {
             return new SqlItemVisitor(context);
         }
 
         public static SqlItemVisitor CreateEmpty()
         {
-            return new SqlItemVisitor(SdmapContext.CreateEmpty());
+            return new SqlItemVisitor(SdmapCompilerContext.CreateEmpty());
         }
     }
 }

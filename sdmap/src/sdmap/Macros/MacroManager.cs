@@ -1,7 +1,7 @@
 ﻿using sdmap.Functional;
 using sdmap.Macros.Attributes;
 using sdmap.Macros.Implements;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +49,7 @@ namespace sdmap.Macros
             return Result.Ok();
         }
 
-        public static Result<string> Execute(SdmapContext context, string name, 
+        public static Result<string> Execute(SdmapCompilerContext context, string name, 
             string ns, object self, object[] arguments)
         {
             Macro macro;

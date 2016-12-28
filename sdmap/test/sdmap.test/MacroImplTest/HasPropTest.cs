@@ -1,6 +1,6 @@
 ﻿using sdmap.Functional;
 using sdmap.Macros.Implements;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +36,7 @@ namespace sdmap.test.MacroImplTest
 
         private Result<string> CallHasProp(object self, string prop, string result)
         {
-            return CommonMacros.HasProp(SdmapContext.CreateEmpty(), "", self, new[] { prop, result });
+            return CommonMacros.HasProp(SdmapCompilerContext.CreateEmpty(), "", self, new[] { prop, result });
         }
     }
 }

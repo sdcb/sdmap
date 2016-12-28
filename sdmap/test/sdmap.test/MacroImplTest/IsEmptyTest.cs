@@ -1,6 +1,6 @@
 ﻿using sdmap.Functional;
 using sdmap.Macros.Implements;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +46,7 @@ namespace sdmap.test.MacroImplTest
         [Fact]
         public void ValueIsNotEmpty()
         {
-            var val = CommonMacros.IsNotEmpty(SdmapContext.CreateEmpty(),
+            var val = CommonMacros.IsNotEmpty(SdmapCompilerContext.CreateEmpty(),
                 "",
                 new { A = DateTime.Now },
                 new object[] { "A", "Ok" });
@@ -56,17 +56,17 @@ namespace sdmap.test.MacroImplTest
 
         private Result<string> CallIsEmpty(object self, string prop, string result)
         {
-            return CommonMacros.IsEmpty(SdmapContext.CreateEmpty(), "", self, new[] { prop, result });
+            return CommonMacros.IsEmpty(SdmapCompilerContext.CreateEmpty(), "", self, new[] { prop, result });
         }
 
         private Result<string> CallIsNotEmpty(object self, string prop, string result)
         {
-            return CommonMacros.IsNotEmpty(SdmapContext.CreateEmpty(), "", self, new[] { prop, result });
+            return CommonMacros.IsNotEmpty(SdmapCompilerContext.CreateEmpty(), "", self, new[] { prop, result });
         }
 
         private Result<string> CallIsNotNull(object self, string prop, string result)
         {
-            return CommonMacros.IsNotNull(SdmapContext.CreateEmpty(), "", self, new[] { prop, result });
+            return CommonMacros.IsNotNull(SdmapCompilerContext.CreateEmpty(), "", self, new[] { prop, result });
         }
     }
 }

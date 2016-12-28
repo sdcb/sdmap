@@ -1,6 +1,6 @@
 ﻿using sdmap.Functional;
 using sdmap.Macros;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace sdmap.test.IntegratedTest
         public void CanAddMacro()
         {
             var code = "sql v1{#hello<>}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             rt.AddMacro("hello", new SdmapTypes[0], (context, ns, self, arguments) =>
             {
@@ -29,7 +29,7 @@ namespace sdmap.test.IntegratedTest
         public void CanAddArgumentMacro()
         {
             var code = "sql v1{#hello<sql{#val<>}>}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             rt.AddMacro("hello", new[] { SdmapTypes.StringOrSql }, (context, ns, self, arguments) =>
             {
@@ -44,7 +44,7 @@ namespace sdmap.test.IntegratedTest
         public void AddArgumentWillDoRuntimeCheck()
         {
             var code = "sql v1{#hello<3>}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             rt.AddMacro("hello", new SdmapTypes[0], (context, ns, self, arguments) =>
             {

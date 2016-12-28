@@ -1,5 +1,5 @@
 ﻿using sdmap.Functional;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace sdmap.Macros
 {
-    public delegate Result<string> MacroDelegate(SdmapContext context, 
+    public delegate Result<string> MacroDelegate(SdmapCompilerContext context, 
         string ns, object self, object[] arguments);
 }

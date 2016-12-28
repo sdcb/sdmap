@@ -1,7 +1,7 @@
 ﻿using sdmap.Functional;
 using sdmap.Macros;
 using sdmap.Parser.Visitor;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace sdmap.test.IntegratedTest
         public void YesNo(bool input, string expected)
         {
             var code = "sql v1{#iif<A, 'Yes#', 'No!<>'}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", new { A = input });
             Assert.Equal(expected, result);
@@ -28,7 +28,7 @@ namespace sdmap.test.IntegratedTest
         public void InsuficientArgumentShouldFail()
         {
             var code = "sql v1{#iif<A, 'Yes#'}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.TryEmit("v1", new { A = true });
             Assert.False(result.IsSuccess);
@@ -38,7 +38,7 @@ namespace sdmap.test.IntegratedTest
         public void NumberTypeShouldFail()
         {
             var code = "sql v1{#iif<A, 'Yes#', 3.14}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.TryEmit("v1", new { A = true });
             Assert.False(result.IsSuccess);
@@ -48,7 +48,7 @@ namespace sdmap.test.IntegratedTest
         public void DateTypeShouldFail()
         {
             var code = "sql v1{#iif<A, 'Yes#', 2016-1-1}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.TryEmit("v1", new { A = true });
             Assert.False(result.IsSuccess);
@@ -58,7 +58,7 @@ namespace sdmap.test.IntegratedTest
         public void NotExistPropShouldFail()
         {
             var code = "sql v1{#iif<A, 'Yes#', 'hello'}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.TryEmit("v1", new { B = true });
             Assert.False(result.IsSuccess);
@@ -69,7 +69,7 @@ namespace sdmap.test.IntegratedTest
         public void CanNestUnnamedSql(bool input, string expected)
         {
             var code = "sql v1{#iif<A, sql{Yes#}, sql{No!<>}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.TryEmit("v1", new { A = input });
             Assert.True(result.IsSuccess);
@@ -80,7 +80,7 @@ namespace sdmap.test.IntegratedTest
         public void CanRunInnerMacro()
         {
             var code = "sql v1{#iif<A, sql{#prop<A>}, sql{}>}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.TryEmit("v1", new { A = true });
             Assert.True(result.IsSuccess);
@@ -91,7 +91,7 @@ namespace sdmap.test.IntegratedTest
         public void OnlyRunOnce()
         {
             var code = "sql v1{#iif<A, sql{#record<>}, sql{#record<>}}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var times = 0;
             rt.AddMacro("record", null, (ctx, ns, self, args) =>

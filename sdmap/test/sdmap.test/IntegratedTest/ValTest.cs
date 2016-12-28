@@ -1,5 +1,5 @@
 ﻿using sdmap.Parser.Visitor;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ namespace sdmap.test.IntegratedTest
         public void CanShowValue()
         {
             var code = "sql v1{#val<>}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", "Hello World");
             Assert.Equal("Hello World", result);
@@ -24,7 +24,7 @@ namespace sdmap.test.IntegratedTest
         public void EmptyValueTest()
         {
             var code = "sql v1{#val<>}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", null);
             Assert.Equal(string.Empty, result);

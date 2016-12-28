@@ -1,5 +1,5 @@
 ﻿using sdmap.Functional;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace sdmap.test.MacroTest.FilterMethodsImpl
 {
     public static class HelloWorldImpl
     {
-        public static Result<string> HelloWorld(SdmapContext context, string ns, object self, object[] arguments)
+        public static Result<string> HelloWorld(SdmapCompilerContext context, string ns, object self, object[] arguments)
         {
             return Result.Ok("Hello World");
         }

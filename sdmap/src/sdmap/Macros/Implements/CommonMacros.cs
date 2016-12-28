@@ -1,6 +1,6 @@
 ﻿using sdmap.Functional;
 using sdmap.Macros.Attributes;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace sdmap.Macros.Implements
     {
         [Macro("include")]
         [MacroArguments(SdmapTypes.Syntax)]
-        public static Result<string> Include(SdmapContext context, 
+        public static Result<string> Include(SdmapCompilerContext context, 
             string ns, object self, object[] arguments)
         {
             var contextId = (string)arguments[0];
@@ -27,7 +27,7 @@ namespace sdmap.Macros.Implements
 
 
         [Macro("val")]
-        public static Result<string> Val(SdmapContext context, 
+        public static Result<string> Val(SdmapCompilerContext context, 
             string ns, object self, object[] arguments)
         {
             return Result.Ok(self?.ToString() ?? string.Empty);
@@ -36,7 +36,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("prop")]
         [MacroArguments(SdmapTypes.Syntax)]
-        public static Result<string> Prop(SdmapContext context, 
+        public static Result<string> Prop(SdmapCompilerContext context, 
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -50,7 +50,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("iif")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql, SdmapTypes.StringOrSql)]
-        public static Result<string> Iif(SdmapContext context, 
+        public static Result<string> Iif(SdmapCompilerContext context, 
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -69,7 +69,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("hasProp")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql)]
-        public static Result<string> HasProp(SdmapContext context,
+        public static Result<string> HasProp(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -84,7 +84,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("isEmpty")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql)]
-        public static Result<string> IsEmpty(SdmapContext context,
+        public static Result<string> IsEmpty(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -114,7 +114,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("isNotEmpty")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql)]
-        public static Result<string> IsNotEmpty(SdmapContext context, 
+        public static Result<string> IsNotEmpty(SdmapCompilerContext context, 
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -144,7 +144,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("isNull")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql)]
-        public static Result<string> IsNull(SdmapContext context,
+        public static Result<string> IsNull(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -163,7 +163,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("isNotNull")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql)]
-        public static Result<string> IsNotNull(SdmapContext context, 
+        public static Result<string> IsNotNull(SdmapCompilerContext context, 
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -182,7 +182,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("isEqual")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.String, SdmapTypes.StringOrSql)]
-        public static Result<string> IsEqual(SdmapContext context,
+        public static Result<string> IsEqual(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -201,7 +201,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("isNotEqual")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.String, SdmapTypes.StringOrSql)]
-        public static Result<string> IsNotEqual(SdmapContext context,
+        public static Result<string> IsNotEqual(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -220,7 +220,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("isLike")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.String, SdmapTypes.StringOrSql)]
-        public static Result<string> IsLike(SdmapContext context,
+        public static Result<string> IsLike(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -238,7 +238,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("isNotLike")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.String, SdmapTypes.StringOrSql)]
-        public static Result<string> IsNotLike(SdmapContext context,
+        public static Result<string> IsNotLike(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();

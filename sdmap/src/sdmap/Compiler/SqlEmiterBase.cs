@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace sdmap.Runtime
+namespace sdmap.Compiler
 {
     public abstract class SqlEmiterBase
     {
@@ -21,7 +21,7 @@ namespace sdmap.Runtime
             _ns = ns;
         }
 
-        public Result EnsureCompiled(SdmapContext context)
+        public Result EnsureCompiled(SdmapCompilerContext context)
         {
             if (Emiter != null)
                 return Result.Ok();
@@ -34,19 +34,19 @@ namespace sdmap.Runtime
                 });
         }
 
-        public Result<string> TryEmit(object v, SdmapContext context)
+        public Result<string> TryEmit(object v, SdmapCompilerContext context)
         {
             return EnsureCompiled(context)
                 .OnSuccess(() => Emiter(context, v))
                 .Unwrap();
         }
 
-        public string Emit(object v, SdmapContext context)
+        public string Emit(object v, SdmapCompilerContext context)
         {
             return TryEmit(v, context).Value;
         }
 
-        private Result<EmitFunction> CompileInternal(SdmapContext context)
+        private Result<EmitFunction> CompileInternal(SdmapCompilerContext context)
         {
             if (_ns != "")
                 context.NsStack.Push(_ns);
@@ -59,8 +59,8 @@ namespace sdmap.Runtime
             return result;
         }
 
-        protected abstract Result<EmitFunction> Compile(SdmapContext context);
+        protected abstract Result<EmitFunction> Compile(SdmapCompilerContext context);
     }
 
-    public delegate Result<string> EmitFunction(SdmapContext context, object obj);
+    public delegate Result<string> EmitFunction(SdmapCompilerContext context, object obj);
 }

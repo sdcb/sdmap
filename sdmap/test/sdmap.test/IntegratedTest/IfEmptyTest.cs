@@ -1,4 +1,4 @@
-﻿using sdmap.Runtime;
+﻿using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace sdmap.test.IntegratedTest
         public void isNotEmpty()
         {
             var code = "sql v1{#isNotEmpty<A, sql{@A}>}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", new { A = "NotEmpty" });
             Assert.Equal("@A", result);
@@ -23,7 +23,7 @@ namespace sdmap.test.IntegratedTest
         public void IfNotNull()
         {
             var code = "sql v1{#isNotEmpty<A, sql{@A}>}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", new { A = " " });
             Assert.Equal(string.Empty, result);
@@ -33,7 +33,7 @@ namespace sdmap.test.IntegratedTest
         public void PropInSubSql()
         {
             var code = "sql v1{#isNotEmpty<A, sql{#prop<A>}>}";
-            var rt = new SdmapRuntime();
+            var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", new { A = "NotEmpty" });
             Assert.Equal("NotEmpty", result);

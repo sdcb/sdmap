@@ -10,7 +10,7 @@ using static sdmap.Parser.G4.SdmapParser;
 using Antlr4.Runtime.Misc;
 using sdmap.Utils;
 using System.Text;
-using sdmap.Runtime;
+using sdmap.Compiler;
 using sdmap.Macros;
 using Antlr4.Runtime;
 
@@ -18,7 +18,7 @@ namespace sdmap.Parser.Visitor
 {
     public class UnnamedSqlVisitor : CoreSqlVisitor
     {
-        public UnnamedSqlVisitor(SdmapContext context)
+        public UnnamedSqlVisitor(SdmapCompilerContext context)
             : base(context)
         {
         }
@@ -28,12 +28,12 @@ namespace sdmap.Parser.Visitor
             return NameUtil.GetFunctionName((UnnamedSqlContext)parseRule);
         }
 
-        public static UnnamedSqlVisitor Create(SdmapContext context)
+        public static UnnamedSqlVisitor Create(SdmapCompilerContext context)
         {
             return new UnnamedSqlVisitor(context);
         }
 
-        public static Result<EmitFunction> Compile(UnnamedSqlContext parseTree, SdmapContext context)
+        public static Result<EmitFunction> Compile(UnnamedSqlContext parseTree, SdmapCompilerContext context)
         {
             var visitor = Create(context);
             return visitor.Visit(parseTree)
@@ -42,7 +42,7 @@ namespace sdmap.Parser.Visitor
 
         public static UnnamedSqlVisitor CreateEmpty()
         {
-            return new UnnamedSqlVisitor(SdmapContext.CreateEmpty());
+            return new UnnamedSqlVisitor(SdmapCompilerContext.CreateEmpty());
         }
     }
 }

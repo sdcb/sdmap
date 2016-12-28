@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace sdmap.Runtime
+namespace sdmap.Compiler
 {
-    public class SdmapContext
+    public class SdmapCompilerContext
     {
         public SortedDictionary<string, SqlEmiterBase> Emiters { get; }
 
@@ -15,7 +15,7 @@ namespace sdmap.Runtime
 
         public MacroManager MacroManager { get; } = new MacroManager();
 
-        private SdmapContext(SortedDictionary<string, SqlEmiterBase> emiters, Stack<string> nsStacks)
+        private SdmapCompilerContext(SortedDictionary<string, SqlEmiterBase> emiters, Stack<string> nsStacks)
         {
             Emiters = emiters;
             NsStack = nsStacks;
@@ -60,19 +60,19 @@ namespace sdmap.Runtime
             return Result.Ok();
         }
 
-        public static SdmapContext CreateEmpty()
+        public static SdmapCompilerContext CreateEmpty()
         {
             return CreateByContext(new SortedDictionary<string, SqlEmiterBase>());
         }
 
-        public static SdmapContext CreateByContext(SortedDictionary<string, SqlEmiterBase> context)
+        public static SdmapCompilerContext CreateByContext(SortedDictionary<string, SqlEmiterBase> context)
         {
             return Create(context, new Stack<string>());
         }
 
-        public static SdmapContext Create(SortedDictionary<string, SqlEmiterBase> emiters, Stack<string> nsStack)
+        public static SdmapCompilerContext Create(SortedDictionary<string, SqlEmiterBase> emiters, Stack<string> nsStack)
         {
-            return new SdmapContext(emiters, nsStack);
+            return new SdmapCompilerContext(emiters, nsStack);
         }
     }
 }
