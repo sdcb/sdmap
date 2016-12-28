@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace sdmap.Macros.Implements
 {
@@ -59,7 +60,7 @@ namespace sdmap.Macros.Implements
             if (prop == null) return RequirePropNotNull(arguments[0]);
 
             if (prop.PropertyType != typeof(bool) && prop.PropertyType != typeof(bool?))
-                return RequirePropType(arguments[0], "bool", prop);
+                return RequirePropType(prop, "bool");
 
             var test = (bool?)prop.GetValue(self) ?? false;
             return test ?
@@ -254,6 +255,57 @@ namespace sdmap.Macros.Implements
             return Empty;
         }
 
+        [Macro("iterate")]
+        [MacroArguments(SdmapTypes.String, SdmapTypes.StringOrSql)]
+        public static Result<string> Iterate(SdmapCompilerContext context,
+            string ns, object self, object[] arguments)
+        {
+            if (self == null) return RequireNotNull();
+            if (!(self is IEnumerable)) return RequireType(self.GetType(), "IEnumerable");
+
+            var result = new StringBuilder();
+            foreach (var newSelf in self as IEnumerable)
+            {
+                if (result.Length > 0) result.Append(arguments[0]);                
+                var one = MacroUtil.EvalToString(arguments[1], context, newSelf);
+                if (one.IsFailure) return one;
+                result.Append(one.Value);
+            }
+            return Result.Ok(result.ToString());
+        }
+
+        [Macro("each")]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.String, SdmapTypes.StringOrSql)]
+        public static Result<string> Each(SdmapCompilerContext context,
+            string ns, object self, object[] arguments)
+        {
+            if (self == null) return RequireNotNull();
+            var prop = GetProp(self, arguments[0]);
+            if (prop == null) return RequirePropNotNull(arguments[0]);
+
+            var val = prop.GetValue(self);
+            if (val == null)
+            {
+                return Empty;
+            }
+            else if (!(val is IEnumerable))
+            {
+                return RequirePropType(prop, "IEnumerable");
+            }
+            else
+            {
+                var result = new StringBuilder();
+                foreach (var newSelf in val as IEnumerable)
+                {
+                    if (result.Length > 0) result.Append(arguments[1]);
+                    var one = MacroUtil.EvalToString(arguments[2], context, newSelf);
+                    if (one.IsFailure) return one;
+                    result.Append(one.Value);
+                }
+                return Result.Ok(result.ToString());
+            }            
+        }
+
         private static readonly Result<string> Empty = Result.Ok("");
 
         private static Result<string> RequireNotNull([CallerMemberName] string caller = null)
@@ -261,16 +313,24 @@ namespace sdmap.Macros.Implements
             return Result.Fail<string>($"Query requires not null in macro '{caller}'.");
         }
 
-        private static Result<string> RequirePropNotNull(object prop, [CallerMemberName] string caller = null)
+        private static Result<string> RequirePropNotNull(object prop, 
+            [CallerMemberName] string caller = null)
         {
             return Result.Fail<string>($"Query requires property '{prop}' in macro '{caller}'.");
         }
 
-        private static Result<string> RequirePropType(object syntax, string expected, PropertyInfo prop, 
+        private static Result<string> RequirePropType(PropertyInfo prop, string expected, 
             [CallerMemberName] string caller = null)
         {
-            return Result.Fail<string>($"Query property '{syntax}' expect type '{expected}' " +
-                    $"but given '{prop.PropertyType.FullName}' in macro 'iif'.");
+            return Result.Fail<string>($"Query property '{prop.Name}' expect type '{expected}' " +
+                    $"but given '{prop.PropertyType.FullName}' in macro '{caller}'.");
+        }
+
+        private static Result<string> RequireType(Type type, string expected, 
+            [CallerMemberName] string caller = null)
+        {
+            return Result.Fail<string>($"Query object expect type '{expected}' " +
+                    $"but given '{type.FullName}' in macro '{caller}'.");
         }
 
         private static PropertyInfo GetProp(object self, object syntax)
