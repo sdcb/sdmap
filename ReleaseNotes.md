@@ -1,5 +1,6 @@
 ## 0.8.0:
 - [core] Breaking change: rename ifNotEmpty->isNotEmpty, ifEmpty->isEmpty
+- [core] Breaking change: rename SdmapRuntime->SdmapCompiler, SdmapContext->SdmapCompilerContext
 - [core] Add hasProp, isNull, isEqual, isNotEqual, isLike, isNotLike
 - [core] Add iterate/each support
 
