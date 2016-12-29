@@ -1,3 +1,7 @@
+## 0.8.1:
+- [core] Reduce .NET version request to 4.5.1
+- [ex] Reduce .NET version request to 4.5.1
+
 ## 0.8.0:
 - [core] Breaking change: rename ifNotEmpty->isNotEmpty, ifEmpty->isEmpty
 - [core] Breaking change: rename SdmapRuntime->SdmapCompiler, SdmapContext->SdmapCompilerContext
