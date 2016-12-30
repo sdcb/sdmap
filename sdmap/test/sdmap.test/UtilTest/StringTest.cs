@@ -65,5 +65,14 @@ namespace sdmap.test.UtilTest
             var actual = Parse(unicode);
             Assert.Equal(expected, actual.Value);
         }
+
+        [Theory]
+        [InlineData(@"@""\/""", @"\/")]
+        [InlineData("@\"\"\"\"", "\"")]
+        public void AtStringCanParse(string atString, string expected)
+        {
+            var actual = Parse(atString);
+            Assert.Equal(expected, actual.Value);
+        }
     }
 }

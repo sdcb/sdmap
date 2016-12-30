@@ -1,3 +1,7 @@
+## 0.8.2:
+- [core] Support Verbatium String(@"\/")
+- [vstool] update to supoort verbatium string
+
 ## 0.8.1:
 - [core] Reduce .NET version request to 4.5.1
 - [ex] Reduce .NET version request to 4.5.1

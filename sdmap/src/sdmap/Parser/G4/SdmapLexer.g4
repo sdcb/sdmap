@@ -17,6 +17,7 @@ CloseCurlyBrace:
 	'}'{bracePrefix = "";};
 
 STRING:
+	'@"' (~'"' | '""')* '"' |
 	'"' (('\\' (["\\/bfnrt] | UNICODE)) | ~ ["\\])* '"' | 
 	'\'' (('\\' (['\\/bfnrt] | UNICODE)) | ~ ['\\])* '\'';
 

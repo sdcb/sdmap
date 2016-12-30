@@ -13,22 +13,6 @@ namespace sdmap.test.LexerTest
     public class SimpleTokenTest : LexerTestBase
     {
         [Fact]
-        public void String1()
-        {
-            var tokens = GetAllTokens("\"Test\"");
-            Assert.Equal(1, tokens.Count);
-            Assert.Equal(STRING, tokens[0].Type);
-        }
-
-        [Fact]
-        public void String2()
-        {
-            var tokens = GetAllTokens("'Test'");
-            Assert.Equal(1, tokens.Count);
-            Assert.Equal(STRING, tokens[0].Type);
-        }
-
-        [Fact]
         public void Number()
         {
             var tokens = GetAllTokens("3.14");
