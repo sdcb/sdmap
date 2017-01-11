@@ -27,12 +27,21 @@ namespace sdmap.Compiler
 
         public Result AddMacro(string id, SdmapTypes[] arguments, MacroDelegate method)
         {
-            if (arguments == null) arguments = new SdmapTypes[0];
             return _context.MacroManager.Add(new Macro
             {
                 Name = id, 
                 Arguments = arguments, 
-                Method = method
+                Method = method, 
+            });
+        }
+
+        public Result AddMacro(string id, MacroDelegate method)
+        {
+            return _context.MacroManager.Add(new Macro
+            {
+                Name = id, 
+                Method = method, 
+                SkipArgumentRuntimeCheck = true
             });
         }
 

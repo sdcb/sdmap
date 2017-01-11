@@ -30,19 +30,23 @@ namespace sdmap.Macros
 
         public static Macro ToSdmapMacro(MethodInfo method)
         {
-            var nameAttr = method.GetCustomAttribute<MacroAttribute>();
+            var mainAttr = method.GetCustomAttribute<MacroAttribute>();
             var argsAttr = method.GetCustomAttribute<MacroArgumentsAttribute>();
 
             return new Macro
             {
-                Name = nameAttr?.Name ?? method.Name,
-                Arguments = argsAttr?.Arguments ?? new SdmapTypes[0],
+                Name = mainAttr?.Name ?? method.Name,
+                SkipArgumentRuntimeCheck = mainAttr?.SkipArgumentRuntimeCheck ?? true,
+                Arguments = argsAttr?.Arguments ?? new SdmapTypes[0],                
                 Method = (MacroDelegate)method.CreateDelegate(typeof(MacroDelegate))
             };
         }
 
         public static Result RuntimeCheck(object[] arguments, Macro macro)
         {
+            if (macro.SkipArgumentRuntimeCheck)
+                return Result.Ok();
+
             if ((arguments?.Length ?? 0) != macro.Arguments.Length)
             {
                 return Result.Fail($"Macro '{macro.Name}' need" +

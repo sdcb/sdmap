@@ -10,7 +10,7 @@ namespace sdmap.Macros.Attributes
     {
         public string Name { get; }
 
-        public bool StrictArgumentCheck { get; } = true;
+        public bool SkipArgumentRuntimeCheck { get; set; }
 
         public MacroAttribute(string name)
         {
