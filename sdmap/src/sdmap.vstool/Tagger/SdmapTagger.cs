@@ -61,6 +61,8 @@ namespace sdmap.Vstool.Tagger
                     return svr.StringLiteral;
                 case Hash:
                     return svr.PreprocessorKeyword;
+                case Bool:
+                    return svr.Keyword;
                 default:
                     return svr.Other;
             }
