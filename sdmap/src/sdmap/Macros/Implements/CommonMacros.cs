@@ -18,7 +18,7 @@ namespace sdmap.Macros.Implements
     {
         [Macro("include")]
         [MacroArguments(SdmapTypes.Syntax)]
-        public static Result<string> Include(SdmapCompilerContext context, 
+        public static Result<string> Include(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
             var contextId = (string)arguments[0];
@@ -28,7 +28,7 @@ namespace sdmap.Macros.Implements
 
 
         [Macro("val")]
-        public static Result<string> Val(SdmapCompilerContext context, 
+        public static Result<string> Val(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
             return Result.Ok(self?.ToString() ?? string.Empty);
@@ -37,7 +37,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("prop")]
         [MacroArguments(SdmapTypes.Syntax)]
-        public static Result<string> Prop(SdmapCompilerContext context, 
+        public static Result<string> Prop(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -45,13 +45,13 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return RequirePropNotNull(arguments[0]);
 
-            return Result.Ok(prop.GetValue(self)?.ToString() ?? string.Empty);
+            return Result.Ok(GetPropValue(self, arguments[0])?.ToString() ?? string.Empty);
         }
 
 
         [Macro("iif")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql, SdmapTypes.StringOrSql)]
-        public static Result<string> Iif(SdmapCompilerContext context, 
+        public static Result<string> Iif(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -62,7 +62,7 @@ namespace sdmap.Macros.Implements
             if (prop.PropertyType != typeof(bool) && prop.PropertyType != typeof(bool?))
                 return RequirePropType(prop, "bool");
 
-            var test = (bool?)prop.GetValue(self) ?? false;
+            var test = (bool?)GetPropValue(self, arguments[0]) ?? false;
             return test ?
                 MacroUtil.EvalToString(arguments[1], context, self) :
                 MacroUtil.EvalToString(arguments[2], context, self);
@@ -78,7 +78,7 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop != null)
                 return MacroUtil.EvalToString(arguments[1], context, self);
-            
+
             return Empty;
         }
 
@@ -93,7 +93,7 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return Result.Ok(string.Empty);
 
-            var val = prop.GetValue(self);
+            var val = GetPropValue(self, arguments[0]);
             if (val == null)
             {
                 return MacroUtil.EvalToString(arguments[1], context, self);
@@ -105,7 +105,7 @@ namespace sdmap.Macros.Implements
             }
             else if (val is IEnumerable)
             {
-                if (!ArrayEmpty(val))
+                if (ArrayEmpty(val))
                     return MacroUtil.EvalToString(arguments[1], context, self);
             }
 
@@ -115,7 +115,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("isNotEmpty")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql)]
-        public static Result<string> IsNotEmpty(SdmapCompilerContext context, 
+        public static Result<string> IsNotEmpty(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -123,7 +123,7 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return Empty;
 
-            var val = prop.GetValue(self);
+            var val = GetPropValue(self, arguments[0]);
             if (val == null)
             {
                 return Empty;
@@ -153,7 +153,7 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return Result.Ok(string.Empty);
 
-            if (prop.GetValue(self) == null)
+            if (GetPropValue(self, arguments[0]) == null)
             {
                 return MacroUtil.EvalToString(arguments[1], context, self);
             }
@@ -164,7 +164,7 @@ namespace sdmap.Macros.Implements
 
         [Macro("isNotNull")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql)]
-        public static Result<string> IsNotNull(SdmapCompilerContext context, 
+        public static Result<string> IsNotNull(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
@@ -172,7 +172,7 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return Empty;
 
-            if (prop.GetValue(self) == null)
+            if (GetPropValue(self, arguments[0]) == null)
             {
                 return Result.Ok(string.Empty);
             }
@@ -191,7 +191,7 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return Empty;
 
-            var val = prop.GetValue(self) as string;
+            var val = GetPropValue(self, arguments[0]) as string;
             var compare = (string)arguments[1];
             if (val == compare)
             {
@@ -210,7 +210,7 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return Empty;
 
-            var val = prop.GetValue(self) as string;
+            var val = GetPropValue(self, arguments[0]) as string;
             var compare = (string)arguments[1];
             if (val != compare)
             {
@@ -229,7 +229,7 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return Empty;
 
-            var val = prop.GetValue(self) as string;
+            var val = GetPropValue(self, arguments[0]) as string;
             if (Regex.IsMatch(val, (string)arguments[1]))
             {
                 return MacroUtil.EvalToString(arguments[2], context, self);
@@ -247,7 +247,7 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return Empty;
 
-            var val = prop.GetValue(self) as string;
+            var val = GetPropValue(self, arguments[0]) as string;
             if (!Regex.IsMatch(val, (string)arguments[1]))
             {
                 return MacroUtil.EvalToString(arguments[2], context, self);
@@ -266,7 +266,7 @@ namespace sdmap.Macros.Implements
             var result = new StringBuilder();
             foreach (var newSelf in self as IEnumerable)
             {
-                if (result.Length > 0) result.Append(arguments[0]);                
+                if (result.Length > 0) result.Append(arguments[0]);
                 var one = MacroUtil.EvalToString(arguments[1], context, newSelf);
                 if (one.IsFailure) return one;
                 result.Append(one.Value);
@@ -283,7 +283,7 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return RequirePropNotNull(arguments[0]);
 
-            var val = prop.GetValue(self);
+            var val = GetPropValue(self, arguments[0]);
             if (val == null)
             {
                 return Empty;
@@ -303,7 +303,7 @@ namespace sdmap.Macros.Implements
                     result.Append(one.Value);
                 }
                 return Result.Ok(result.ToString());
-            }            
+            }
         }
 
         private static readonly Result<string> Empty = Result.Ok("");
@@ -313,37 +313,50 @@ namespace sdmap.Macros.Implements
             return Result.Fail<string>($"Query requires not null in macro '{caller}'.");
         }
 
-        private static Result<string> RequirePropNotNull(object prop, 
+        private static Result<string> RequirePropNotNull(object prop,
             [CallerMemberName] string caller = null)
         {
             return Result.Fail<string>($"Query requires property '{prop}' in macro '{caller}'.");
         }
 
-        private static Result<string> RequirePropType(PropertyInfo prop, string expected, 
+        private static Result<string> RequirePropType(PropertyInfo prop, string expected,
             [CallerMemberName] string caller = null)
         {
             return Result.Fail<string>($"Query property '{prop.Name}' expect type '{expected}' " +
                     $"but given '{prop.PropertyType.FullName}' in macro '{caller}'.");
         }
 
-        private static Result<string> RequireType(Type type, string expected, 
+        private static Result<string> RequireType(Type type, string expected,
             [CallerMemberName] string caller = null)
         {
             return Result.Fail<string>($"Query object expect type '{expected}' " +
                     $"but given '{type.FullName}' in macro '{caller}'.");
         }
 
-        private static PropertyInfo GetProp(object self, object syntax)
+        public static PropertyInfo GetProp(object self, object syntax)
         {
-            return self
-                .GetType()
+            var props = (syntax as string).Split('.');
+            var fronts = props.Take(props.Length - 1);
+
+            var frontValue = fronts.Aggregate(self, (s, p) =>
+                s?.GetType().GetTypeInfo().GetProperty(p)?.GetValue(s));
+            
+            return frontValue
+                ?.GetType()
                 .GetTypeInfo()
-                .GetProperty((string)syntax);
+                .GetProperty(props.Last());
         }
 
-        private static bool ArrayEmpty(object arr)
+        public static object GetPropValue(object self, object syntax)
         {
-            return ((IEnumerable)arr).GetEnumerator().MoveNext();
+            var props = (syntax as string).Split('.');
+            return props.Aggregate(self, (s, p) =>
+                s?.GetType().GetTypeInfo().GetProperty(p)?.GetValue(s));
+        }
+
+        public static bool ArrayEmpty(object arr)
+        {
+            return !((IEnumerable)arr).GetEnumerator().MoveNext();
         }
     }
 }
