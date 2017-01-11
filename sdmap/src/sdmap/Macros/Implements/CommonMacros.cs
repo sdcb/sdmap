@@ -91,24 +91,10 @@ namespace sdmap.Macros.Implements
             if (self == null) return RequireNotNull();
 
             var prop = GetProp(self, arguments[0]);
-            if (prop == null) return Result.Ok(string.Empty);
+            if (prop == null) return RequirePropNotNull(prop);
 
-            var val = GetPropValue(self, arguments[0]);
-            if (val == null)
-            {
+            if (IsEmpty(GetPropValue(self, arguments[0])))
                 return MacroUtil.EvalToString(arguments[1], context, self);
-            }
-            else if (val is string)
-            {
-                if (string.IsNullOrWhiteSpace((string)val))
-                    return MacroUtil.EvalToString(arguments[1], context, self);
-            }
-            else if (val is IEnumerable)
-            {
-                if (ArrayEmpty(val))
-                    return MacroUtil.EvalToString(arguments[1], context, self);
-            }
-
             return Empty;
         }
 
@@ -121,25 +107,11 @@ namespace sdmap.Macros.Implements
             if (self == null) return RequireNotNull();
 
             var prop = GetProp(self, arguments[0]);
-            if (prop == null) return Empty;
+            if (prop == null) return RequirePropNotNull(prop);
 
-            var val = GetPropValue(self, arguments[0]);
-            if (val == null)
-            {
-                return Empty;
-            }
-            else if (val is string)
-            {
-                if (string.IsNullOrWhiteSpace((string)val))
-                    return Empty;
-            }
-            else if (val is IEnumerable)
-            {
-                if (ArrayEmpty(val))
-                    return Empty;
-            }
-
-            return MacroUtil.EvalToString(arguments[1], context, self);
+            if (!IsEmpty(GetPropValue(self, arguments[0])))
+                return MacroUtil.EvalToString(arguments[1], context, self);
+            return Empty;
         }
 
 
@@ -154,11 +126,9 @@ namespace sdmap.Macros.Implements
             if (prop == null) return Result.Ok(string.Empty);
 
             if (GetPropValue(self, arguments[0]) == null)
-            {
                 return MacroUtil.EvalToString(arguments[1], context, self);
-            }
 
-            return Result.Ok(string.Empty);
+            return Empty;
         }
 
 
@@ -172,12 +142,10 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return Empty;
 
-            if (GetPropValue(self, arguments[0]) == null)
-            {
-                return Result.Ok(string.Empty);
-            }
+            if (GetPropValue(self, arguments[0]) != null)
+                return MacroUtil.EvalToString(arguments[1], context, self);
 
-            return MacroUtil.EvalToString(arguments[1], context, self);
+            return Empty;
         }
 
 
@@ -194,9 +162,7 @@ namespace sdmap.Macros.Implements
             var val = GetPropValue(self, arguments[0]);
             var compare = arguments[1];
             if (IsEqual(val, compare))
-            {
                 return MacroUtil.EvalToString(arguments[2], context, self);
-            }
             
             return Empty;
         }
@@ -214,9 +180,8 @@ namespace sdmap.Macros.Implements
             var val = GetPropValue(self, arguments[0]);
             var compare = arguments[1];
             if (!IsEqual(val, compare))
-            {
                 return MacroUtil.EvalToString(arguments[2], context, self);
-            }
+
             return Empty;
         }
 
@@ -378,6 +343,17 @@ namespace sdmap.Macros.Implements
             {
                 return (val2 as DateTime?).Equals(val1);
             }
+            return false;
+        }
+
+        public static bool IsEmpty(object v)
+        {
+            if (v == null)
+                return true;
+            if (v is string)
+                return string.IsNullOrWhiteSpace((string)v);
+            if (v is IEnumerable)
+                return ArrayEmpty(v);
             return false;
         }
     }

@@ -39,7 +39,6 @@ namespace sdmap.test.MacroImplTest
         public void NullIsEmpty()
         {
             var val = CallIsNotEmpty(new { A = (string)null }, "A", "Ok");
-            Assert.True(val.IsSuccess);
             Assert.Equal(string.Empty, val.Value);
         }
 

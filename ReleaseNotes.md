@@ -1,3 +1,10 @@
+## 0.9.0:
+- [core] add support for bool type
+- [core] add support for any type
+- [core] allow skip argument runtime check
+- [core] enable any type in ifEquals/ifNotEquals
+- [core] all property syntax in macro support Nested Objects
+
 ## 0.8.2:
 - [core] Support Verbatium String(@"\/")
 - [vstool] update to supoort verbatium string
