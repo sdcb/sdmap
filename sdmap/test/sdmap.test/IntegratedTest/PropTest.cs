@@ -80,5 +80,15 @@ namespace sdmap.test.IntegratedTest
             var result = rt.TryEmit("v1.v1", new { });
             Assert.False(result.IsSuccess);
         }
+
+        [Fact]
+        public void NestedPropTest()
+        {
+            var code = "sql v1{#prop<A.B>}";
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode(code);
+            var result = rt.TryEmit("v1", new { A = new { B = 3 } });
+            Assert.Equal("3", result.Value);
+        }
     }
 }
