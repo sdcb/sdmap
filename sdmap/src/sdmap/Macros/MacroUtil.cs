@@ -84,6 +84,13 @@ namespace sdmap.Macros
                         if (!(arg is string) && !(arg is EmitFunction))
                             return TypeCheckFail(macro, i, arg, mac);
                         break;
+                    case SdmapTypes.Bool:
+                        if (!(arg is bool))
+                            return TypeCheckFail(macro, i, arg, mac);
+                        break;
+                    case SdmapTypes.Any:
+                        // allow any types.
+                        break;
                     default:
                         return TypeCheckFail(macro, i, arg, mac);
                 }

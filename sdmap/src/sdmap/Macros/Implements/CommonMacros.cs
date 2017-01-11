@@ -182,7 +182,7 @@ namespace sdmap.Macros.Implements
 
 
         [Macro("isEqual")]
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.String, SdmapTypes.StringOrSql)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Any, SdmapTypes.StringOrSql)]
         public static Result<string> IsEqual(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
@@ -191,17 +191,18 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return Empty;
 
-            var val = GetPropValue(self, arguments[0]) as string;
-            var compare = (string)arguments[1];
-            if (val == compare)
+            var val = GetPropValue(self, arguments[0]);
+            var compare = arguments[1];
+            if (IsEqual(val, compare))
             {
                 return MacroUtil.EvalToString(arguments[2], context, self);
             }
+            
             return Empty;
         }
 
         [Macro("isNotEqual")]
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.String, SdmapTypes.StringOrSql)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Any, SdmapTypes.StringOrSql)]
         public static Result<string> IsNotEqual(SdmapCompilerContext context,
             string ns, object self, object[] arguments)
         {
@@ -210,9 +211,9 @@ namespace sdmap.Macros.Implements
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return Empty;
 
-            var val = GetPropValue(self, arguments[0]) as string;
-            var compare = (string)arguments[1];
-            if (val != compare)
+            var val = GetPropValue(self, arguments[0]);
+            var compare = arguments[1];
+            if (!IsEqual(val, compare))
             {
                 return MacroUtil.EvalToString(arguments[2], context, self);
             }
@@ -357,6 +358,27 @@ namespace sdmap.Macros.Implements
         public static bool ArrayEmpty(object arr)
         {
             return !((IEnumerable)arr).GetEnumerator().MoveNext();
+        }
+
+        public static bool IsEqual(object val1, object val2)
+        {            
+            if (val2 is string)
+            {
+                return (val2 as string).Equals(val1);
+            }
+            else if (val2 is bool)
+            {
+                return (val2 as bool?).Equals(val1);
+            }
+            else if (val2 is double)
+            {
+                return Convert.ToDecimal(val2).Equals(val1);
+            }
+            else if (val2 is DateTime)
+            {
+                return (val2 as DateTime?).Equals(val1);
+            }
+            return false;
         }
     }
 }

@@ -67,6 +67,16 @@ namespace sdmap.test.LexerTest
         }
 
         [Fact]
+        public void BoolTest()
+        {
+            var tokens = GetAllTokens("true false");
+            Assert.Equal(new[]
+            {
+                Bool, Bool
+            }, tokens.Select(x => x.Type));
+        }
+
+        [Fact]
         public void EmptySqlTest()
         {
             var tokens = GetAllTokens("sql v1{#syntax<sql{}>}");

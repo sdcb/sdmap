@@ -32,6 +32,7 @@ macro:
 	CloseAngleBracket;
 
 macroParameter:
+	Bool |
 	SYNTAX |
 	NSSyntax | 
 	STRING |

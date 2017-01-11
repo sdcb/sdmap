@@ -43,6 +43,9 @@ DATE:
 	INT '-' INT '-' INT |
 	INT '/' INT '/' INT;
 
+Bool: 
+	'true' | 'false';
+
 SYNTAX: 
 	[a-zA-Z_] [0-9a-zA-Z_]*;
 

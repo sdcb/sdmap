@@ -154,6 +154,13 @@ namespace sdmap.Parser.Visitor
                         return result;
                     }
                 }
+                else if (arg.Bool() != null)
+                {
+                    _il.Emit(bool.Parse(arg.Bool().GetText()) ? 
+                        OpCodes.Ldc_I4_1 : 
+                        OpCodes.Ldc_I4_0);                                  // .. -> args idx bool
+                    _il.Emit(OpCodes.Box, typeof(bool));                    // .. -> args idx rele
+                }
                 else if (arg.unnamedSql() != null)
                 {
                     var parseTree = arg.unnamedSql();

@@ -13,5 +13,7 @@ namespace sdmap.Macros
         String, 
         Sql, 
         StringOrSql, 
+        Bool, 
+        Any, 
     }
 }

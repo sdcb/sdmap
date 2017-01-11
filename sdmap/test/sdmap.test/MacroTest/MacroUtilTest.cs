@@ -1,4 +1,5 @@
 ﻿using sdmap.Macros.Implements;
+using sdmap.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +61,25 @@ namespace sdmap.test.MacroTest
         {
             var arr = Enumerable.Range(1, 10);
             Assert.False(CommonMacros.ArrayEmpty(arr));
+        }
+
+        [Fact]
+        public void BoolEqualBool()
+        {
+            Assert.True(CommonMacros.IsEqual(true, true));
+        }
+
+        [Fact]
+        public void NumberEqualsNumber()
+        {
+            Assert.True(CommonMacros.IsEqual(3.14m, 3.14));
+        }
+
+        [Fact]
+        public void DateEqualsDate()
+        {
+            var date = new DateTime(2016, 1, 1);
+            Assert.True(CommonMacros.IsEqual(date, DateUtil.Parse("2016/1/1").Value));
         }
     }
 }
