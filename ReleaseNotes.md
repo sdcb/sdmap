@@ -4,6 +4,8 @@
 - [core] allow skip argument runtime check
 - [core] enable any type in ifEquals/ifNotEquals
 - [core] all property syntax in macro support Nested Objects
+- [vstool] update with core
+- [ext] update with core
 
 ## 0.8.2:
 - [core] Support Verbatium String(@"\/")
@@ -11,7 +13,7 @@
 
 ## 0.8.1:
 - [core] Reduce .NET version request to 4.5.1
-- [ex] Reduce .NET version request to 4.5.1
+- [ext] Reduce .NET version request to 4.5.1
 
 ## 0.8.0:
 - [core] Breaking change: rename ifNotEmpty->isNotEmpty, ifEmpty->isEmpty
