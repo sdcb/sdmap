@@ -12,7 +12,12 @@ namespace sdmap.Compiler
 {
     public class SdmapCompiler
     {
-        private readonly SdmapCompilerContext _context = SdmapCompilerContext.CreateEmpty();
+        private readonly SdmapCompilerContext _context;
+
+        public SdmapCompiler(SdmapCompilerContext context = null)
+        {
+            _context = context ?? SdmapCompilerContext.CreateEmpty();
+        }
 
         public Result AddSourceCode(string sourceCode)
         {
@@ -58,7 +63,7 @@ namespace sdmap.Compiler
 
         public Result EnsureCompiled()
         {
-            foreach (var kv in _context.Emiters)
+            foreach (var kv in _context.Emiters.ToList())
             {
                 var ok = kv.Value.EnsureCompiled(_context);
                 if (ok.IsFailure) return ok;
