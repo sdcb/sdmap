@@ -1,15 +1,19 @@
+## 0.9.1:
+- [core] fix a issue that EnsureCompiled will fail when using sub-sql.
+- [ext] bump version.
+
 ## 0.9.0:
 - [core] add support for bool type
 - [core] add support for any type
 - [core] allow skip argument runtime check
 - [core] enable any type in ifEquals/ifNotEquals
 - [core] all property syntax in macro support Nested Objects
-- [vstool] update with core
-- [ext] update with core
+- [vstool] bump version
+- [ext] bump version
 
 ## 0.8.2:
 - [core] Support Verbatium String(@"\/")
-- [vstool] update to supoort verbatium string
+- [vstool] update to support verbatium string
 
 ## 0.8.1:
 - [core] Reduce .NET version request to 4.5.1
