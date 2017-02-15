@@ -9,24 +9,44 @@ using Microsoft.VisualStudio.Language.StandardClassification;
 using sdmap.Parser.G4;
 using Microsoft.VisualStudio.Text.Classification;
 using static sdmap.Parser.G4.SdmapLexer;
+using System.Reactive.Linq;
 
 namespace sdmap.Vstool.Tagger
 {
-    class SdmapTagger : ITagger<ClassificationTag>
+    sealed class SdmapTagger : ITagger<ClassificationTag>
     {
         private ISdmapLexer lexer;
         private ITextBuffer buffer;
         private IStandardClassificationService standardClassificationService;
-
-#pragma warning disable CS0067
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
-#pragma warning restore CS0067
+        private SortedList<int, TagSpan<ClassificationTag>> tokenBuffer = new SortedList<int, TagSpan<ClassificationTag>>();
 
         public SdmapTagger(ISdmapLexer lexer, ITextBuffer buffer, IStandardClassificationService standardClassificationService)
         {
             this.lexer = lexer;
             this.buffer = buffer;
             this.standardClassificationService = standardClassificationService;
+
+            void WriteBuffer(TextContentChangedEventArgs args)
+            {
+                foreach (var kv in lexer.Run(new[] { buffer.CurrentSnapshot.GetText() }, 0))
+                {
+                    tokenBuffer[kv.Span.Start] = new TagSpan<ClassificationTag>(
+                        new SnapshotSpan(buffer.CurrentSnapshot, kv.Span),
+                        new ClassificationTag(GetClassificationTypeByToken(kv.TokenType, standardClassificationService)));
+                }
+
+                if (TagsChanged != null && args != null)
+                {
+                    TagsChanged(this, new SnapshotSpanEventArgs(new SnapshotSpan(args.After, 
+                        args.Changes[0].NewSpan)));
+                }
+            };
+
+            Observable.FromEventPattern<TextContentChangedEventArgs>(buffer, nameof(buffer.Changed))
+                .Throttle(TimeSpan.FromMilliseconds(100.0))
+                .Subscribe(e => WriteBuffer(e.EventArgs));
+            WriteBuffer(null);
         }
 
         public static IClassificationType GetClassificationTypeByToken(int token, IStandardClassificationService svr)
@@ -67,14 +87,30 @@ namespace sdmap.Vstool.Tagger
                     return svr.Other;
             }
         }
-
+        
         public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans)
         {
-            return lexer
-                .Run(new []{ buffer.CurrentSnapshot.GetText() }, 0)
-                .Select(x => new TagSpan<ClassificationTag>(
-                    new SnapshotSpan(buffer.CurrentSnapshot, x.Span), 
-                    new ClassificationTag(GetClassificationTypeByToken(x.TokenType, standardClassificationService))));
+            foreach (var span in spans)
+            {
+                var start = span.Start.Position;
+                var end = span.End.Position;
+
+                var keysArray = tokenBuffer.Keys.ToArray();
+                var startPos = Array.BinarySearch(keysArray, start);
+                var endPos = Array.BinarySearch(keysArray, end);
+
+                if (startPos < 0) startPos = Math.Abs(startPos) - 1;
+                if (endPos < 0) endPos = Math.Abs(endPos) - 1;
+                startPos = startPos - 30;
+                if (startPos < 0) startPos = 0;
+                if (startPos >= tokenBuffer.Count) startPos = tokenBuffer.Count - 1;
+                if (endPos >= tokenBuffer.Count) endPos = tokenBuffer.Count - 1;
+
+                for (var i = startPos; i <= endPos; ++i)
+                {
+                    yield return tokenBuffer.Values[i];
+                }
+            }
         }
     }
 }
