@@ -34,7 +34,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>1</WarningLevel>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,10 +49,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tagger\Antlr\SdmapLexer.cs" />
     <Compile Include="Tagger\Antlr\TextSegmentsCharStream.cs" />
+    <Compile Include="Tagger\BitHelper.cs" />
+    <Compile Include="Tagger\DocumentState.cs" />
+    <Compile Include="Tagger\EnumerableHelpers.cs" />
     <Compile Include="Tagger\ISdmapLexer.cs" />
+    <Compile Include="Tagger\JoinedTextChange.cs" />
     <Compile Include="Tagger\SdmapTagger.cs" />
     <Compile Include="Tagger\SdmapTaggerProvider.cs" />
+    <Compile Include="Tagger\SortedSet.cs" />
+    <Compile Include="Tagger\SortedSetHelpers.cs" />
     <Compile Include="Tagger\SpannedToken.cs" />
+    <Compile Include="Tagger\TokensChangedEventArgs.cs" />
+    <Compile Include="Tagger\TrackingToken.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -102,6 +110,22 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Reactive.Core, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.Interfaces.3.1.1\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.Linq.3.1.1\lib\net45\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.PlatformServices.3.1.1\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Threading, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.Windows.Threading.3.1.1\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />

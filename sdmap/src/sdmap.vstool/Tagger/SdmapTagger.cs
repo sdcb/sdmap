@@ -24,13 +24,32 @@ namespace sdmap.Vstool.Tagger
 
         public SdmapTagger(ISdmapLexer lexer, ITextBuffer buffer, IStandardClassificationService standardClassificationService)
         {
-            this.lexer = lexer;
             this.buffer = buffer;
             this.standardClassificationService = standardClassificationService;
+
+            var state = DocumentState.CreateAndRegister(lexer, buffer);
+            state.TokensChanged += TokensChanged;
         }
 
-        public static IClassificationType GetClassificationTypeByToken(int token, IStandardClassificationService svr)
+        private void TokensChanged(object src, TokensChangedEventArgs args)
         {
+            OutliningRegionTag f;
+            if (args.NewTokens.Count == 0)
+                return;
+            DocumentState state = src as DocumentState;
+            if (state == null)
+                return;
+            var temp = TagsChanged;
+            if (temp == null)
+                return;
+            int start = args.NewTokens[0].GetStart(state.CurrentSnapshot);
+            int end = args.NewTokens[args.NewTokens.Count - 1].GetEnd(state.CurrentSnapshot);
+            temp(this, new SnapshotSpanEventArgs(new SnapshotSpan(state.CurrentSnapshot, new Span(start, end - start))));
+        }
+
+        public IClassificationType GetClassificationTypeByToken(int token)
+        {
+            var svr = standardClassificationService;
             switch (token)
             {
                 case KSql:
@@ -70,11 +89,22 @@ namespace sdmap.Vstool.Tagger
 
         public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans)
         {
-            return lexer
-                .Run(new []{ buffer.CurrentSnapshot.GetText() }, 0)
-                .Select(x => new TagSpan<ClassificationTag>(
-                    new SnapshotSpan(buffer.CurrentSnapshot, x.Span), 
-                    new ClassificationTag(GetClassificationTypeByToken(x.TokenType, standardClassificationService))));
+            DocumentState document;
+            if (!DocumentState.TryGet(buffer, out document))
+                yield break;
+            if (document.CurrentSnapshot.Version.VersionNumber != buffer.CurrentSnapshot.Version.VersionNumber)
+                yield break;
+
+            foreach (var span in spans)
+            {
+                foreach (var token in document.GetTokens(span))
+                {
+                    if (token.IsEmpty)
+                        continue;
+                    var tag = new ClassificationTag(GetClassificationTypeByToken(token.Type));
+                    yield return new TagSpan<ClassificationTag>(new SnapshotSpan(document.CurrentSnapshot, token.GetSpan(document.CurrentSnapshot)), tag);
+                }
+            }
         }
     }
 }
