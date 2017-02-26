@@ -14,18 +14,22 @@ namespace sdmap.ext.test
         [Fact]
         public void WatchSmoke()
         {
+            Directory.CreateDirectory("sqls");
             var tempFile = @"sqls\test.sdmap";
-            SdmapExtensions.SetSqlDirectoryAndWatch("sqls");
+            File.WriteAllText(tempFile, "sql Hello{Hello}");
+            SdmapExtensions.SetSqlDirectoryAndWatch(@".\sqls");
+
             try
             {
-                File.WriteAllText(tempFile, "sql Hello2{Hello2}");
+                File.WriteAllText(tempFile, "sql Hello{Hello2}");
                 Thread.Sleep(100);
-                var text = SdmapExtensions.EmitSql("Hello2", null);
+                var text = SdmapExtensions.EmitSql("Hello", null);
                 Assert.Equal("Hello2", text);
             }
             finally
             {
                 File.Delete(tempFile);
+                Directory.Delete("sqls");
             }
         }
     }
