@@ -22,7 +22,7 @@ namespace sdmap.ext.test
             try
             {
                 File.WriteAllText(tempFile, "sql Hello{Hello2}");
-                Thread.Sleep(100);
+                Thread.Sleep(30);
                 var text = SdmapExtensions.EmitSql("Hello", null);
                 Assert.Equal("Hello2", text);
             }
