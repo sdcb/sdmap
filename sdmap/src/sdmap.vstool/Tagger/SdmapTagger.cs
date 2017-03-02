@@ -101,7 +101,7 @@ namespace sdmap.Vstool.Tagger
 
                 if (startPos < 0) startPos = Math.Abs(startPos) - 1;
                 if (endPos < 0) endPos = Math.Abs(endPos) - 1;
-                startPos = startPos - 30;
+                startPos = startPos - 1;
                 if (startPos < 0) startPos = 0;
                 if (startPos >= tokenBuffer.Count) startPos = tokenBuffer.Count - 1;
                 if (endPos >= tokenBuffer.Count) endPos = tokenBuffer.Count - 1;
