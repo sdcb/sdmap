@@ -9,3 +9,6 @@ A template engine for writing dynamic sql.
 
 # Release notes: 
 https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md
+
+# Document/Wiki
+https://github.com/sdcb/sdmap/wiki
