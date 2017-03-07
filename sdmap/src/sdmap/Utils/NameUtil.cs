@@ -12,5 +12,10 @@ namespace sdmap.Utils
         {
             return "UnNamed_" + HashUtil.Base64SHA256(context.GetText());
         }
+
+        public static string GetFunctionName(CoreSqlContext context)
+        {
+            return "UnNamed_" + HashUtil.Base64SHA256(context.GetText());
+        }
     }
 }

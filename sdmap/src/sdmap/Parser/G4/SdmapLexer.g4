@@ -7,6 +7,9 @@ private string bracePrefix = "";
 KSql: 
 	'sql'{bracePrefix = "sql";};
 
+KIf: 
+	'if'{bracePrefix = "sql";};
+
 KNamespace:
 	'namespace'{bracePrefix = "namespace";};
 
@@ -70,9 +73,6 @@ OpenAngleBracket:
 CloseAngleBracket:
 	'>' -> popMode;
 
-If: 
-	'if'{bracePrefix = "sql";};
-
 OpenBrace: 
 	'(';
 
@@ -90,6 +90,10 @@ Null:
 
 Else: 
 	'else';
+
+
+
+
 
 mode SQL;
 SQLText: 

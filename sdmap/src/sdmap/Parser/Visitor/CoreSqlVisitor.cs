@@ -48,9 +48,9 @@ namespace sdmap.Parser.Visitor
             var method = new DynamicMethod(fullName,
                 typeof(Result<string>), new[] { typeof(SdmapCompilerContext), typeof(object) });
             _il = method.GetILGenerator();
-            
+
             var coreSqlContext = parseRule.GetChild<CoreSqlContext>(0);
-            
+
             _il.DeclareLocal(typeof(StringBuilder));
             _il.Emit(OpCodes.Newobj, typeof(StringBuilder)
                 .GetTypeInfo()
@@ -79,8 +79,8 @@ namespace sdmap.Parser.Visitor
                 returnBlock();
                 return Result.Ok();
             }
-                                                                                      
-            return Visit(coreSqlContext)                                              
+
+            return Visit(coreSqlContext)
                 .OnSuccess(() =>                                                      // [must be empty]
                 {
                     returnBlock();
@@ -156,8 +156,8 @@ namespace sdmap.Parser.Visitor
                 }
                 else if (arg.Bool() != null)
                 {
-                    _il.Emit(bool.Parse(arg.Bool().GetText()) ? 
-                        OpCodes.Ldc_I4_1 : 
+                    _il.Emit(bool.Parse(arg.Bool().GetText()) ?
+                        OpCodes.Ldc_I4_1 :
                         OpCodes.Ldc_I4_0);                                  // .. -> args idx bool
                     _il.Emit(OpCodes.Box, typeof(bool));                    // .. -> args idx rele
                 }
@@ -235,6 +235,74 @@ namespace sdmap.Parser.Visitor
                 new[] { typeof(string), }));                                       // sb+str
             _il.Emit(OpCodes.Pop);                                                 // [empty]
             return Result.Ok();
+        }
+
+        public override Result VisitBoolExpression([NotNull] BoolExpressionContext context)
+        {
+            if (context.children.Count == 1) // #if(PropertyName) {...}
+            {
+                _il.Emit(OpCodes.Ldarg_1);                              // stack: self
+                _il.Emit(OpCodes.Ldstr, context.children[0].GetText()); // stack: self propName
+                _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo().GetMethod(
+                    nameof(IfUtils.PropertyExistsAndEvalToTrue)));
+                return Result.Ok();
+            }
+            else if (context.children.Count == 3 && context.children[2].GetText() == "null")
+            {
+                var op = context.children[1].GetText();
+                _il.Emit(OpCodes.Ldarg_1); // stack: self
+                switch (op)
+                {
+                    case "==":
+                        _il.Emit(OpCodes.Ldnull);
+                        _il.Emit(OpCodes.Ceq);
+                        break;
+                    case "!=":
+                        _il.Emit(OpCodes.Ldnull);
+                        _il.Emit(OpCodes.Ceq);
+                        _il.Emit(OpCodes.Ldc_I4_0);
+                        _il.Emit(OpCodes.Ceq);
+                        break;
+                }
+            }
+            return Result.Fail("#if statement currently only supports == null and != null.");
+        }
+
+        public override Result VisitIf([NotNull] IfContext context)
+        {
+            return Visit(context.boolExpression())
+                .OnSuccess(() =>
+                {
+                    var parseTree = context.coreSql();
+                    var id = NameUtil.GetFunctionName(parseTree);
+                    var result = _context.TryGetEmiter(id, _context.CurrentNs);
+
+                    throw new NotImplementedException();
+                    //CoreSqlEmiter emiter;
+                    //if (result.IsSuccess)
+                    //{
+                    //    emiter = (CoreSqlEmiter)result.Value;
+                    //}
+                    //else
+                    //{
+                    //    emiter = CoreSqlEmiter.Create(parseTree, _context.CurrentNs);
+                    //    var ok = _context.TryAdd(id, emiter);
+                    //    if (ok.IsFailure) return ok;
+                    //}
+
+                    //var compileResult = emiter.EnsureCompiled(_context);
+                    //if (compileResult.IsFailure)
+                    //{
+                    //    return compileResult;
+                    //}
+
+                    //_il.Emit(OpCodes.Ldarg_0);                             // .. -> args idx ctx
+                    //_il.Emit(OpCodes.Ldstr, id);                           // .. -> args idx ctx id
+                    //_il.Emit(OpCodes.Ldstr, _context.CurrentNs);           // .. -> args idx ctx id ns
+                    //_il.Emit(OpCodes.Call, typeof(CoreSqlEmiter).GetTypeInfo()
+                    //    .GetMethod(nameof(CoreSqlEmiter.EmiterFromId)));// .. -> args idx emiter
+                    //return Result.Ok();
+                });
         }
 
         protected override Result AggregateResult(Result aggregate, Result nextResult)

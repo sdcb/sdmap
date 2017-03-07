@@ -11,7 +11,7 @@ namespace:
 	CloseCurlyBrace;
 
 coreSql:
-	(macro | plainText)+;
+	(if | macro | plainText)+;
 
 plainText:
 	SQLText;
@@ -26,11 +26,11 @@ unnamedSql:
 		coreSql?
 	CloseSql;
 
-ifStatement:
-	Hash If OpenBrace boolExpression CloseBrace
+if:
+	Hash KIf OpenBrace boolExpression CloseBrace
 	OpenCurlyBrace
 		coreSql?
-	CloseCurlyBrace;
+	CloseSql;
 
 boolExpression: 
 	SYNTAX
