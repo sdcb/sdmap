@@ -26,6 +26,16 @@ unnamedSql:
 		coreSql?
 	CloseSql;
 
+ifStatement:
+	Hash If OpenBrace boolExpression CloseBrace
+	OpenCurlyBrace
+		coreSql?
+	CloseCurlyBrace;
+
+boolExpression: 
+	SYNTAX
+	SYNTAX (Equal | NotEqual) Null;
+
 macro:
 	Hash SYNTAX OpenAngleBracket
 		macroParameter? (Comma macroParameter)*

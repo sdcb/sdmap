@@ -70,6 +70,27 @@ OpenAngleBracket:
 CloseAngleBracket:
 	'>' -> popMode;
 
+If: 
+	'if'{bracePrefix = "sql";};
+
+OpenBrace: 
+	'(';
+
+CloseBrace: 
+	')';
+
+Equal: 
+	'==';
+
+NotEqual: 
+	'!=';
+
+Null: 
+	'null';
+
+Else: 
+	'else';
+
 mode SQL;
 SQLText: 
 	~('#' | '}')+;
