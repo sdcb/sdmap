@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Antlr4.Runtime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,12 +9,7 @@ namespace sdmap.Utils
 {
     public static class NameUtil
     {
-        public static string GetFunctionName(UnnamedSqlContext context)
-        {
-            return "UnNamed_" + HashUtil.Base64SHA256(context.GetText());
-        }
-
-        public static string GetFunctionName(CoreSqlContext context)
+        public static string GetFunctionName(ParserRuleContext context)
         {
             return "UnNamed_" + HashUtil.Base64SHA256(context.GetText());
         }

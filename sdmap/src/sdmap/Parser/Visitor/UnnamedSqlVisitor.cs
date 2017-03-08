@@ -23,17 +23,12 @@ namespace sdmap.Parser.Visitor
         {
         }
 
-        protected override string GetFunctionName(ParserRuleContext parseRule)
-        {
-            return NameUtil.GetFunctionName((UnnamedSqlContext)parseRule);
-        }
-
         public static UnnamedSqlVisitor Create(SdmapCompilerContext context)
         {
             return new UnnamedSqlVisitor(context);
         }
 
-        public static Result<EmitFunction> Compile(UnnamedSqlContext parseTree, SdmapCompilerContext context)
+        public static Result<EmitFunction> Compile(ParserRuleContext parseTree, SdmapCompilerContext context)
         {
             var visitor = Create(context);
             return visitor.Visit(parseTree)

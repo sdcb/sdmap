@@ -28,8 +28,20 @@ namespace sdmap.Parser.Visitor
         {
             _context = context;
         }
+        
+        protected virtual string GetFunctionName(ParserRuleContext parseRule)
+        {
+            return NameUtil.GetFunctionName(parseRule);
+        }
 
-        protected abstract string GetFunctionName(ParserRuleContext parseRule);
+        public override Result VisitCoreSql([NotNull] CoreSqlContext context)
+        {
+            if (_il == null)
+            {
+                Process(context);
+            }
+            return base.VisitCoreSql(context);
+        }
 
         public override Result VisitNamedSql([NotNull] NamedSqlContext context)
         {
@@ -49,7 +61,15 @@ namespace sdmap.Parser.Visitor
                 typeof(Result<string>), new[] { typeof(SdmapCompilerContext), typeof(object) });
             _il = method.GetILGenerator();
 
-            var coreSqlContext = parseRule.GetChild<CoreSqlContext>(0);
+            CoreSqlContext coreSqlContext;
+            if (parseRule is CoreSqlContext)
+            {
+                coreSqlContext = (CoreSqlContext)parseRule;
+            }
+            else
+            {
+                coreSqlContext = parseRule.GetChild<CoreSqlContext>(0);
+            }            
 
             _il.DeclareLocal(typeof(StringBuilder));
             _il.Emit(OpCodes.Newobj, typeof(StringBuilder)
@@ -277,31 +297,30 @@ namespace sdmap.Parser.Visitor
                     var id = NameUtil.GetFunctionName(parseTree);
                     var result = _context.TryGetEmiter(id, _context.CurrentNs);
 
-                    throw new NotImplementedException();
-                    //CoreSqlEmiter emiter;
-                    //if (result.IsSuccess)
-                    //{
-                    //    emiter = (CoreSqlEmiter)result.Value;
-                    //}
-                    //else
-                    //{
-                    //    emiter = CoreSqlEmiter.Create(parseTree, _context.CurrentNs);
-                    //    var ok = _context.TryAdd(id, emiter);
-                    //    if (ok.IsFailure) return ok;
-                    //}
+                    UnnamedSqlEmiter emiter;
+                    if (result.IsSuccess)
+                    {
+                        emiter = (UnnamedSqlEmiter)result.Value;
+                    }
+                    else
+                    {
+                        emiter = UnnamedSqlEmiter.Create(parseTree, _context.CurrentNs);
+                        var ok = _context.TryAdd(id, emiter);
+                        if (ok.IsFailure) return ok;
+                    }
 
-                    //var compileResult = emiter.EnsureCompiled(_context);
-                    //if (compileResult.IsFailure)
-                    //{
-                    //    return compileResult;
-                    //}
+                    var compileResult = emiter.EnsureCompiled(_context);
+                    if (compileResult.IsFailure)
+                    {
+                        return compileResult;
+                    }
 
-                    //_il.Emit(OpCodes.Ldarg_0);                             // .. -> args idx ctx
-                    //_il.Emit(OpCodes.Ldstr, id);                           // .. -> args idx ctx id
-                    //_il.Emit(OpCodes.Ldstr, _context.CurrentNs);           // .. -> args idx ctx id ns
-                    //_il.Emit(OpCodes.Call, typeof(CoreSqlEmiter).GetTypeInfo()
-                    //    .GetMethod(nameof(CoreSqlEmiter.EmiterFromId)));// .. -> args idx emiter
-                    //return Result.Ok();
+                    _il.Emit(OpCodes.Ldarg_0);                             // .. -> args idx ctx
+                    _il.Emit(OpCodes.Ldstr, id);                           // .. -> args idx ctx id
+                    _il.Emit(OpCodes.Ldstr, _context.CurrentNs);           // .. -> args idx ctx id ns
+                    _il.Emit(OpCodes.Call, typeof(UnnamedSqlEmiter).GetTypeInfo()
+                        .GetMethod(nameof(UnnamedSqlEmiter.EmiterFromId)));// .. -> args idx emiter
+                    return Result.Ok();
                 });
         }
 
