@@ -270,19 +270,22 @@ namespace sdmap.Parser.Visitor
             else if (context.children.Count == 3 && context.children[2].GetText() == "null")
             {
                 var op = context.children[1].GetText();
-                _il.Emit(OpCodes.Ldarg_1); // stack: self
+                _il.Emit(OpCodes.Ldarg_1);                              // self
+                _il.Emit(OpCodes.Ldstr, context.children[0].GetText()); // self propName
+                _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo().GetMethod(
+                    nameof(IfUtils.LoadProp)));                         // obj
                 switch (op)
                 {
                     case "==":
                         _il.Emit(OpCodes.Ldnull);
                         _il.Emit(OpCodes.Ceq);
-                        break;
+                        return Result.Ok();
                     case "!=":
                         _il.Emit(OpCodes.Ldnull);
                         _il.Emit(OpCodes.Ceq);
                         _il.Emit(OpCodes.Ldc_I4_0);
                         _il.Emit(OpCodes.Ceq);
-                        break;
+                        return Result.Ok();
                 }
             }
             return Result.Fail("#if statement currently only supports == null and != null.");
@@ -290,36 +293,67 @@ namespace sdmap.Parser.Visitor
 
         public override Result VisitIf([NotNull] IfContext context)
         {
+            var parseTree = context.coreSql();
+            var id = NameUtil.GetFunctionName(parseTree);
+            var result = _context.TryGetEmiter(id, _context.CurrentNs);
+
+            UnnamedSqlEmiter emiter;
+            if (result.IsSuccess)
+            {
+                emiter = (UnnamedSqlEmiter)result.Value;
+            }
+            else
+            {
+                emiter = UnnamedSqlEmiter.Create(parseTree, _context.CurrentNs);
+                var ok = _context.TryAdd(id, emiter);
+                if (ok.IsFailure) return ok;
+            }
+
+            var compileResult = emiter.EnsureCompiled(_context);
+            if (compileResult.IsFailure)
+            {
+                return compileResult;
+            }
+
             return Visit(context.boolExpression())
                 .OnSuccess(() =>
                 {
-                    var parseTree = context.coreSql();
-                    var id = NameUtil.GetFunctionName(parseTree);
-                    var result = _context.TryGetEmiter(id, _context.CurrentNs);
+                    var ifSkip = _il.DefineLabel();
+                    _il.Emit(OpCodes.Ldc_I4_0);
+                    _il.Emit(OpCodes.Beq, ifSkip);                    
 
-                    UnnamedSqlEmiter emiter;
-                    if (result.IsSuccess)
-                    {
-                        emiter = (UnnamedSqlEmiter)result.Value;
-                    }
-                    else
-                    {
-                        emiter = UnnamedSqlEmiter.Create(parseTree, _context.CurrentNs);
-                        var ok = _context.TryAdd(id, emiter);
-                        if (ok.IsFailure) return ok;
-                    }
-
-                    var compileResult = emiter.EnsureCompiled(_context);
-                    if (compileResult.IsFailure)
-                    {
-                        return compileResult;
-                    }
-
-                    _il.Emit(OpCodes.Ldarg_0);                             // .. -> args idx ctx
-                    _il.Emit(OpCodes.Ldstr, id);                           // .. -> args idx ctx id
-                    _il.Emit(OpCodes.Ldstr, _context.CurrentNs);           // .. -> args idx ctx id ns
+                    _il.Emit(OpCodes.Ldarg_0);                             // ctx
+                    _il.Emit(OpCodes.Ldstr, id);                           // ctx id
+                    _il.Emit(OpCodes.Ldstr, _context.CurrentNs);           // ctx id ns
                     _il.Emit(OpCodes.Call, typeof(UnnamedSqlEmiter).GetTypeInfo()
-                        .GetMethod(nameof(UnnamedSqlEmiter.EmiterFromId)));// .. -> args idx emiter
+                        .GetMethod(nameof(UnnamedSqlEmiter.EmiterFromId)));// emiter
+                    _il.Emit(OpCodes.Ldarg_0);                             // emiter ctx
+                    _il.Emit(OpCodes.Ldarg_1);                             // emiter ctx obj
+                    _il.Emit(OpCodes.Call,                                 // result<str>
+                        typeof(IfUtils).GetTypeInfo().GetMethod(nameof(IfUtils.ExecuteEmiter)));
+
+                    // convert result<str> to str
+                    _il.Emit(OpCodes.Dup);                                     // result<str> x 2
+                    _il.Emit(OpCodes.Call, typeof(Result).GetTypeInfo()
+                        .GetMethod("get_" + nameof(Result.IsSuccess)));        // result<str> bool
+                    _il.Emit(OpCodes.Ldc_I4_1);                                // result<str> bool true
+                    var ifIsSuccess = _il.DefineLabel();
+                    _il.Emit(OpCodes.Beq, ifIsSuccess);                        // result<str> (jmp if equal)
+                    _il.Emit(OpCodes.Ret);                                     // [exit-returned]
+
+                    _il.MarkLabel(ifIsSuccess);                                // ifIsSuccess:
+                    _il.Emit(OpCodes.Call, typeof(Result<string>).GetTypeInfo()
+                        .GetMethod("get_" + nameof(Result<string>.Value)));    // str
+
+                    var strLocal = _il.DeclareLocal(typeof(string));
+                    _il.Emit(OpCodes.Stloc, strLocal);
+                    _il.Emit(OpCodes.Ldloc_0);
+                    _il.Emit(OpCodes.Ldloc, strLocal);
+                    _il.Emit(OpCodes.Call, 
+                        typeof(StringBuilder).GetTypeInfo().GetMethod(nameof(StringBuilder.Append),
+                        new[] { typeof(string), }));                                // sb+str
+                    _il.Emit(OpCodes.Pop);
+                    _il.MarkLabel(ifSkip);
                     return Result.Ok();
                 });
         }
