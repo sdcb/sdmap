@@ -10,6 +10,9 @@ KSql:
 KIf: 
 	'if'{bracePrefix = "sql";};
 
+KElse: 
+	'else'{bracePrefix = "sql";};
+
 KNamespace:
 	'namespace'{bracePrefix = "namespace";};
 
@@ -87,9 +90,6 @@ NotEqual:
 
 Null: 
 	'null';
-
-Else: 
-	'else';
 
 
 
