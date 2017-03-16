@@ -22,8 +22,7 @@ namespace sdmap.Parser.Visitor
 
         public override Result VisitNamespace([NotNull] SdmapParser.NamespaceContext context)
         {
-            var nsLexler = context.GetToken(SYNTAX, 0) ?? context.GetToken(NSSyntax, 0);
-            var ns = nsLexler.GetText();
+            var ns = context.nsSyntax().GetText();
 
             Context.NsStack.Push(ns);
             var result = base.VisitNamespace(context);

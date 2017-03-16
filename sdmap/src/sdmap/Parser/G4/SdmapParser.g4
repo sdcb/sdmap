@@ -6,7 +6,7 @@ root:
 	(namespace | namedSql)*;
 
 namespace:
-	KNamespace (SYNTAX|NSSyntax) OpenCurlyBrace
+	KNamespace nsSyntax OpenCurlyBrace
 		(namespace | namedSql)*
 	CloseCurlyBrace;
 
@@ -46,10 +46,12 @@ macro:
 		macroParameter? (Comma macroParameter)*
 	CloseAngleBracket;
 
+nsSyntax:
+	SYNTAX (Dot SYNTAX)*;
+
 macroParameter:
 	Bool |
-	SYNTAX |
-	NSSyntax | 
+	nsSyntax |
 	STRING |
 	NUMBER |
 	DATE |

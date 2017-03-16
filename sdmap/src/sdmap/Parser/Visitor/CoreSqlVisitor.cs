@@ -126,13 +126,9 @@ namespace sdmap.Parser.Visitor
                 _il.Emit(OpCodes.Dup);                                      // .. -> args
                 _il.Emit(OpCodes.Ldc_I4, i);                                // .. -> args idx
 
-                if (arg.SYNTAX() != null)
+                if (arg.nsSyntax() != null)
                 {
-                    _il.Emit(OpCodes.Ldstr, arg.SYNTAX().GetText());        // .. -> args idx ele
-                }
-                else if (arg.NSSyntax() != null)
-                {
-                    _il.Emit(OpCodes.Ldstr, arg.NSSyntax().GetText());        // .. -> args idx ele
+                    _il.Emit(OpCodes.Ldstr, arg.nsSyntax().GetText());      // .. -> args idx ele
                 }
                 else if (arg.STRING() != null)
                 {

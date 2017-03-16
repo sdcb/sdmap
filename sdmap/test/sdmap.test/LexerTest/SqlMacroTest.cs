@@ -76,12 +76,10 @@ namespace sdmap.test.LexerTest
             {
                 KSql, OpenCurlyBrace,
                     Hash, SYNTAX, OpenAngleBracket,
-                        NSSyntax,
+                        SYNTAX, Dot, SYNTAX,
                     CloseAngleBracket,
                 CloseSql
             }, tokens.Select(x => x.Type));
-            
-            Assert.Equal("Common.OrderBy", tokens.Single(x => x.Type == NSSyntax).Text);
         }
     }
 }
