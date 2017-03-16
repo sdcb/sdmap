@@ -21,12 +21,15 @@ namespace sdmap.Parser.Visitor
         protected readonly SdmapCompilerContext _context;
         protected ILGenerator _il;
         protected int _stackPos;
+        private string _functionName;
 
         public EmitFunction Function { get; protected set; }
 
-        public CoreSqlVisitor(SdmapCompilerContext context)
+        public CoreSqlVisitor(
+            SdmapCompilerContext context)
         {
             _context = context;
+            _functionName = null;
         }
         
         protected virtual string GetFunctionName(ParserRuleContext parseRule)
@@ -61,23 +64,7 @@ namespace sdmap.Parser.Visitor
                 typeof(Result<string>), new[] { typeof(SdmapCompilerContext), typeof(object) });
             _il = method.GetILGenerator();
 
-            CoreSqlContext coreSqlContext;
-            if (parseRule is CoreSqlContext)
-            {
-                coreSqlContext = (CoreSqlContext)parseRule;
-            }
-            else
-            {
-                coreSqlContext = parseRule.GetChild<CoreSqlContext>(0);
-            }            
-
-            _il.DeclareLocal(typeof(StringBuilder));
-            _il.Emit(OpCodes.Newobj, typeof(StringBuilder)
-                .GetTypeInfo()
-                .GetConstructor(Type.EmptyTypes));                                    // sb
-            _il.Emit(OpCodes.Stloc_0);                                                // [empty]
-
-            Action returnBlock = () =>
+            void returnBlock()
             {
                 _il.Emit(OpCodes.Ldloc_0);                                        // sb
                 var okMethod = typeof(Result)
@@ -94,11 +81,27 @@ namespace sdmap.Parser.Visitor
                 Function = (EmitFunction)method.CreateDelegate(typeof(EmitFunction));
             };
 
-            if (coreSqlContext == null)
+            if (parseRule == null)
             {
                 returnBlock();
                 return Result.Ok();
             }
+
+            CoreSqlContext coreSqlContext;
+            if (parseRule is CoreSqlContext)
+            {
+                coreSqlContext = (CoreSqlContext)parseRule;
+            }
+            else
+            {
+                coreSqlContext = parseRule.GetChild<CoreSqlContext>(0);
+            }
+
+            _il.DeclareLocal(typeof(StringBuilder));
+            _il.Emit(OpCodes.Newobj, typeof(StringBuilder)
+                .GetTypeInfo()
+                .GetConstructor(Type.EmptyTypes));                                    // sb
+            _il.Emit(OpCodes.Stloc_0);                                                // [empty]
 
             return Visit(coreSqlContext)
                 .OnSuccess(() =>                                                      // [must be empty]
@@ -384,11 +387,11 @@ namespace sdmap.Parser.Visitor
         }
 
         public static Result<EmitFunction> CompileCore(
-            ParserRuleContext parseTree, 
+            CoreSqlContext coreSql, 
             SdmapCompilerContext context)
         {
             var visitor = CreateCore(context);
-            return visitor.Visit(parseTree)
+            return visitor.Process(coreSql)
                 .OnSuccess(() => visitor.Function);
         }
 

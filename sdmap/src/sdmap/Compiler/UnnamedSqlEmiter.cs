@@ -24,9 +24,23 @@ namespace sdmap.Compiler
 
         protected override Result<EmitFunction> Compile(SdmapCompilerContext context)
         {
-            return CoreSqlVisitor.CompileCore(
-                _parseTree, 
-                context);
+            if (_parseTree is UnnamedSqlContext)
+            {
+                return CoreSqlVisitor.CompileCore(
+                    (_parseTree as UnnamedSqlContext).coreSql(),
+                    context);
+            }
+            else if (_parseTree is CoreSqlContext)
+            {
+                return CoreSqlVisitor.CompileCore(
+                    _parseTree as CoreSqlContext,
+                    context);
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                    $"Context {_parseTree.GetType().FullName} is allowed.");
+            }
         }
 
         public static EmitFunction EmiterFromId(SdmapCompilerContext context, string id, string ns)

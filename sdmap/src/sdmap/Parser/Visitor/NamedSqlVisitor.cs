@@ -16,36 +16,24 @@ using Antlr4.Runtime;
 
 namespace sdmap.Parser.Visitor
 {
-    public class NamedSqlVisitor : CoreSqlVisitor
+    public static class NamedSqlVisitor
     {
-        public NamedSqlVisitor(SdmapCompilerContext context)
-            : base(context)
+        public static Result<EmitFunction> Compile(
+            NamedSqlContext parseTree, 
+            SdmapCompilerContext context)
         {
+            var id = parseTree.GetToken(SYNTAX, 0).GetText();
+            var fullName = context.GetFullNameInCurrentNs(id);
+
+            var core = new CoreSqlVisitor(context /*, fullName */);
+            return core.Visit(parseTree.coreSql())
+                .OnSuccess(() => core.Function);
         }
 
-        protected override string GetFunctionName(ParserRuleContext parseRule)
+        public static Result<EmitFunction> CompileNoContext(
+            NamedSqlContext parseTree)
         {
-            var context = (NamedSqlContext)parseRule;
-            var id = context.GetToken(SYNTAX, 0).GetText();
-            var fullName = _context.GetFullNameInCurrentNs(id);
-            return fullName;
-        }
-
-        public static NamedSqlVisitor Create(SdmapCompilerContext context)
-        {
-            return new NamedSqlVisitor(context);
-        }
-
-        public static Result<EmitFunction> Compile(NamedSqlContext parseTree, SdmapCompilerContext context)
-        {
-            var visitor = Create(context);
-            return visitor.Visit(parseTree)
-                .OnSuccess(() => visitor.Function);
-        }
-
-        public static NamedSqlVisitor CreateEmpty()
-        {
-            return new NamedSqlVisitor(SdmapCompilerContext.CreateEmpty());
+            return Compile(parseTree, SdmapCompilerContext.CreateEmpty());
         }
     }
 }

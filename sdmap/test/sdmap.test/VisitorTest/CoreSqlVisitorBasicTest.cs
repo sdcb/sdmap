@@ -15,12 +15,13 @@ namespace sdmap.test.VisitorTest
         {
             var code = "sql v1{Hello World}";
             var parseTree = GetParseTree(code);
-            var visitor = NamedSqlVisitor.CreateEmpty();
-            visitor.Visit(parseTree);
+            var result = NamedSqlVisitor.CompileNoContext(
+                parseTree.namedSql()[0]);
             
-            Assert.NotNull(visitor.Function);
+            Assert.True(result.IsSuccess);
 
-            var output = visitor.Function(SdmapCompilerContext.CreateEmpty(), null);
+            var function = result.Value;
+            var output = function(SdmapCompilerContext.CreateEmpty(), null);
             Assert.Equal("Hello World", output.Value);
         }
 
@@ -29,13 +30,13 @@ namespace sdmap.test.VisitorTest
         {
             var sql = "SELECT * FROM `client_WOReactive`;";
             var code = "sql v1{" + sql + "}";
-            var visitor = NamedSqlVisitor.CreateEmpty();
             var parseTree = GetParseTree(code);
-            visitor.Visit(parseTree);
-            
-            Assert.NotNull(visitor.Function);
+            var result = NamedSqlVisitor.CompileNoContext(parseTree.namedSql()[0]);
 
-            var output = visitor.Function(SdmapCompilerContext.CreateEmpty(), null);
+            Assert.True(result.IsSuccess);
+
+            var function = result.Value;
+            var output = function(SdmapCompilerContext.CreateEmpty(), null);
             Assert.Equal(sql, output.Value);
         }
 
@@ -48,13 +49,13 @@ namespace sdmap.test.VisitorTest
                 "FROM                    \r\n" +
                 "   `client_WOReactive`; \r\n";
             var code = $"sql v1{{{sql}}}";
-            var visitor = NamedSqlVisitor.CreateEmpty();
             var parseTree = GetParseTree(code);
-            visitor.Visit(parseTree);
+            var result = NamedSqlVisitor.CompileNoContext(parseTree.namedSql()[0]);
 
-            Assert.NotNull(visitor.Function);
+            Assert.True(result.IsSuccess);
 
-            var output = visitor.Function(SdmapCompilerContext.CreateEmpty(), null);
+            var function = result.Value;
+            var output = function(SdmapCompilerContext.CreateEmpty(), null);
             Assert.Equal(sql, output.Value);
         }
     }

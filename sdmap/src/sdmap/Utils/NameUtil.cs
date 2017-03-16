@@ -11,6 +11,7 @@ namespace sdmap.Utils
     {
         public static string GetFunctionName(ParserRuleContext context)
         {
+            if (context == null) return "<Empty>";
             return "UnNamed_" + HashUtil.Base64SHA256(context.GetText());
         }
     }
