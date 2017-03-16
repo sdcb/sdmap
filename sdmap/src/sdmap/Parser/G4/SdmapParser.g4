@@ -33,8 +33,13 @@ if:
 	CloseSql;
 
 boolExpression: 
-	SYNTAX
-	SYNTAX (Equal | NotEqual) Null;
+    SYNTAX OpenBrace boolExpression? (Comma boolExpression)* CloseBrace |
+	SYNTAX                                                              |
+	Bool                                                                |
+	OpenBrace boolExpression CloseBrace                                 |
+	SYNTAX (Equal | NotEqual) Null                                      |
+	boolExpression OpAnd boolExpression                                 |
+	boolExpression OpOr  boolExpression;
 
 macro:
 	Hash SYNTAX OpenAngleBracket
@@ -49,4 +54,3 @@ macroParameter:
 	NUMBER |
 	DATE |
 	unnamedSql;
-

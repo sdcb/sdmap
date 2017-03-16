@@ -13,6 +13,12 @@ KIf:
 KNamespace:
 	'namespace'{bracePrefix = "namespace";};
 
+OpAnd:
+	'&&';
+
+OpOr:
+	'||';
+
 OpenCurlyBrace: 
 	'{'{if (bracePrefix == "sql") PushMode(SQL);};
 
