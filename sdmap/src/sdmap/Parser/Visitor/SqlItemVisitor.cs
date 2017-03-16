@@ -34,7 +34,7 @@ namespace sdmap.Parser.Visitor
         {
             var id = context.GetToken(SYNTAX, 0).GetText();
 
-            return Context.TryAdd(id, SqlEmiter.Create(context, Context.CurrentNs));
+            return Context.TryAdd(id, SqlEmiterUtil.CreateNamed(context, Context.CurrentNs));
         }
 
         public static SqlItemVisitor Create(SdmapCompilerContext context)

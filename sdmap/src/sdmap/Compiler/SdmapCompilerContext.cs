@@ -9,13 +9,13 @@ namespace sdmap.Compiler
 {
     public class SdmapCompilerContext
     {
-        public Dictionary<string, SqlEmiterBase> Emiters { get; }
+        public Dictionary<string, SqlEmiter> Emiters { get; }
 
         public Stack<string> NsStack { get; }
 
         public MacroManager MacroManager { get; } = new MacroManager();
 
-        private SdmapCompilerContext(Dictionary<string, SqlEmiterBase> emiters, Stack<string> nsStacks)
+        private SdmapCompilerContext(Dictionary<string, SqlEmiter> emiters, Stack<string> nsStacks)
         {
             Emiters = emiters;
             NsStack = nsStacks;
@@ -28,7 +28,7 @@ namespace sdmap.Compiler
             return string.Join(".", NsStack.Reverse().Concat(new List<string> { contextId }));
         }
 
-        public Result<SqlEmiterBase> TryGetEmiter(string contextId, string currentNs)
+        public Result<SqlEmiter> TryGetEmiter(string contextId, string currentNs)
         {
             var nss = currentNs.Split('.');
             for (var i = nss.Length; i >= 0; --i)
@@ -40,15 +40,15 @@ namespace sdmap.Compiler
                     return Result.Ok(Emiters[fullName]);
                 }
             }
-            return Result.Fail<SqlEmiterBase>($"Syntax '{contextId}' not found in current scope.");
+            return Result.Fail<SqlEmiter>($"Syntax '{contextId}' not found in current scope.");
         }
 
-        public SqlEmiterBase GetEmiter(string contextId, string currentNs)
+        public SqlEmiter GetEmiter(string contextId, string currentNs)
         {
             return TryGetEmiter(contextId, currentNs).Value;
         }
 
-        public Result TryAdd(string contextId, SqlEmiterBase emiter)
+        public Result TryAdd(string contextId, SqlEmiter emiter)
         {
             var fullName = GetFullNameInCurrentNs(contextId);
             if (Emiters.ContainsKey(fullName))
@@ -62,15 +62,15 @@ namespace sdmap.Compiler
 
         public static SdmapCompilerContext CreateEmpty()
         {
-            return CreateByContext(new Dictionary<string, SqlEmiterBase>());
+            return CreateByContext(new Dictionary<string, SqlEmiter>());
         }
 
-        public static SdmapCompilerContext CreateByContext(Dictionary<string, SqlEmiterBase> context)
+        public static SdmapCompilerContext CreateByContext(Dictionary<string, SqlEmiter> context)
         {
             return Create(context, new Stack<string>());
         }
 
-        public static SdmapCompilerContext Create(Dictionary<string, SqlEmiterBase> emiters, Stack<string> nsStack)
+        public static SdmapCompilerContext Create(Dictionary<string, SqlEmiter> emiters, Stack<string> nsStack)
         {
             return new SdmapCompilerContext(emiters, nsStack);
         }

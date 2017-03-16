@@ -1,6 +1,8 @@
-﻿using Antlr4.Runtime.Tree;
+﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 using sdmap.Functional;
 using sdmap.Parser.Visitor;
+using sdmap.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,19 +11,66 @@ using static sdmap.Parser.G4.SdmapParser;
 
 namespace sdmap.Compiler
 {
-    public static class SqlEmiter
+    public class SqlEmiter
     {
-        public static SqlEmiterBase Create(NamedSqlContext parseTree, string ns)
+        private ParserRuleContext _parseTree;
+        private string _ns;
+        private readonly CompileFunction _compiler;
+
+        public EmitFunction Emiter { get; private set; }
+
+        public SqlEmiter(
+            ParserRuleContext parseTree, 
+            string ns, 
+            CompileFunction compiler)
         {
-            return new SqlEmiterBase(parseTree, ns, 
-                (ctx, pt) => Compile(ctx, (NamedSqlContext)pt));
+            _parseTree = parseTree;
+            _ns = ns;
+            _compiler = compiler;
         }
 
-        private static Result<EmitFunction> Compile(
-            SdmapCompilerContext context, 
-            NamedSqlContext parseTree)
+        public Result EnsureCompiled(SdmapCompilerContext context)
         {
-            return NamedSqlVisitor.Compile(parseTree, context);
+            if (Emiter != null)
+                return Result.Ok();
+
+            return CompileInternal(context)
+                .OnSuccess(v =>
+                {
+                    Emiter = v;
+                    _parseTree = null;
+                });
         }
-    }
+
+        public Result<string> TryEmit(object v, SdmapCompilerContext context)
+        {
+            return EnsureCompiled(context)
+                .OnSuccess(() => Emiter(context, v))
+                .Unwrap();
+        }
+
+        public string Emit(object v, SdmapCompilerContext context)
+        {
+            return TryEmit(v, context).Value;
+        }
+
+        private Result<EmitFunction> CompileInternal(SdmapCompilerContext context)
+        {
+            if (_ns != "")
+                context.NsStack.Push(_ns);
+
+            var result = _compiler(context, _parseTree);
+
+            if (_ns != "")
+                context.NsStack.Pop();
+
+            return result;
+        }
+    }    
+
+    public delegate Result<EmitFunction> CompileFunction(
+        SdmapCompilerContext context, 
+        ParserRuleContext parseTree);
+
+    public delegate Result<string> EmitFunction(SdmapCompilerContext context, object obj);
 }

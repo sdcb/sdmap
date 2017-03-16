@@ -158,14 +158,14 @@ namespace sdmap.Parser.Visitor
                     var id = NameUtil.GetFunctionName(parseTree);
                     var result = _context.TryGetEmiter(id, _context.CurrentNs);
 
-                    SqlEmiterBase emiter;
+                    SqlEmiter emiter;
                     if (result.IsSuccess)
                     {
                         emiter = result.Value;
                     }
                     else
                     {
-                        emiter = UnnamedSqlEmiter.Create(parseTree, _context.CurrentNs);
+                        emiter = SqlEmiterUtil.CreateUnnamed(parseTree, _context.CurrentNs);
                         var ok = _context.TryAdd(id, emiter);
                         if (ok.IsFailure) return ok;
                     }
@@ -179,8 +179,8 @@ namespace sdmap.Parser.Visitor
                     _il.Emit(OpCodes.Ldarg_0);                             // .. -> args idx ctx
                     _il.Emit(OpCodes.Ldstr, id);                           // .. -> args idx ctx id
                     _il.Emit(OpCodes.Ldstr, _context.CurrentNs);           // .. -> args idx ctx id ns
-                    _il.Emit(OpCodes.Call, typeof(UnnamedSqlEmiter).GetTypeInfo()
-                        .GetMethod(nameof(UnnamedSqlEmiter.EmiterFromId)));// .. -> args idx emiter
+                    _il.Emit(OpCodes.Call, typeof(SqlEmiterUtil).GetTypeInfo()
+                        .GetMethod(nameof(SqlEmiterUtil.EmiterFromId)));// .. -> args idx emiter
                 }
                 else
                 {
@@ -268,14 +268,14 @@ namespace sdmap.Parser.Visitor
             var id = NameUtil.GetFunctionName(parseTree);
             var result = _context.TryGetEmiter(id, _context.CurrentNs);
 
-            SqlEmiterBase emiter;
+            SqlEmiter emiter;
             if (result.IsSuccess)
             {
                 emiter = result.Value;
             }
             else
             {
-                emiter = UnnamedSqlEmiter.Create(parseTree, _context.CurrentNs);
+                emiter = SqlEmiterUtil.CreateUnnamed(parseTree, _context.CurrentNs);
                 var ok = _context.TryAdd(id, emiter);
                 if (ok.IsFailure) return ok;
             }
@@ -296,8 +296,8 @@ namespace sdmap.Parser.Visitor
                     _il.Emit(OpCodes.Ldarg_0);                             // ctx
                     _il.Emit(OpCodes.Ldstr, id);                           // ctx id
                     _il.Emit(OpCodes.Ldstr, _context.CurrentNs);           // ctx id ns
-                    _il.Emit(OpCodes.Call, typeof(UnnamedSqlEmiter).GetTypeInfo()
-                        .GetMethod(nameof(UnnamedSqlEmiter.EmiterFromId)));// emiter
+                    _il.Emit(OpCodes.Call, typeof(SqlEmiterUtil).GetTypeInfo()
+                        .GetMethod(nameof(SqlEmiterUtil.EmiterFromId)));// emiter
                     _il.Emit(OpCodes.Ldarg_0);                             // emiter ctx
                     _il.Emit(OpCodes.Ldarg_1);                             // emiter ctx obj
                     _il.Emit(OpCodes.Call,                                 // result<str>
