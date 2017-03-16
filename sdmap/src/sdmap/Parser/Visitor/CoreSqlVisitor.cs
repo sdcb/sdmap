@@ -21,7 +21,6 @@ namespace sdmap.Parser.Visitor
         protected readonly SdmapCompilerContext _context;
         protected ILGenerator _il;
         protected int _stackPos;
-        private string _functionName;
 
         public EmitFunction Function { get; protected set; }
 
@@ -29,19 +28,11 @@ namespace sdmap.Parser.Visitor
             SdmapCompilerContext context)
         {
             _context = context;
-            _functionName = null;
-        }
-        
-        protected virtual string GetFunctionName(ParserRuleContext parseRule)
-        {
-            return NameUtil.GetFunctionName(parseRule);
         }
 
-        public Result Process(ParserRuleContext parseRule)
+        public Result Process(ParserRuleContext parseRule, string functionName)
         {
-            var fullName = GetFunctionName(parseRule);
-
-            var method = new DynamicMethod(fullName,
+            var method = new DynamicMethod(functionName,
                 typeof(Result<string>), new[] { typeof(SdmapCompilerContext), typeof(object) });
             _il = method.GetILGenerator();
 
@@ -362,17 +353,19 @@ namespace sdmap.Parser.Visitor
             }
         }
 
-        public static CoreSqlVisitor CreateCore(SdmapCompilerContext context)
+        public static CoreSqlVisitor CreateCore(
+            SdmapCompilerContext context)
         {
             return new CoreSqlVisitor(context);
         }
 
         public static Result<EmitFunction> CompileCore(
             CoreSqlContext coreSql, 
-            SdmapCompilerContext context)
+            SdmapCompilerContext context, 
+            string functionName)
         {
             var visitor = CreateCore(context);
-            return visitor.Process(coreSql)
+            return visitor.Process(coreSql, functionName)
                 .OnSuccess(() => visitor.Function);
         }
 

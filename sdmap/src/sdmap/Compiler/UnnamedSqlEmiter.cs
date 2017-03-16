@@ -2,6 +2,7 @@
 using Antlr4.Runtime.Tree;
 using sdmap.Functional;
 using sdmap.Parser.Visitor;
+using sdmap.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,15 +27,21 @@ namespace sdmap.Compiler
         {
             if (_parseTree is UnnamedSqlContext)
             {
+                var coreSql = (_parseTree as UnnamedSqlContext).coreSql();
+                var fullName = NameUtil.GetFunctionName(coreSql);
                 return CoreSqlVisitor.CompileCore(
-                    (_parseTree as UnnamedSqlContext).coreSql(),
-                    context);
+                    coreSql,
+                    context, 
+                    fullName);
             }
             else if (_parseTree is CoreSqlContext)
             {
+                var coreSql = _parseTree as CoreSqlContext;
+                var fullName = NameUtil.GetFunctionName(coreSql);
                 return CoreSqlVisitor.CompileCore(
-                    _parseTree as CoreSqlContext,
-                    context);
+                    coreSql,
+                    context, 
+                    fullName);
             }
             else
             {
