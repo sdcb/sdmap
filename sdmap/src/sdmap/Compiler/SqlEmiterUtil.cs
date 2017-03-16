@@ -16,7 +16,7 @@ namespace sdmap.Compiler
         public static SqlEmiter CreateNamed(NamedSqlContext parseTree, string ns)
         {
             return new SqlEmiter(parseTree, ns,
-                (ctx, pt) => CompileNamed(ctx, (NamedSqlContext)pt));
+                ctx => CompileNamed(ctx, parseTree));
         }
 
         private static Result<EmitFunction> CompileNamed(
@@ -26,38 +26,34 @@ namespace sdmap.Compiler
             return NamedSqlVisitor.Compile(parseTree, context);
         }
 
-        public static SqlEmiter CreateUnnamed(ParserRuleContext parseTree, string ns)
+        public static SqlEmiter CreateUnnamed(UnnamedSqlContext parseTree, string ns)
         {
-            return new SqlEmiter(parseTree, ns, CompileUnnamed);
+            return new SqlEmiter(parseTree, ns, 
+                ctx => CompileUnnamed(ctx, parseTree));
         }
 
         private static Result<EmitFunction> CompileUnnamed(
             SdmapCompilerContext context,
-            ParserRuleContext parseTree)
+            UnnamedSqlContext unnamedSql)
         {
-            if (parseTree is UnnamedSqlContext)
-            {
-                var coreSql = (parseTree as UnnamedSqlContext).coreSql();
-                var fullName = NameUtil.GetFunctionName(coreSql);
-                return CoreSqlVisitor.CompileCore(
-                    coreSql,
-                    context,
-                    fullName);
-            }
-            else if (parseTree is CoreSqlContext)
-            {
-                var coreSql = parseTree as CoreSqlContext;
-                var fullName = NameUtil.GetFunctionName(coreSql);
-                return CoreSqlVisitor.CompileCore(
-                    coreSql,
-                    context,
-                    fullName);
-            }
-            else
-            {
-                throw new InvalidOperationException(
-                    $"Context {parseTree.GetType().FullName} is allowed.");
-            }
+            return CompileCore(context, unnamedSql.coreSql());
+        }
+
+        public static SqlEmiter CreateCore(CoreSqlContext parseTree, string ns)
+        {
+            return new SqlEmiter(parseTree, ns,
+                ctx => CompileCore(ctx, parseTree));
+        }
+
+        private static Result<EmitFunction> CompileCore(
+            SdmapCompilerContext context,
+            CoreSqlContext coreSql)
+        {
+            var fullName = NameUtil.GetFunctionName(coreSql);
+            return CoreSqlVisitor.CompileCore(
+                coreSql,
+                context,
+                fullName);
         }
 
         public static EmitFunction EmiterFromId(SdmapCompilerContext context, string id, string ns)

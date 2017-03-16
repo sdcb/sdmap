@@ -59,7 +59,7 @@ namespace sdmap.Compiler
             if (_ns != "")
                 context.NsStack.Push(_ns);
 
-            var result = _compiler(context, _parseTree);
+            var result = _compiler(context);
 
             if (_ns != "")
                 context.NsStack.Pop();
@@ -69,8 +69,7 @@ namespace sdmap.Compiler
     }    
 
     public delegate Result<EmitFunction> CompileFunction(
-        SdmapCompilerContext context, 
-        ParserRuleContext parseTree);
+        SdmapCompilerContext context);
 
     public delegate Result<string> EmitFunction(SdmapCompilerContext context, object obj);
 }

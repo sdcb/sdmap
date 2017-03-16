@@ -264,8 +264,8 @@ namespace sdmap.Parser.Visitor
 
         public override Result VisitIf([NotNull] IfContext context)
         {
-            var parseTree = context.coreSql();
-            var id = NameUtil.GetFunctionName(parseTree);
+            var coreSql = context.coreSql();
+            var id = NameUtil.GetFunctionName(coreSql);
             var result = _context.TryGetEmiter(id, _context.CurrentNs);
 
             SqlEmiter emiter;
@@ -275,7 +275,7 @@ namespace sdmap.Parser.Visitor
             }
             else
             {
-                emiter = SqlEmiterUtil.CreateUnnamed(parseTree, _context.CurrentNs);
+                emiter = SqlEmiterUtil.CreateCore(coreSql, _context.CurrentNs);
                 var ok = _context.TryAdd(id, emiter);
                 if (ok.IsFailure) return ok;
             }
