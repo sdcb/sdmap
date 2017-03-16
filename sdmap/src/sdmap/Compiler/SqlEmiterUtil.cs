@@ -19,11 +19,16 @@ namespace sdmap.Compiler
                 ctx => CompileNamed(ctx, parseTree));
         }
 
-        private static Result<EmitFunction> CompileNamed(
+        public static Result<EmitFunction> CompileNamed(
             SdmapCompilerContext context,
             NamedSqlContext parseTree)
         {
-            return NamedSqlVisitor.Compile(parseTree, context);
+            var id = parseTree.GetToken(SYNTAX, 0).GetText();
+            var fullName = context.GetFullNameInCurrentNs(id);
+
+            var core = new CoreSqlVisitor(context);
+            return core.Process(parseTree.coreSql(), fullName)
+                .OnSuccess(() => core.Function);
         }
 
         public static SqlEmiter CreateUnnamed(UnnamedSqlContext parseTree, string ns)

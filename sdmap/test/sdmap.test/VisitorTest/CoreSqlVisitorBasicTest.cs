@@ -15,7 +15,8 @@ namespace sdmap.test.VisitorTest
         {
             var code = "sql v1{Hello World}";
             var parseTree = GetParseTree(code);
-            var result = NamedSqlVisitor.CompileNoContext(
+            var result = SqlEmiterUtil.CompileNamed(
+                SdmapCompilerContext.CreateEmpty(),
                 parseTree.namedSql()[0]);
             
             Assert.True(result.IsSuccess);
@@ -31,7 +32,9 @@ namespace sdmap.test.VisitorTest
             var sql = "SELECT * FROM `client_WOReactive`;";
             var code = "sql v1{" + sql + "}";
             var parseTree = GetParseTree(code);
-            var result = NamedSqlVisitor.CompileNoContext(parseTree.namedSql()[0]);
+            var result = SqlEmiterUtil.CompileNamed(
+                SdmapCompilerContext.CreateEmpty(),
+                parseTree.namedSql()[0]);
 
             Assert.True(result.IsSuccess);
 
@@ -50,7 +53,9 @@ namespace sdmap.test.VisitorTest
                 "   `client_WOReactive`; \r\n";
             var code = $"sql v1{{{sql}}}";
             var parseTree = GetParseTree(code);
-            var result = NamedSqlVisitor.CompileNoContext(parseTree.namedSql()[0]);
+            var result = SqlEmiterUtil.CompileNamed(
+                SdmapCompilerContext.CreateEmpty(),
+                parseTree.namedSql()[0]);
 
             Assert.True(result.IsSuccess);
 
