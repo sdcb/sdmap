@@ -16,7 +16,7 @@ using static sdmap.Parser.G4.SdmapParser;
 
 namespace sdmap.Parser.Visitor
 {
-    public abstract class CoreSqlVisitor : SdmapParserBaseVisitor<Result>
+    public class CoreSqlVisitor : SdmapParserBaseVisitor<Result>
     {
         protected readonly SdmapCompilerContext _context;
         protected ILGenerator _il;
@@ -24,7 +24,7 @@ namespace sdmap.Parser.Visitor
 
         public EmitFunction Function { get; protected set; }
 
-        protected CoreSqlVisitor(SdmapCompilerContext context)
+        public CoreSqlVisitor(SdmapCompilerContext context)
         {
             _context = context;
         }
@@ -376,6 +376,25 @@ namespace sdmap.Parser.Visitor
             {
                 throw new ArgumentNullException();
             }
+        }
+
+        public static CoreSqlVisitor CreateCore(SdmapCompilerContext context)
+        {
+            return new CoreSqlVisitor(context);
+        }
+
+        public static Result<EmitFunction> CompileCore(
+            ParserRuleContext parseTree, 
+            SdmapCompilerContext context)
+        {
+            var visitor = CreateCore(context);
+            return visitor.Visit(parseTree)
+                .OnSuccess(() => visitor.Function);
+        }
+
+        public static CoreSqlVisitor CreateCoreEmpty()
+        {
+            return new CoreSqlVisitor(SdmapCompilerContext.CreateEmpty());
         }
     }
 }

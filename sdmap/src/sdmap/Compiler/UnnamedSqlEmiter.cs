@@ -24,7 +24,9 @@ namespace sdmap.Compiler
 
         protected override Result<EmitFunction> Compile(SdmapCompilerContext context)
         {
-            return UnnamedSqlVisitor.Compile(_parseTree, context);
+            return CoreSqlVisitor.CompileCore(
+                _parseTree, 
+                context);
         }
 
         public static EmitFunction EmiterFromId(SdmapCompilerContext context, string id, string ns)
