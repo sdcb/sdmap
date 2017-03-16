@@ -9,21 +9,19 @@ using static sdmap.Parser.G4.SdmapParser;
 
 namespace sdmap.Compiler
 {
-    public class SqlEmiter : SqlEmiterBase
+    public static class SqlEmiter
     {
-        public SqlEmiter(NamedSqlContext parseTree, string ns)
-            : base(parseTree, ns)
+        public static SqlEmiterBase Create(NamedSqlContext parseTree, string ns)
         {
+            return new SqlEmiterBase(parseTree, ns, 
+                (ctx, pt) => Compile(ctx, (NamedSqlContext)pt));
         }
 
-        public static SqlEmiter Create(NamedSqlContext parseTree, string ns)
+        private static Result<EmitFunction> Compile(
+            SdmapCompilerContext context, 
+            NamedSqlContext parseTree)
         {
-            return new SqlEmiter(parseTree, ns);
-        }
-
-        protected override Result<EmitFunction> Compile(SdmapCompilerContext context)
-        {
-            return NamedSqlVisitor.Compile((NamedSqlContext)_parseTree, context);
+            return NamedSqlVisitor.Compile(parseTree, context);
         }
     }
 }

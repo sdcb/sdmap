@@ -158,10 +158,10 @@ namespace sdmap.Parser.Visitor
                     var id = NameUtil.GetFunctionName(parseTree);
                     var result = _context.TryGetEmiter(id, _context.CurrentNs);
 
-                    UnnamedSqlEmiter emiter;
+                    SqlEmiterBase emiter;
                     if (result.IsSuccess)
                     {
-                        emiter = (UnnamedSqlEmiter)result.Value;
+                        emiter = result.Value;
                     }
                     else
                     {
@@ -268,10 +268,10 @@ namespace sdmap.Parser.Visitor
             var id = NameUtil.GetFunctionName(parseTree);
             var result = _context.TryGetEmiter(id, _context.CurrentNs);
 
-            UnnamedSqlEmiter emiter;
+            SqlEmiterBase emiter;
             if (result.IsSuccess)
             {
-                emiter = (UnnamedSqlEmiter)result.Value;
+                emiter = result.Value;
             }
             else
             {

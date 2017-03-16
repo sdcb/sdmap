@@ -11,32 +11,29 @@ using static sdmap.Parser.G4.SdmapParser;
 
 namespace sdmap.Compiler
 {
-    public class UnnamedSqlEmiter : SqlEmiterBase
+    public static class UnnamedSqlEmiter
     {
-        public UnnamedSqlEmiter(ParserRuleContext parseTree, string ns)
-            : base(parseTree, ns)
+        public static SqlEmiterBase Create(ParserRuleContext parseTree, string ns)
         {
+            return new SqlEmiterBase(parseTree, ns, Compile);
         }
 
-        public static UnnamedSqlEmiter Create(ParserRuleContext parseTree, string ns)
+        private static Result<EmitFunction> Compile(
+            SdmapCompilerContext context, 
+            ParserRuleContext parseTree)
         {
-            return new UnnamedSqlEmiter(parseTree, ns);
-        }
-
-        protected override Result<EmitFunction> Compile(SdmapCompilerContext context)
-        {
-            if (_parseTree is UnnamedSqlContext)
+            if (parseTree is UnnamedSqlContext)
             {
-                var coreSql = (_parseTree as UnnamedSqlContext).coreSql();
+                var coreSql = (parseTree as UnnamedSqlContext).coreSql();
                 var fullName = NameUtil.GetFunctionName(coreSql);
                 return CoreSqlVisitor.CompileCore(
                     coreSql,
                     context, 
                     fullName);
             }
-            else if (_parseTree is CoreSqlContext)
+            else if (parseTree is CoreSqlContext)
             {
-                var coreSql = _parseTree as CoreSqlContext;
+                var coreSql = parseTree as CoreSqlContext;
                 var fullName = NameUtil.GetFunctionName(coreSql);
                 return CoreSqlVisitor.CompileCore(
                     coreSql,
@@ -46,7 +43,7 @@ namespace sdmap.Compiler
             else
             {
                 throw new InvalidOperationException(
-                    $"Context {_parseTree.GetType().FullName} is allowed.");
+                    $"Context {parseTree.GetType().FullName} is allowed.");
             }
         }
 

@@ -9,16 +9,22 @@ using System.Threading.Tasks;
 
 namespace sdmap.Compiler
 {
-    public abstract class SqlEmiterBase
+    public class SqlEmiterBase
     {
-        protected ParserRuleContext _parseTree;
-        protected string _ns;
+        private ParserRuleContext _parseTree;
+        private string _ns;
+        private readonly CompileFunction _compiler;
+
         public EmitFunction Emiter { get; private set; }
 
-        protected SqlEmiterBase(ParserRuleContext parseTree, string ns)
+        public SqlEmiterBase(
+            ParserRuleContext parseTree, 
+            string ns, 
+            CompileFunction compiler)
         {
             _parseTree = parseTree;
             _ns = ns;
+            _compiler = compiler;
         }
 
         public Result EnsureCompiled(SdmapCompilerContext context)
@@ -51,16 +57,18 @@ namespace sdmap.Compiler
             if (_ns != "")
                 context.NsStack.Push(_ns);
 
-            var result = Compile(context);
+            var result = _compiler(context, _parseTree);
 
             if (_ns != "")
                 context.NsStack.Pop();
 
             return result;
         }
-
-        protected abstract Result<EmitFunction> Compile(SdmapCompilerContext context);
     }
+
+    public delegate Result<EmitFunction> CompileFunction(
+        SdmapCompilerContext context, 
+        ParserRuleContext parseTree);
 
     public delegate Result<string> EmitFunction(SdmapCompilerContext context, object obj);
 }
