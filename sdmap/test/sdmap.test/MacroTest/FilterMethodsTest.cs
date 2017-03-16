@@ -1,4 +1,5 @@
 ﻿using sdmap.Macros;
+using sdmap.Macros.Implements;
 using sdmap.test.MacroTest.FilterMethodsImpl;
 using System;
 using System.Collections.Generic;

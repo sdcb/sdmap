@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace sdmap.Utils
 {
-    public class NumberUtil
+    internal class NumberUtil
     {
         public static Result<double> Parse(string input)
         {

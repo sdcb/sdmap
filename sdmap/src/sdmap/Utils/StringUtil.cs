@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace sdmap.Utils
 {
-    public class StringUtil
+    internal class StringUtil
     {
         public static Result<string> Parse(string input)
         {

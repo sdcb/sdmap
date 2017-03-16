@@ -7,7 +7,7 @@ using static sdmap.Parser.G4.SdmapParser;
 
 namespace sdmap.Utils
 {
-    public static class NameUtil
+    internal static class NameUtil
     {
         public static string GetFunctionName(ParserRuleContext context)
         {

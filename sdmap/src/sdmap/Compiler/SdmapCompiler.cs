@@ -14,9 +14,14 @@ namespace sdmap.Compiler
     {
         private readonly SdmapCompilerContext _context;
 
-        public SdmapCompiler(SdmapCompilerContext context = null)
+        public SdmapCompiler()
         {
-            _context = context ?? SdmapCompilerContext.CreateEmpty();
+            _context = SdmapCompilerContext.CreateEmpty();
+        }
+
+        internal SdmapCompiler(SdmapCompilerContext context)
+        {
+            _context = context;
         }
 
         public Result AddSourceCode(string sourceCode)

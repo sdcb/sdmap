@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace sdmap.Parser.Visitor
+namespace sdmap.Utils
 {
-    public static class IfUtils
+    internal static class IfUtils
     {
         public static bool PropertyExistsAndEvalToTrue(object obj, string propName)
         {

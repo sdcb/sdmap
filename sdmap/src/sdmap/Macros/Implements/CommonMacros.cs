@@ -14,7 +14,7 @@ using System.Text;
 
 namespace sdmap.Macros.Implements
 {
-    public static class CommonMacros
+    internal static class CommonMacros
     {
         [Macro("include")]
         [MacroArguments(SdmapTypes.Syntax)]

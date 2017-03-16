@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace sdmap.Utils
 {
-    public static class HashUtil
+    internal static class HashUtil
     {
         public static string Base64SHA256(string text)
         {

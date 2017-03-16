@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace sdmap.Utils
 {
-    public class DateUtil
+    internal class DateUtil
     {
         public static Result<DateTime> Parse(string input)
         {

@@ -11,7 +11,7 @@ using static sdmap.Parser.G4.SdmapLexer;
 
 namespace sdmap.Parser.Visitor
 {
-    public class SqlItemVisitor : SdmapParserBaseVisitor<Result>
+    internal class SqlItemVisitor : SdmapParserBaseVisitor<Result>
     {
         public SdmapCompilerContext Context { get; }
 

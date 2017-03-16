@@ -16,7 +16,7 @@ using static sdmap.Parser.G4.SdmapParser;
 
 namespace sdmap.Parser.Visitor
 {
-    public class CoreSqlVisitor : SdmapParserBaseVisitor<Result>
+    internal class CoreSqlVisitor : SdmapParserBaseVisitor<Result>
     {
         protected readonly SdmapCompilerContext _context;
         protected ILGenerator _il;
