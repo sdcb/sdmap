@@ -26,7 +26,7 @@ namespace sdmap.Parser.Visitor
             var fullName = context.GetFullNameInCurrentNs(id);
 
             var core = new CoreSqlVisitor(context /*, fullName */);
-            return core.Visit(parseTree.coreSql())
+            return core.Process(parseTree.coreSql())
                 .OnSuccess(() => core.Function);
         }
 

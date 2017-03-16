@@ -37,26 +37,7 @@ namespace sdmap.Parser.Visitor
             return NameUtil.GetFunctionName(parseRule);
         }
 
-        public override Result VisitCoreSql([NotNull] CoreSqlContext context)
-        {
-            if (_il == null)
-            {
-                Process(context);
-            }
-            return base.VisitCoreSql(context);
-        }
-
-        public override Result VisitNamedSql([NotNull] NamedSqlContext context)
-        {
-            return Process(context);
-        }
-
-        public override Result VisitUnnamedSql([NotNull] UnnamedSqlContext context)
-        {
-            return Process(context);
-        }
-
-        private Result Process(ParserRuleContext parseRule)
+        public Result Process(ParserRuleContext parseRule)
         {
             var fullName = GetFunctionName(parseRule);
 
