@@ -64,5 +64,20 @@ namespace sdmap.test.IntegratedTest
             });
             Assert.Equal("Emit", result);
         }
+
+        [Fact]
+        public void NestedIfTest()
+        {
+            var code = "sql v1{#if(A){A#if(B){B}#if(C){C}}}";
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("v1", new
+            {
+                A = true,
+                B = false, 
+                C = true
+            });
+            Assert.Equal("AC", result);
+        }
     }
 }
