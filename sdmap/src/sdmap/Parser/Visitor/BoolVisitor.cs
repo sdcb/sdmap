@@ -117,6 +117,15 @@ namespace sdmap.Parser.Visitor
             return Result.Ok();
         }
 
+        public override Result VisitBoolOpNot([NotNull] BoolOpNotContext context)
+        {
+            var exp = Visit(context.boolExpression());
+            if (exp.IsFailure) return exp;
+            
+            _il.Emit(OpCodes.Not);
+            return Result.Ok();
+        }
+
         public override Result VisitBoolBrace([NotNull] BoolBraceContext context)
         {
             return Visit(context.boolExpression());

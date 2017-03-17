@@ -132,6 +132,17 @@ namespace sdmap.unittest.VisitorTest
             Assert.Equal(1, obj.A.AccessCount);
         }
 
+        [Theory]
+        [InlineData("!true", false)]
+        [InlineData("!false", true)]
+        public void NotTest(string code, bool expected)
+        {
+            var ctx = SdmapCompilerContext.CreateEmpty();
+            var func = CompileExpression(code, ctx);
+            var actual = func(ctx, null);
+            Assert.Equal(expected, actual);
+        }
+
         private BoolVisitorDelegate CompileExpression(string code, SdmapCompilerContext ctx)
         {
             var dm = new DynamicMethod(

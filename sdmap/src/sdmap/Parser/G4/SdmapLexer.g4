@@ -22,6 +22,9 @@ OpAnd:
 OpOr:
 	'||';
 
+OpNot:
+	'!';
+
 OpenCurlyBrace: 
 	'{'{if (bracePrefix == "sql") PushMode(SQL);};
 

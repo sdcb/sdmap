@@ -39,7 +39,8 @@ boolExpression:
 	nsSyntax (Equal | NotEqual) Null                                    #BoolNull      |
 	nsSyntax                                                            #BoolNsSyntax  |
 	boolExpression OpAnd boolExpression                                 #BoolOpAnd     |
-	boolExpression OpOr  boolExpression                                 #BoolOpOr;
+	boolExpression OpOr  boolExpression                                 #BoolOpOr      |
+	OpNot boolExpression                                                #BoolOpNot;
 
 macro:
 	Hash SYNTAX OpenAngleBracket
