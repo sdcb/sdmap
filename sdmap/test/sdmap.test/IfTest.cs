@@ -50,5 +50,19 @@ namespace sdmap.test.IntegratedTest
                 Assert.Equal("", result);
             }
         }
+
+        [Fact]
+        public void AllTest()
+        {
+            var code = "sql v1{#if(A && !(false || isEmpty(B))){Emit}}";
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("v1", new
+            {
+                A = true, 
+                B = new[] { 1, 2, 3 }
+            });
+            Assert.Equal("Emit", result);
+        }
     }
 }
