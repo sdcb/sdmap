@@ -6,7 +6,7 @@ using Xunit;
 
 using static sdmap.Parser.G4.SdmapLexer;
 
-namespace sdmap.test.LexerTest
+namespace sdmap.unittest.LexerTest
 {
     public class SqlMacroTest : LexerTestBase
     {

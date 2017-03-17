@@ -6,7 +6,7 @@ using Xunit;
 
 using static sdmap.Utils.NumberUtil;
 
-namespace sdmap.test.UtilTest
+namespace sdmap.unittest.UtilTest
 {
     public class NumberTest
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace sdmap.test.CompilerTest
+namespace sdmap.unittest.CompilerTest
 {
     public class EnsureCompiledTest
     {

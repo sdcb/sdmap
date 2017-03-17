@@ -1,13 +1,13 @@
 ﻿using sdmap.Macros;
 using sdmap.Macros.Implements;
-using sdmap.test.MacroTest.FilterMethodsImpl;
+using sdmap.unittest.MacroTest.FilterMethodsImpl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace sdmap.test.MacroTest
+namespace sdmap.unittest.MacroTest
 {
     public class FilterMethodsTest
     {

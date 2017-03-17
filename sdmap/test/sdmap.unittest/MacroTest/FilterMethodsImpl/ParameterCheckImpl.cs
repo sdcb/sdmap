@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace sdmap.test.MacroTest.FilterMethodsImpl
+namespace sdmap.unittest.MacroTest.FilterMethodsImpl
 {
     public class ParameterCheckImpl
     {

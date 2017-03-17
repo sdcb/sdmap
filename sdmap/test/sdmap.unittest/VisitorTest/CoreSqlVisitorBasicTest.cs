@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace sdmap.test.VisitorTest
+namespace sdmap.unittest.VisitorTest
 {
     public class CoreSqlVisitorBasicTest : VisitorTestBase
     {

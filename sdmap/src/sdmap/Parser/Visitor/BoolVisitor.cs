@@ -16,8 +16,15 @@ using static sdmap.Parser.G4.SdmapParser;
 
 namespace sdmap.Parser.Visitor
 {
-    internal partial class CoreSqlVisitor
+    internal class BoolVisitor : SdmapParserBaseVisitor<Result>
     {
+        private readonly ILGenerator _il;
+
+        public BoolVisitor(ILGenerator il)
+        {
+            _il = il;
+        }
+
         public override Result VisitBoolNull([NotNull] BoolNullContext context)
         {
             var op = context.children[1].GetText();
@@ -48,6 +55,11 @@ namespace sdmap.Parser.Visitor
             _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo().GetMethod(
                 nameof(IfUtils.PropertyExistsAndEvalToTrue)));
             return Result.Ok();
+        }
+
+        public override Result VisitBoolBrace([NotNull] BoolBraceContext context)
+        {
+            return Visit(context.boolExpression());
         }
     }
 }

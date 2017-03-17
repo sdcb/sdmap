@@ -1,5 +1,5 @@
 ﻿using sdmap.Macros;
-using sdmap.test.MacroTest.ToMacroImpl;
+using sdmap.unittest.MacroTest.ToMacroImpl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Xunit;
 using static sdmap.Macros.Implements.MacroUtil;
 
-namespace sdmap.test.MacroTest
+namespace sdmap.unittest.MacroTest
 {
     public class ToMacroTest
     {

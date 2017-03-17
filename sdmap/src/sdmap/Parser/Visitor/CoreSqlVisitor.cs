@@ -16,7 +16,7 @@ using static sdmap.Parser.G4.SdmapParser;
 
 namespace sdmap.Parser.Visitor
 {
-    internal partial class CoreSqlVisitor : SdmapParserBaseVisitor<Result>
+    internal class CoreSqlVisitor : SdmapParserBaseVisitor<Result>
     {
         protected readonly SdmapCompilerContext _context;
         protected ILGenerator _il;
@@ -30,7 +30,7 @@ namespace sdmap.Parser.Visitor
             _context = context;
         }
 
-        public Result Process(ParserRuleContext parseRule, string functionName)
+        public Result Process(CoreSqlContext parseRule, string functionName)
         {
             var method = new DynamicMethod(functionName,
                 typeof(Result<string>), new[] { typeof(SdmapCompilerContext), typeof(object) });
@@ -59,23 +59,13 @@ namespace sdmap.Parser.Visitor
                 return Result.Ok();
             }
 
-            CoreSqlContext coreSqlContext;
-            if (parseRule is CoreSqlContext)
-            {
-                coreSqlContext = (CoreSqlContext)parseRule;
-            }
-            else
-            {
-                coreSqlContext = parseRule.GetChild<CoreSqlContext>(0);
-            }
-
             _il.DeclareLocal(typeof(StringBuilder));
             _il.Emit(OpCodes.Newobj, typeof(StringBuilder)
                 .GetTypeInfo()
                 .GetConstructor(Type.EmptyTypes));                                    // sb
             _il.Emit(OpCodes.Stloc_0);                                                // [empty]
 
-            return Visit(coreSqlContext)
+            return Visit(parseRule)
                 .OnSuccess(() =>                                                      // [must be empty]
                 {
                     returnBlock();
@@ -228,40 +218,6 @@ namespace sdmap.Parser.Visitor
             return Result.Ok();
         }
 
-        public override Result VisitBoolExpression([NotNull] BoolExpressionContext context)
-        {
-            if (context.children.Count == 1) // #if(PropertyName) {...}
-            {
-                _il.Emit(OpCodes.Ldarg_1);                              // stack: self
-                _il.Emit(OpCodes.Ldstr, context.children[0].GetText()); // stack: self propName
-                _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo().GetMethod(
-                    nameof(IfUtils.PropertyExistsAndEvalToTrue)));
-                return Result.Ok();
-            }
-            else if (context.children.Count == 3 && context.children[2].GetText() == "null")
-            {
-                var op = context.children[1].GetText();
-                _il.Emit(OpCodes.Ldarg_1);                              // self
-                _il.Emit(OpCodes.Ldstr, context.children[0].GetText()); // self propName
-                _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo().GetMethod(
-                    nameof(IfUtils.LoadProp)));                         // obj
-                switch (op)
-                {
-                    case "==":
-                        _il.Emit(OpCodes.Ldnull);
-                        _il.Emit(OpCodes.Ceq);
-                        return Result.Ok();
-                    case "!=":
-                        _il.Emit(OpCodes.Ldnull);
-                        _il.Emit(OpCodes.Ceq);
-                        _il.Emit(OpCodes.Ldc_I4_0);
-                        _il.Emit(OpCodes.Ceq);
-                        return Result.Ok();
-                }
-            }
-            return Result.Fail("#if statement currently only supports == null and != null.");
-        }
-
         public override Result VisitIf([NotNull] IfContext context)
         {
             var coreSql = context.coreSql();
@@ -286,7 +242,7 @@ namespace sdmap.Parser.Visitor
                 return compileResult;
             }
 
-            return Visit(context.boolExpression())
+            return new BoolVisitor(_il).Visit(context.boolExpression())
                 .OnSuccess(() =>
                 {
                     var ifSkip = _il.DefineLabel();
@@ -352,26 +308,16 @@ namespace sdmap.Parser.Visitor
                 throw new ArgumentNullException();
             }
         }
-
-        public static CoreSqlVisitor CreateCore(
-            SdmapCompilerContext context)
-        {
-            return new CoreSqlVisitor(context);
-        }
+        
 
         public static Result<EmitFunction> CompileCore(
             CoreSqlContext coreSql, 
             SdmapCompilerContext context, 
             string functionName)
         {
-            var visitor = CreateCore(context);
+            var visitor = new CoreSqlVisitor(context);
             return visitor.Process(coreSql, functionName)
                 .OnSuccess(() => visitor.Function);
-        }
-
-        public static CoreSqlVisitor CreateCoreEmpty()
-        {
-            return new CoreSqlVisitor(SdmapCompilerContext.CreateEmpty());
         }
     }
 }

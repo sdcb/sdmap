@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace sdmap.test.MacroTest.ToMacroImpl
+namespace sdmap.unittest.MacroTest.ToMacroImpl
 {
     public static class NameCanChangeImpl
     {

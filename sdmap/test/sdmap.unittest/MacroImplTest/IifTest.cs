@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace sdmap.test.MacroImplTest
+namespace sdmap.unittest.MacroImplTest
 {
     public class IifTest
     {

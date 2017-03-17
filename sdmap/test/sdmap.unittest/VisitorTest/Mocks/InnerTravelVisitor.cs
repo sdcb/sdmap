@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Antlr4.Runtime.Misc;
 
-namespace sdmap.test.VisitorTest.Mocks
+namespace sdmap.unittest.VisitorTest.Mocks
 {
     public class InnerTravelVisitor : SdmapParserBaseVisitor<Result>
     {

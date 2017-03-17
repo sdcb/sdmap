@@ -34,10 +34,10 @@ if:
 
 boolExpression: 
     SYNTAX OpenBrace boolExpression? (Comma boolExpression)* CloseBrace #BoolFunc      |
-	nsSyntax                                                            #BoolNsSyntax  |
 	Bool                                                                #BoolLeteral   |
 	OpenBrace boolExpression CloseBrace                                 #BoolBrace     |
-	SYNTAX (Equal | NotEqual) Null                                      #BoolNull      |
+	nsSyntax (Equal | NotEqual) Null                                    #BoolNull      |
+	nsSyntax                                                            #BoolNsSyntax  |
 	boolExpression OpAnd boolExpression                                 #BoolOp        |
 	boolExpression OpOr  boolExpression                                 #BoolOp;
 

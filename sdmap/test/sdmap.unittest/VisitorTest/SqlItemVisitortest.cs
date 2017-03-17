@@ -2,7 +2,7 @@
 using System.Linq;
 using Xunit;
 
-namespace sdmap.test.VisitorTest
+namespace sdmap.unittest.VisitorTest
 {
     public class SqlItemVisitorTest : VisitorTestBase
     {

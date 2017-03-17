@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Xunit;
 using static sdmap.Macros.Implements.MacroUtil;
 
-namespace sdmap.test.MacroTest
+namespace sdmap.unittest.MacroTest
 {
     public class RuntimeCheckTest
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace sdmap.test.MacroTest
+namespace sdmap.unittest.MacroTest
 {
     public class MacroUtilTest
     {

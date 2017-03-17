@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace sdmap.test.LexerTest
+namespace sdmap.unittest.LexerTest
 {
     public class LexerTestBase
     {
