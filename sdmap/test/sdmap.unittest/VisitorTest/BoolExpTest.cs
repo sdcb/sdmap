@@ -74,6 +74,64 @@ namespace sdmap.unittest.VisitorTest
             Assert.Equal(expected, actual);
         }
 
+        [Theory]
+        [InlineData("true && true", true)]
+        [InlineData("true && false", false)]
+        [InlineData("false && true", false)]
+        [InlineData("false && false", false)]
+        public void AndTest(string code, bool expected)
+        {
+            var ctx = SdmapCompilerContext.CreateEmpty();
+            var func = CompileExpression(code, ctx);
+            var actual = func(ctx, null);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData("true || true", true)]
+        [InlineData("true || false", true)]
+        [InlineData("false || true", true)]
+        [InlineData("false || false", false)]
+        public void OrTest(string code, bool expected)
+        {
+            var ctx = SdmapCompilerContext.CreateEmpty();
+            var func = CompileExpression(code, ctx);
+            var actual = func(ctx, null);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void AndShortCircuit()
+        {
+            var ctx = SdmapCompilerContext.CreateEmpty();
+            var func = CompileExpression("A.Value && B.Value", ctx);
+            var obj = new
+            {
+                A = new BoolWithAccessCount(false),
+                B = new BoolWithAccessCount(true)
+            };
+            var actual = func(ctx, obj);
+            Assert.False(actual);
+            Assert.Equal(0, obj.B.AccessCount);
+            Assert.Equal(1, obj.A.AccessCount);
+        }
+
+        [Fact]
+        public void OrShortCircuit()
+        {
+            var ctx = SdmapCompilerContext.CreateEmpty();
+            var func = CompileExpression("A.Value || B.Value", ctx);
+            var obj = new
+            {
+                A = new BoolWithAccessCount(true),
+                B = new BoolWithAccessCount(false)
+            };
+            var actual = func(ctx, obj);
+            Assert.True(actual);
+            Assert.Equal(0, obj.B.AccessCount);
+            Assert.Equal(1, obj.A.AccessCount);
+        }
+
         private BoolVisitorDelegate CompileExpression(string code, SdmapCompilerContext ctx)
         {
             var dm = new DynamicMethod(
@@ -90,5 +148,26 @@ namespace sdmap.unittest.VisitorTest
         }
 
         public delegate bool BoolVisitorDelegate(SdmapCompilerContext ctx, object obj);
+
+        private class BoolWithAccessCount
+        {
+            private readonly bool _v;
+
+            public BoolWithAccessCount(bool v)
+            {
+                _v = v;
+            }
+
+            public int AccessCount { get; private set; }
+
+            public bool Value
+            {
+                get
+                {
+                    ++AccessCount;
+                    return _v;
+                }
+            }
+        }
     }
 }

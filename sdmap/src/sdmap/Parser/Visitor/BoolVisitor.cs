@@ -71,6 +71,52 @@ namespace sdmap.Parser.Visitor
             return Result.Fail($"Failed to parse '{context.GetText()}' as bool");
         }
 
+        public override Result VisitBoolOpAnd([NotNull] BoolOpAndContext context)
+        {
+            var end = _il.DefineLabel();
+            var gofalse = _il.DefineLabel();
+
+            var exp1 = Visit(context.boolExpression()[0]);
+            if (exp1.IsFailure) return exp1;
+            _il.Emit(OpCodes.Brfalse_S, gofalse);
+
+            var exp2 = Visit(context.boolExpression()[1]);
+            if (exp2.IsFailure) return exp2;
+            _il.Emit(OpCodes.Brfalse_S, gofalse);
+
+            _il.Emit(OpCodes.Ldc_I4_1);
+            _il.Emit(OpCodes.Br_S, end);
+
+            _il.MarkLabel(gofalse);
+            _il.Emit(OpCodes.Ldc_I4_0);
+
+            _il.MarkLabel(end);
+            return Result.Ok();
+        }
+
+        public override Result VisitBoolOpOr([NotNull] BoolOpOrContext context)
+        {
+            var end = _il.DefineLabel();
+            var gotrue = _il.DefineLabel();
+
+            var exp1 = Visit(context.boolExpression()[0]);
+            if (exp1.IsFailure) return exp1;
+            _il.Emit(OpCodes.Brtrue_S, gotrue);
+
+            var exp2 = Visit(context.boolExpression()[1]);
+            if (exp2.IsFailure) return exp2;
+            _il.Emit(OpCodes.Brtrue_S, gotrue);
+
+            _il.Emit(OpCodes.Ldc_I4_0);
+            _il.Emit(OpCodes.Br_S, end);
+
+            _il.MarkLabel(gotrue);
+            _il.Emit(OpCodes.Ldc_I4_1);
+
+            _il.MarkLabel(end);
+            return Result.Ok();
+        }
+
         public override Result VisitBoolBrace([NotNull] BoolBraceContext context)
         {
             return Visit(context.boolExpression());

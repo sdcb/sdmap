@@ -38,8 +38,8 @@ boolExpression:
 	OpenBrace boolExpression CloseBrace                                 #BoolBrace     |
 	nsSyntax (Equal | NotEqual) Null                                    #BoolNull      |
 	nsSyntax                                                            #BoolNsSyntax  |
-	boolExpression OpAnd boolExpression                                 #BoolOp        |
-	boolExpression OpOr  boolExpression                                 #BoolOp;
+	boolExpression OpAnd boolExpression                                 #BoolOpAnd     |
+	boolExpression OpOr  boolExpression                                 #BoolOpOr;
 
 macro:
 	Hash SYNTAX OpenAngleBracket
