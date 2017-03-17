@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sdmap.ext.test", "test\sdma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sdmap.unittest", "test\sdmap.unittest\sdmap.unittest.csproj", "{7FA299A4-0360-45F4-9349-CCC7C8456241}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sdmap.test", "test\sdmap.test\sdmap.test.csproj", "{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,18 @@ Global
 		{7FA299A4-0360-45F4-9349-CCC7C8456241}.Release|x64.Build.0 = Release|Any CPU
 		{7FA299A4-0360-45F4-9349-CCC7C8456241}.Release|x86.ActiveCfg = Release|Any CPU
 		{7FA299A4-0360-45F4-9349-CCC7C8456241}.Release|x86.Build.0 = Release|Any CPU
+		{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899}.Debug|x64.Build.0 = Debug|Any CPU
+		{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899}.Debug|x86.Build.0 = Debug|Any CPU
+		{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899}.Release|x64.ActiveCfg = Release|Any CPU
+		{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899}.Release|x64.Build.0 = Release|Any CPU
+		{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899}.Release|x86.ActiveCfg = Release|Any CPU
+		{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,5 +119,6 @@ Global
 		{13776823-ACE7-4138-9A72-8E3C6AEBD7FB} = {FB5AAE70-8943-448C-83DC-138D926AAE94}
 		{F4673720-6FED-4297-A987-BA8A7135F641} = {37A082F1-8179-4EEA-93D8-1C282B5AC65A}
 		{7FA299A4-0360-45F4-9349-CCC7C8456241} = {37A082F1-8179-4EEA-93D8-1C282B5AC65A}
+		{D6A5E85D-31B1-4D42-BDD6-B5D1E77FC899} = {37A082F1-8179-4EEA-93D8-1C282B5AC65A}
 	EndGlobalSection
 EndGlobal
