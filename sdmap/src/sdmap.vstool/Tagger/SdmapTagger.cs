@@ -55,6 +55,8 @@ namespace sdmap.Vstool.Tagger
             {
                 case KSql:
                 case KNamespace:
+                case KIf:
+                case KElse:
                     return svr.Keyword;
                 case OpenCurlyBrace:
                 case CloseCurlyBrace:
@@ -66,7 +68,6 @@ namespace sdmap.Vstool.Tagger
                 case DATE:
                     return svr.NumberLiteral;
                 case SYNTAX:
-                case NSSyntax:
                     return svr.Identifier;
                 case WS:
                     return svr.WhiteSpace;
@@ -83,6 +84,10 @@ namespace sdmap.Vstool.Tagger
                     return svr.PreprocessorKeyword;
                 case Bool:
                     return svr.Keyword;
+                case OpAnd:
+                case OpOr:
+                case OpNot:
+                    return svr.Operator;
                 default:
                     return svr.Other;
             }
