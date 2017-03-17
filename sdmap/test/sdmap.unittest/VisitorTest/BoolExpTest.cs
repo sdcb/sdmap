@@ -143,6 +143,37 @@ namespace sdmap.unittest.VisitorTest
             Assert.Equal(expected, actual);
         }
 
+        [Theory]
+        [InlineData("isEmpty(A)", "", true)]
+        [InlineData("isEmpty(A)", null, true)]
+        public void IsEmptyString(string code, string value, bool expected)
+        {
+            var ctx = SdmapCompilerContext.CreateEmpty();
+            var func = CompileExpression(code, ctx);
+            var actual = func(ctx, new { A = value });
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData("isEmpty(A)", true, true)]
+        [InlineData("isEmpty(A)", false, false)]
+        public void IsEmptyArray(string code, bool emptyArray, bool expected)
+        {
+            var ctx = SdmapCompilerContext.CreateEmpty();
+            var func = CompileExpression(code, ctx);
+            var actual = func(ctx, new { A = emptyArray ? new int[] { } : new[] { 1 } });
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void IsNotEmptyTest()
+        {
+            var ctx = SdmapCompilerContext.CreateEmpty();
+            var func = CompileExpression("isNotEmpty(A)", ctx);
+            var actual = func(ctx, new { A = new[] { 1 } });
+            Assert.Equal(true, actual);
+        }
+
         private BoolVisitorDelegate CompileExpression(string code, SdmapCompilerContext ctx)
         {
             var dm = new DynamicMethod(

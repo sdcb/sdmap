@@ -2,6 +2,7 @@
 using sdmap.Functional;
 using sdmap.Macros.Implements;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -27,6 +28,14 @@ namespace sdmap.Utils
         public static Result<string> ExecuteEmiter(EmitFunction ef, SdmapCompilerContext ctx, object obj)
         {
             return ef(ctx, obj);
+        }
+
+        public static bool IsEmpty(object obj)
+        {
+            if (obj == null) return true;
+            if (obj is string) return string.IsNullOrEmpty((string)obj);
+            if (obj is IEnumerable) return CommonMacros.ArrayEmpty(obj);
+            return false;
         }
     }
 }

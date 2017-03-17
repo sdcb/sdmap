@@ -13,6 +13,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using static sdmap.Parser.G4.SdmapParser;
+using sdmap.Macros.Implements;
 
 namespace sdmap.Parser.Visitor
 {
@@ -121,9 +122,41 @@ namespace sdmap.Parser.Visitor
         {
             var exp = Visit(context.boolExpression());
             if (exp.IsFailure) return exp;
-            
-            _il.Emit(OpCodes.Not);
+            _il.Emit(OpCodes.Ldc_I4_0);
+            _il.Emit(OpCodes.Ceq);
             return Result.Ok();
+        }
+
+        public override Result VisitBoolFunc([NotNull] BoolFuncContext context)
+        {
+            var syntax = context.GetToken(SYNTAX, 0).GetText();
+            var exps = context.nsSyntax();
+
+            foreach (var exp in exps)
+            {
+                _il.Emit(OpCodes.Ldarg_1);
+                _il.Emit(OpCodes.Ldstr, exp.GetText());
+                _il.Emit(OpCodes.Call, typeof(CommonMacros).GetTypeInfo()
+                    .GetMethod(nameof(CommonMacros.GetPropValue)));
+            }
+
+            switch (syntax)
+            {
+                case "isEmpty":
+                    if (exps.Length != 1) break;
+                    _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo()
+                        .GetMethod(nameof(IfUtils.IsEmpty)));
+                    return Result.Ok();
+                case "isNotEmpty":
+                    if (exps.Length != 1) break;
+                    _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo()
+                        .GetMethod(nameof(IfUtils.IsEmpty)));
+                    _il.Emit(OpCodes.Ldc_I4_0);
+                    _il.Emit(OpCodes.Ceq);
+                    return Result.Ok();
+            }
+            return Result.Fail(
+                $"Function '{syntax}' with {exps.Length} arguments is not supported in bool expression.");
         }
 
         public override Result VisitBoolBrace([NotNull] BoolBraceContext context)
