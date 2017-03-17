@@ -1,3 +1,8 @@
+## 0.10.0
+- [core] support #if(){} syntax.
+- [core] switch a large amount of class modifier from public to internal.
+- [core] optimized performance for nested sql.
+
 ## 0.9.1:
 - [core] fix a issue that EnsureCompiled will fail when using sub-sql.
 - [ext] bump version.
