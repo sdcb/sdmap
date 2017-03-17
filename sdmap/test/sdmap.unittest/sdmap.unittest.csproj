@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
-    <AssemblyName>sdmap.test</AssemblyName>
+    <AssemblyName>sdmap.unittest</AssemblyName>
     <PackageId>sdmap.test</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RuntimeIdentifiers>win10-x86</RuntimeIdentifiers>
