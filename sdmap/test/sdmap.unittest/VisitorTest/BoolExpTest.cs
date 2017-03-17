@@ -45,6 +45,35 @@ namespace sdmap.unittest.VisitorTest
             Assert.Equal(true, actual);
         }
 
+        [Fact]
+        public void NsSyntax2Test()
+        {
+            var ctx = SdmapCompilerContext.CreateEmpty();
+            var func = CompileExpression("A.B", ctx);
+            var actual = func(ctx, new { A = new { B = true } } );
+            Assert.Equal(true, actual);
+        }
+
+        [Fact]
+        public void NsSyntax4Test()
+        {
+            var ctx = SdmapCompilerContext.CreateEmpty();
+            var func = CompileExpression("A.B.C.D", ctx);
+            var actual = func(ctx, new { A = new { B = new { C = new { D = false } } } } );
+            Assert.Equal(false, actual);
+        }
+
+        [Theory]
+        [InlineData("true", true)]
+        [InlineData("false", false)]
+        public void LiteralTest(string input, bool expected)
+        {
+            var ctx = SdmapCompilerContext.CreateEmpty();
+            var func = CompileExpression(input, ctx);
+            var actual = func(ctx, null);
+            Assert.Equal(expected, actual);
+        }
+
         private BoolVisitorDelegate CompileExpression(string code, SdmapCompilerContext ctx)
         {
             var dm = new DynamicMethod(

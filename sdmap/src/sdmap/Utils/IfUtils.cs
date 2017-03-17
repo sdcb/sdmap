@@ -1,5 +1,6 @@
 ﻿using sdmap.Compiler;
 using sdmap.Functional;
+using sdmap.Macros.Implements;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -11,25 +12,16 @@ namespace sdmap.Utils
     {
         public static bool PropertyExistsAndEvalToTrue(object obj, string propName)
         {
-            if (obj == null) return false;
-
-            var prop = obj.GetType().GetTypeInfo().GetProperty(propName);
-            if (prop == null) return false;
-
-            var val = prop.GetValue(obj);
+            var val = CommonMacros.GetPropValue(obj, propName);
             if (val is bool) return (bool)val;
+            if (val is bool?) return ((bool?)val).GetValueOrDefault();
 
-            return true;
+            return false;
         }
 
         public static object LoadProp(object obj, string propName)
         {
-            if (obj == null) return null;
-
-            var prop = obj.GetType().GetTypeInfo().GetProperty(propName);
-            if (prop == null) return null;
-
-            return prop.GetValue(obj);
+            return CommonMacros.GetPropValue(obj, propName);
         }
 
         public static Result<string> ExecuteEmiter(EmitFunction ef, SdmapCompilerContext ctx, object obj)

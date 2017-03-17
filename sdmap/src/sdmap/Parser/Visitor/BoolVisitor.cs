@@ -57,6 +57,20 @@ namespace sdmap.Parser.Visitor
             return Result.Ok();
         }
 
+        public override Result VisitBoolLeteral([NotNull] BoolLeteralContext context)
+        {
+            if (bool.TryParse(context.GetText(), out bool b))
+            {
+                if (b)
+                    _il.Emit(OpCodes.Ldc_I4_1);
+                else
+                    _il.Emit(OpCodes.Ldc_I4_0);
+                return Result.Ok();
+            }
+            
+            return Result.Fail($"Failed to parse '{context.GetText()}' as bool");
+        }
+
         public override Result VisitBoolBrace([NotNull] BoolBraceContext context)
         {
             return Visit(context.boolExpression());
