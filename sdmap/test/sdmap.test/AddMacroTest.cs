@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Xunit;
 using sdmap.Macros.Implements;
 
-namespace sdmap.test.IntegratedTest
+namespace sdmap.IntegratedTest
 {
     public class AddMacroTest
     {

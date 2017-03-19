@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace sdmap.test.IntegratedTest
+namespace sdmap.IntegratedTest
 {
     public class CompareTest
     {
