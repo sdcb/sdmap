@@ -14,6 +14,7 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <Version>0.10.0</Version>
+    <Description>Useful extensions for sdmap/Dapper.</Description>
   </PropertyGroup>
 
   <ItemGroup>
