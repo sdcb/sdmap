@@ -12,58 +12,26 @@ namespace sdmap.Extensions
 {
     public static partial class SdmapExtensions
     {
-        public static SdmapCompiler Runtime { get; set; }
-
-        private static FileSystemWatcher watcher = null;
+        private static ISqlEmiter SqlEmiter;
 
         public static void SetSqlDirectory(string sqlDirectory)
         {
-            if (watcher != null)
-            {
-                watcher.Dispose();
-            }
-
-            var runtime = new SdmapCompiler();
-
-            foreach (var file in Directory.EnumerateFiles(sqlDirectory, "*.sdmap", SearchOption.AllDirectories))
-            {
-                var code = File.ReadAllText(file);
-                runtime.AddSourceCode(code);
-            }
-
-            Runtime = runtime;
+            SetSqlEmiter(FileSystemSqlEmiter.FromSqlDirectory(sqlDirectory));
         }
 
         public static void SetSqlDirectoryAndWatch(string sqlDirectory)
         {
-            var runtime = new SdmapCompiler();
+            SetSqlEmiter(FileSystemSqlEmiter.FromSqlDirectoryAndWatch(sqlDirectory));
+        }
 
-            if (watcher != null)
-            {
-                watcher.Dispose();
-            }
-            watcher = new FileSystemWatcher(sqlDirectory);
-            watcher.EnableRaisingEvents = true;
-            watcher.NotifyFilter = NotifyFilters.LastWrite;
-            watcher.Changed += (o, e) =>
-            {
-                GC.KeepAlive(watcher);
-                watcher.Dispose();
-                Thread.Sleep(1);
-                SetSqlDirectoryAndWatch(sqlDirectory);
-            };
-
-            foreach (var file in Directory.EnumerateFiles(sqlDirectory, "*.sdmap", SearchOption.AllDirectories))
-            {
-                var code = File.ReadAllText(file);
-                runtime.AddSourceCode(code);
-            }
-            Runtime = runtime;
+        public static void SetSqlEmiter(ISqlEmiter sqlEmiter)
+        {
+            SqlEmiter = sqlEmiter;
         }
 
         public static string EmitSql(string id, object param)
         {
-            return Runtime.Emit(id, param);
+            return SqlEmiter.EmitSql(id, param);
         }
 
         public static int ExecuteById(this IDbConnection cnn,
