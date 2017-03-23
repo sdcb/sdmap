@@ -3,6 +3,7 @@
 - [core] switch a large amount of class modifier from public to internal.
 - [core] optimized performance for nested sql.
 - [vstool] improve performance.
+- [ext-0.10.1] add ISqlEmiter
 
 ## 0.9.1:
 - [core] fix a issue that EnsureCompiled will fail when using sub-sql.
