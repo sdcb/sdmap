@@ -15,7 +15,7 @@ namespace sdmap.ext.test
         {
             public string EmitSql(string sqlId, object queryObject)
             {
-                return "Simple";
+                return sqlId;
             }
         }
 
@@ -24,7 +24,7 @@ namespace sdmap.ext.test
         {
             SdmapExtensions.SetSqlEmiter(new SimpleSqlEmiter());
             var actual = SdmapExtensions.EmitSql("test", null);
-            Assert.Equal("Simple", actual);
+            Assert.Equal("test", actual);
         }
 
         [Fact]
