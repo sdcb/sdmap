@@ -15,7 +15,7 @@ JAVA org.antlr.v4.Tool %FullPath% %Options%
 SET    G4File=SdmapParser
 DEL /Q ^
 	%G4Folder%%G4File%.tokens		  ^
-	%G4Folder%%G4File%.cs		  ^
+	%G4Folder%%G4File%.cs		      ^
 	%G4Folder%%G4File%Listener.cs	  ^
 	%G4Folder%%G4File%BaseListener.cs ^
 	%G4Folder%%G4File%Visitor.cs	  ^
