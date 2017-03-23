@@ -11,6 +11,22 @@ namespace sdmap.ext.test
 {
     public class SmokeTest
     {
+        private class SimpleSqlEmiter : ISqlEmiter
+        {
+            public string EmitSql(string sqlId, object queryObject)
+            {
+                return "Simple";
+            }
+        }
+
+        [Fact]
+        public void SqlEmiterTest()
+        {
+            SdmapExtensions.SetSqlEmiter(new SimpleSqlEmiter());
+            var actual = SdmapExtensions.EmitSql("test", null);
+            Assert.Equal("Simple", actual);
+        }
+
         [Fact]
         public void WatchSmoke()
         {
