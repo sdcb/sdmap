@@ -13,8 +13,11 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>0.10.0</Version>
+    <Version>0.10.1</Version>
     <Description>Useful extensions for sdmap/Dapper.</Description>
+    <PackageProjectUrl>https://github.com/sdcb/sdmap</PackageProjectUrl>
+    <Authors>sdcb</Authors>
+    <Copyright>MIT</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
