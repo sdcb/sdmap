@@ -15,11 +15,12 @@ namespace sdmap.Vstool.Tagger
 {
     sealed class SdmapTagger : ITagger<ClassificationTag>
     {
-        private ISdmapLexer lexer;
-        private ITextBuffer buffer;
-        private IStandardClassificationService standardClassificationService;
+        private readonly ISdmapLexer lexer;
+        private readonly ITextBuffer buffer;
+        private readonly IStandardClassificationService standardClassificationService;
+        private readonly SortedList<int, TagSpan<ClassificationTag>> tokenBuffer = new SortedList<int, TagSpan<ClassificationTag>>();
+
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
-        private SortedList<int, TagSpan<ClassificationTag>> tokenBuffer = new SortedList<int, TagSpan<ClassificationTag>>();
 
         public SdmapTagger(ISdmapLexer lexer, ITextBuffer buffer, IStandardClassificationService standardClassificationService)
         {
