@@ -30,6 +30,7 @@ namespace sdmap.Vstool.Tagger
 
             void WriteBuffer(TextContentChangedEventArgs args)
             {
+                tokenBuffer.Clear();
                 foreach (var kv in lexer.Run(new[] { buffer.CurrentSnapshot.GetText() }, 0))
                 {
                     tokenBuffer[kv.Span.Start] = new TagSpan<ClassificationTag>(
