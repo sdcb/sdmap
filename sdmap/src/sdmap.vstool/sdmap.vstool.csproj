@@ -50,11 +50,12 @@
     <Compile Include="Tagger\Antlr\SdmapLexer.cs" />
     <Compile Include="Tagger\Antlr\TextSegmentsCharStream.cs" />
     <Compile Include="Tagger\ISdmapLexer.cs" />
-    <Compile Include="Tagger\SdmapTagger.cs" />
-    <Compile Include="Tagger\SdmapTaggerProvider.cs" />
+    <Compile Include="Tagger\CodeHighlightTagger.cs" />
+    <Compile Include="Tagger\CodeHighlightTaggerProvider.cs" />
     <Compile Include="Tagger\SpannedToken.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -63,9 +64,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Antlr4.Runtime, Version=4.5.0.0, Culture=neutral, PublicKeyToken=09abb75b9ed49849, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Antlr4.Runtime.4.5.3\lib\net45\Antlr4.Runtime.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Antlr4.Runtime, Version=4.6.0.0, Culture=neutral, PublicKeyToken=09abb75b9ed49849, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Antlr4.Runtime.4.6.1\lib\net45\Antlr4.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.CSharp" />
