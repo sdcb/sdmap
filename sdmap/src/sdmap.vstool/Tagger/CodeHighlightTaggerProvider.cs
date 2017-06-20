@@ -21,7 +21,7 @@ namespace sdmap.Vstool.Tagger
         internal IStandardClassificationService StandardClassificationService = null;
 
         [Import]
-        internal ISdmapLexer lexer = null;
+        internal ISdmapLexerHelper lexer = null;
 
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {

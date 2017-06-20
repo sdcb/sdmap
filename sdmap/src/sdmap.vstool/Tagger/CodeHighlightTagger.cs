@@ -15,14 +15,14 @@ namespace sdmap.Vstool.Tagger
 {
     sealed class CodeHighlightTagger : ITagger<ClassificationTag>
     {
-        private readonly ISdmapLexer lexer;
+        private readonly ISdmapLexerHelper lexer;
         private readonly ITextBuffer buffer;
         private readonly IStandardClassificationService standardClassificationService;
         private readonly SortedList<int, TagSpan<ClassificationTag>> tokenBuffer = new SortedList<int, TagSpan<ClassificationTag>>();
 
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
-        public CodeHighlightTagger(ISdmapLexer lexer, ITextBuffer buffer, IStandardClassificationService standardClassificationService)
+        public CodeHighlightTagger(ISdmapLexerHelper lexer, ITextBuffer buffer, IStandardClassificationService standardClassificationService)
         {
             this.lexer = lexer;
             this.buffer = buffer;
@@ -31,7 +31,7 @@ namespace sdmap.Vstool.Tagger
             void WriteBuffer(TextContentChangedEventArgs args)
             {
                 tokenBuffer.Clear();
-                foreach (var kv in lexer.Run(new[] { buffer.CurrentSnapshot.GetText() }, 0))
+                foreach (var kv in lexer.GetTokens(new[] { buffer.CurrentSnapshot.GetText() }, 0))
                 {
                     tokenBuffer[kv.Span.Start] = new TagSpan<ClassificationTag>(
                         new SnapshotSpan(buffer.CurrentSnapshot, kv.Span),

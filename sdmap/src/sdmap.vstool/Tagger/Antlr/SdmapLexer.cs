@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace sdmap.Vstool.Tagger.Antlr
 {
-    [Export(typeof(ISdmapLexer))]
-    class SdmapLexer : ISdmapLexer
+    [Export(typeof(ISdmapLexerHelper))]
+    class SdmapLexerHelper : ISdmapLexerHelper
     {
-        public IEnumerable<SpannedToken> Run(IEnumerable<string> segments, int offset)
+        public IEnumerable<SpannedToken> GetTokens(IEnumerable<string> segments, int offset)
         {
             var lexer = new Parser.G4.SdmapLexer(new UnbufferedCharStream(new TextSegmentsCharStream(segments)));
             while (true)

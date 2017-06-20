@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace sdmap.Vstool.Tagger
 {
-    interface ISdmapLexer
+    interface ISdmapLexerHelper
     {
-        IEnumerable<SpannedToken> Run(IEnumerable<string> segments, int offset);
+        IEnumerable<SpannedToken> GetTokens(IEnumerable<string> segments, int offset);
     }
 }
