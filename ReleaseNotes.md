@@ -6,6 +6,7 @@
 - [ext-0.10.1] add ISqlEmiter
 - [vstool-0.10.2] fix a color highlight bug.
 - [vstool-0.10.3] support VS2017.
+- [vstool-0.10.4] support code folding.
 
 ## 0.9.1:
 - [core] fix a issue that EnsureCompiled will fail when using sub-sql.
