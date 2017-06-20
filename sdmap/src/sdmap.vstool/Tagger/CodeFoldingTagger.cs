@@ -13,20 +13,6 @@ using Antlr4.Runtime.Misc;
 
 namespace sdmap.Vstool.Tagger
 {
-    class PartialRegion
-    {
-        public int StartLine { get; set; }
-        public int StartOffset { get; set; }
-        public int StartOffsetHoverText { get; set; }
-        public int Level { get; set; }
-        public PartialRegion PartialParent { get; set; }
-    }
-
-    class Region : PartialRegion
-    {
-        public int EndLine { get; set; }
-    }
-
     internal sealed class CodeFoldingTagger : ITagger<IOutliningRegionTag>
     {
         private readonly ITextBuffer _buffer;
@@ -34,7 +20,6 @@ namespace sdmap.Vstool.Tagger
         ITextVersion _currentVersion;
 
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
-        
 
         public CodeFoldingTagger(
             ITextBuffer buffer)
