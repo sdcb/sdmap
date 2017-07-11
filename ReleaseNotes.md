@@ -1,7 +1,8 @@
 ## 0.10.5
 - [core] fix mixed #if and macro runtime error.
 - [core] make the TryEmit method synchronizable.
-- [ext-Breaking Change] rename ***ById to ***ByMap.
+- [ext-Breaking Change!] rename ***ById to ***ByMap.
+- [ext] add EmbeddedResourceSqlEmiter.
 - [vstool] fix the #if folding issue
 - [vstool] fix the keyword 'null' syntax color issue.
 
