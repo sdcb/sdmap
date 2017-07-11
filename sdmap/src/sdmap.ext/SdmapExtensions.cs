@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,6 +23,11 @@ namespace sdmap.ext
         public static void SetSqlDirectoryAndWatch(string sqlDirectory)
         {
             SetSqlEmiter(FileSystemSqlEmiter.FromSqlDirectoryAndWatch(sqlDirectory));
+        }
+
+        public static void SetEmbeddedSqlAssembly(Assembly assembly)
+        {
+            SetSqlEmiter(EmbeddedResourceSqlEmiter.CreateFrom(assembly));
         }
 
         public static void SetSqlEmiter(ISqlEmiter sqlEmiter)
