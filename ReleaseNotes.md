@@ -1,3 +1,9 @@
+## 0.10.5
+- [core] fix mixed #if and macro runtime error.
+- [core] make the TryEmit method synchronizable.
+- [vstool] fix the #if folding issue
+- [vstool] fix the keyword 'null' syntax color issue.
+
 ## 0.10.0
 - [core] support #if(){} syntax.
 - [core] switch a large amount of class modifier from public to internal.

@@ -57,8 +57,11 @@ namespace sdmap.Compiler
 
         public Result<string> TryEmit(string id, object query)
         {
-            return _context.TryGetEmiter(id, _context.CurrentNs)
-                .OnSuccess(emiter => emiter.TryEmit(query, _context));
+            lock(_context)
+            {
+                return _context.TryGetEmiter(id, _context.CurrentNs)
+                    .OnSuccess(emiter => emiter.TryEmit(query, _context));
+            }
         }
 
         public string Emit(string id, object query)
