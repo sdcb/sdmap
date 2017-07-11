@@ -8,7 +8,7 @@ KSql:
 	'sql'{bracePrefix = "sql";};
 
 KIf: 
-	'if'{bracePrefix = "sql";};
+	'if'{bracePrefix = "if";};
 
 KElse: 
 	'else'{bracePrefix = "sql";};

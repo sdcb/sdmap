@@ -1,6 +1,6 @@
 @ECHO OFF
 
-SET CLASSPATH=%SystemDrive%%HomePath%\.nuget\packages\Antlr4.CodeGenerator\4.5.4-beta001\tools\antlr4-csharp-4.5.4-SNAPSHOT-complete.jar
+SET CLASSPATH=%SystemDrive%%HomePath%\.nuget\packages\Antlr4.CodeGenerator\4.6.2\tools\antlr4-csharp-4.6.2-complete.jar
 SET Namespace=sdmap.Parser.G4
 SET  G4Folder=%~dp0
 SET   Options=-Dlanguage=CSharp_v4_5 -package %Namespace% -visitor -listener -encoding UTF8

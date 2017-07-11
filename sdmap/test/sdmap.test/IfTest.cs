@@ -1,6 +1,7 @@
 ﻿using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -78,6 +79,20 @@ namespace sdmap.IntegratedTest
                 C = true
             });
             Assert.Equal("AC", result);
+        }
+
+        [Fact]
+        public void IfWithMacroTest()
+        {
+            var code = "sql v1{#if(A){A}#val<A>}";
+            Debugger.Launch();
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("v1", new
+            {
+                A = true,
+            });
+            Assert.Equal("Atrue", result);
         }
     }
 }
