@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace sdmap.Extensions
+namespace sdmap.ext
 {
     public static partial class SdmapExtensions
     {
@@ -29,82 +29,82 @@ namespace sdmap.Extensions
             SqlEmiter = sqlEmiter;
         }
 
-        public static string EmitSql(string id, object param)
+        public static string EmitSql(string sqlMapId, object param)
         {
-            return SqlEmiter.EmitSql(id, param);
+            return SqlEmiter.EmitSql(sqlMapId, param);
         }
 
-        public static int ExecuteById(this IDbConnection cnn,
-            string sqlId,
+        public static int ExecuteByMap(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.Execute(sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static IDataReader ExecuteReaderById(this IDbConnection cnn,
-            string sqlId,
+        public static IDataReader ExecuteReaderByMap(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.ExecuteReader(sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static object ExecuteScalarById(this IDbConnection cnn,
-            string sqlId,
+        public static object ExecuteScalarByMap(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.ExecuteReader(sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static T ExecuteScalarById<T>(this IDbConnection cnn,
-            string sqlId,
+        public static T ExecuteScalarByMap<T>(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.ExecuteScalar<T>(sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static IEnumerable<dynamic> QueryById(this IDbConnection cnn,
-            string sqlId,
+        public static IEnumerable<dynamic> QueryByMap(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             bool buffered = true,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.Query(sql, param, transaction, buffered, commandTimeout, commandType);
         }
 
-        public static IEnumerable<T> QueryById<T>(this IDbConnection cnn,
-            string sqlId,
+        public static IEnumerable<T> QueryByMap<T>(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             bool buffered = true,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.Query<T>(sql, param, transaction, buffered, commandTimeout, commandType);
         }
 
-        public static IEnumerable<TReturn> QueryById<TFirst, TSecond, TReturn>(
+        public static IEnumerable<TReturn> QueryByMap<TFirst, TSecond, TReturn>(
             this IDbConnection cnn,
-            string sqlId,
+            string sqlMapName,
             Func<TFirst, TSecond, TReturn> map,
             object param = null,
             IDbTransaction transaction = null,
@@ -113,13 +113,13 @@ namespace sdmap.Extensions
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.Query(sql, map, param, transaction, buffered, splitOn, commandTimeout, commandType);
         }
 
-        public static IEnumerable<TReturn> QueryById<TFirst, TSecond, TThird, TReturn>(
+        public static IEnumerable<TReturn> QueryByMap<TFirst, TSecond, TThird, TReturn>(
             this IDbConnection cnn,
-            string sqlId,
+            string sqlMapName,
             Func<TFirst, TSecond, TThird, TReturn> map,
             object param = null,
             IDbTransaction transaction = null,
@@ -129,14 +129,14 @@ namespace sdmap.Extensions
             CommandType? commandType = null
         )
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.Query(sql, map, param, transaction, buffered, splitOn, commandTimeout, commandType);
         }
 
-        public static IEnumerable<TReturn> QueryById<TFirst, TSecond, TThird, TFourth,
+        public static IEnumerable<TReturn> QueryByMap<TFirst, TSecond, TThird, TFourth,
             TReturn>(
             this IDbConnection cnn,
-            string sqlId,
+            string sqlMapName,
             Func<TFirst, TSecond, TThird, TFourth, TReturn> map,
             object param = null,
             IDbTransaction transaction = null,
@@ -146,14 +146,14 @@ namespace sdmap.Extensions
             CommandType? commandType = null
         )
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.Query(sql, map, param, transaction, buffered, splitOn, commandTimeout, commandType);
         }
 
-        public static IEnumerable<TReturn> QueryById<TFirst, TSecond, TThird, TFourth,
+        public static IEnumerable<TReturn> QueryByMap<TFirst, TSecond, TThird, TFourth,
             TFifth, TReturn>(
             this IDbConnection cnn,
-            string sqlId,
+            string sqlMapName,
             Func<TFirst, TSecond, TThird, TFourth, TFifth, TReturn> map,
             object param = null,
             IDbTransaction transaction = null,
@@ -162,14 +162,14 @@ namespace sdmap.Extensions
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.Query(sql, map, param, transaction, buffered, splitOn, commandTimeout, commandType);
         }
 
-        public static IEnumerable<TReturn> QueryById<TFirst, TSecond, TThird, TFourth,
+        public static IEnumerable<TReturn> QueryByMap<TFirst, TSecond, TThird, TFourth,
             TFifth, TSixth, TReturn>(
             this IDbConnection cnn,
-            string sqlId,
+            string sqlMapName,
             Func<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TReturn> map,
             object param = null,
             IDbTransaction transaction = null,
@@ -178,14 +178,14 @@ namespace sdmap.Extensions
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.Query(sql, map, param, transaction, buffered, splitOn, commandTimeout, commandType);
         }
 
-        public static IEnumerable<TReturn> QueryById<TFirst, TSecond, TThird, TFourth,
+        public static IEnumerable<TReturn> QueryByMap<TFirst, TSecond, TThird, TFourth,
             TFifth, TSixth, TSeventh, TReturn>(
             this IDbConnection cnn,
-            string sqlId,
+            string sqlMapName,
             Func<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TReturn> map,
             object param = null,
             IDbTransaction transaction = null,
@@ -194,155 +194,155 @@ namespace sdmap.Extensions
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.Query(sql, map, param, transaction, buffered, splitOn, commandTimeout, commandType);
         }
 
-        public static dynamic QueryFirstById(this IDbConnection cnn,
-            string sqlId,
+        public static dynamic QueryFirstByMap(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryFirst(sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static object QueryFirstById(this IDbConnection cnn,
+        public static object QueryFirstByMap(this IDbConnection cnn,
             Type type,
-            string sqlId,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryFirst(type, sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static T QueryFirstById<T>(this IDbConnection cnn,
-            string sqlId,
+        public static T QueryFirstByMap<T>(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryFirst<T>(sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static dynamic QueryFirstOrDefaultById(this IDbConnection cnn,
-            string sqlId,
+        public static dynamic QueryFirstOrDefaultByMap(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryFirstOrDefault(sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static object QueryFirstOrDefaultById(this IDbConnection cnn,
+        public static object QueryFirstOrDefaultByMap(this IDbConnection cnn,
             Type type,
-            string sqlId,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryFirstOrDefault(type, sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static T QueryFirstOrDefaultById<T>(this IDbConnection cnn,
-            string sqlId,
+        public static T QueryFirstOrDefaultByMap<T>(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryFirstOrDefault<T>(sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static dynamic QuerySingleById(this IDbConnection cnn,
-            string sqlId,
+        public static dynamic QuerySingleByMap(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QuerySingle(sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static object QuerySingleById(this IDbConnection cnn,
+        public static object QuerySingleByMap(this IDbConnection cnn,
             Type type,
-            string sqlId,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QuerySingle(type, sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static T QuerySingleById<T>(this IDbConnection cnn,
-            string sqlId,
+        public static T QuerySingleByMap<T>(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QuerySingle<T>(sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static dynamic QuerySingleOrDefaultById(this IDbConnection cnn,
-            string sqlId,
+        public static dynamic QuerySingleOrDefaultByMap(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QuerySingleOrDefault(sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static object QuerySingleOrDefaultById(
+        public static object QuerySingleOrDefaultByMap(
             this IDbConnection cnn,
             Type type,
-            string sqlId,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QuerySingleOrDefault(type, sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static T QuerySingleOrDefaultById<T>(this IDbConnection cnn,
-            string sqlId,
+        public static T QuerySingleOrDefaultByMap<T>(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QuerySingleOrDefault<T>(sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static SqlMapper.GridReader QueryMultipleById(this IDbConnection cnn,
-            string sqlId,
+        public static SqlMapper.GridReader QueryMultipleByMap(this IDbConnection cnn,
+            string sqlMapName,
             object param = null,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryMultiple(sql, param, transaction, commandTimeout, commandType);
         }
     }

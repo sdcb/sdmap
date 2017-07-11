@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 
-namespace sdmap.Extensions
+namespace sdmap.ext
 {
     public class FileSystemSqlEmiter : ISqlEmiter
     {
@@ -16,9 +16,9 @@ namespace sdmap.Extensions
             _compiler = compiler;
         }
 
-        public string EmitSql(string sqlId, object queryObject)
+        public string EmitSql(string sqlMapName, object queryObject)
         {
-            return _compiler.Emit(sqlId, queryObject);
+            return _compiler.Emit(sqlMapName, queryObject);
         }
 
         private static SdmapCompiler CreateCompilerFromSqlDirectory(

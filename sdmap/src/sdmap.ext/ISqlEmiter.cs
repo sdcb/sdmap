@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace sdmap.Extensions
+namespace sdmap.ext
 {
     public interface ISqlEmiter
     {
-        string EmitSql(string sqlId, object queryObject);
+        string EmitSql(string sqlMapName, object queryObject);
     }
 }

@@ -5,150 +5,150 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace sdmap.Extensions
+namespace sdmap.ext
 {
     public static partial class SdmapExtensions
     {
-        public static Task<IEnumerable<dynamic>> QueryByIdAsync(this IDbConnection cnn, 
-            string sqlId, 
+        public static Task<IEnumerable<dynamic>> QueryByMapAsync(this IDbConnection cnn, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryAsync(sql, param, transaction, commandTimeout, commandType);
         }
         
-        public static Task<IEnumerable<T>> QueryByIdAsync<T>(this IDbConnection cnn, 
-            string sqlId, 
+        public static Task<IEnumerable<T>> QueryByMapAsync<T>(this IDbConnection cnn, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryAsync<T>(sql, param, transaction, commandTimeout, commandType);
         }
         
-        public static Task<T> QueryFirstByIdAsync<T>(this IDbConnection cnn, 
-            string sqlId, 
+        public static Task<T> QueryFirstByMapAsync<T>(this IDbConnection cnn, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
-            return cnn.QueryFirstAsync<T>(sqlId, param, transaction, commandTimeout, commandType);
+            var sql = EmitSql(sqlMapName, param);
+            return cnn.QueryFirstAsync<T>(sqlMapName, param, transaction, commandTimeout, commandType);
         }
         
-        public static Task<T> QueryFirstOrDefaultByIdAsync<T>(this IDbConnection cnn, 
-            string sqlId, 
+        public static Task<T> QueryFirstOrDefaultByMapAsync<T>(this IDbConnection cnn, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryFirstOrDefaultAsync<T>(sql, param, transaction, commandTimeout, commandType);
         }
         
-        public static Task<T> QuerySingleByIdAsync<T>(this IDbConnection cnn, 
-            string sqlId, 
+        public static Task<T> QuerySingleByMapAsync<T>(this IDbConnection cnn, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QuerySingleAsync<T>(sql, param, transaction, commandTimeout, commandType);
         }
         
-        public static Task<T> QuerySingleOrDefaultByIdAsync<T>(this IDbConnection cnn, 
-            string sqlId, 
+        public static Task<T> QuerySingleOrDefaultByMapAsync<T>(this IDbConnection cnn, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QuerySingleOrDefaultAsync<T>(sql, param, transaction, commandTimeout, commandType);
         }
         
-        public static Task<IEnumerable<object>> QueryByIdAsync(this IDbConnection cnn, 
+        public static Task<IEnumerable<object>> QueryByMapAsync(this IDbConnection cnn, 
             Type type, 
-            string sqlId, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryAsync(sql, param, transaction, commandTimeout, commandType);
         }
         
-        public static Task<object> QueryFirstByIdAsync(this IDbConnection cnn, 
+        public static Task<object> QueryFirstByMapAsync(this IDbConnection cnn, 
             Type type, 
-            string sqlId, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryFirstAsync(type, sql, param, transaction, commandTimeout, commandType);
         }
         
-        public static Task<object> QueryFirstOrDefaultByIdAsync(this IDbConnection cnn, 
+        public static Task<object> QueryFirstOrDefaultByMapAsync(this IDbConnection cnn, 
             Type type, 
-            string sqlId, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryFirstOrDefaultAsync(type, sql, param, transaction, commandTimeout, commandType);
         }
         
-        public static Task<object> QuerySingleByIdAsync(this IDbConnection cnn, 
+        public static Task<object> QuerySingleByMapAsync(this IDbConnection cnn, 
             Type type, 
-            string sqlId, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QuerySingleAsync(type, sql, param, transaction, commandTimeout, commandType);
         }
         
-        public static Task<object> QuerySingleOrDefaultByIdAsync(this IDbConnection cnn, 
+        public static Task<object> QuerySingleOrDefaultByMapAsync(this IDbConnection cnn, 
             Type type, 
-            string sqlId, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QuerySingleOrDefaultAsync(type, sql, param, transaction, commandTimeout, commandType);
         }
         
-        public static Task<int> ExecuteByIdAsync(this IDbConnection cnn, 
-            string sqlId, 
+        public static Task<int> ExecuteByMapAsync(this IDbConnection cnn, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.ExecuteAsync(sql, param, transaction, commandTimeout, commandType);
         }
 
-        public static Task<IEnumerable<TReturn>> QueryByIdAsync<TFirst, TSecond, TReturn>(
+        public static Task<IEnumerable<TReturn>> QueryByMapAsync<TFirst, TSecond, TReturn>(
             this IDbConnection cnn, 
-            string sqlId, 
+            string sqlMapName, 
             Func<TFirst, TSecond, TReturn> map, 
             object param = null, 
             IDbTransaction transaction = null, 
@@ -157,13 +157,13 @@ namespace sdmap.Extensions
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryAsync(sql, map, param, transaction, buffered, splitOn, commandTimeout, commandType);
         }
         
-        public static Task<IEnumerable<TReturn>> QueryByIdAsync<TFirst, TSecond, TThird, TReturn>(
+        public static Task<IEnumerable<TReturn>> QueryByMapAsync<TFirst, TSecond, TThird, TReturn>(
             this IDbConnection cnn, 
-            string sqlId, 
+            string sqlMapName, 
             Func<TFirst, TSecond, TThird, TReturn> map, 
             object param = null, 
             IDbTransaction transaction = null, 
@@ -172,13 +172,13 @@ namespace sdmap.Extensions
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryAsync(sql, map, param, transaction, buffered, splitOn, commandTimeout, commandType);
         }
         
-        public static Task<IEnumerable<TReturn>> QueryByIdAsync<TFirst, TSecond, TThird, TFourth, TReturn>(
+        public static Task<IEnumerable<TReturn>> QueryByMapAsync<TFirst, TSecond, TThird, TFourth, TReturn>(
             this IDbConnection cnn, 
-            string sqlId, 
+            string sqlMapName, 
             Func<TFirst, TSecond, TThird, TFourth, TReturn> map, 
             object param = null, 
             IDbTransaction transaction = null, 
@@ -187,13 +187,13 @@ namespace sdmap.Extensions
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryAsync(sql, map, param, transaction, buffered, splitOn, commandTimeout, commandType);
         }
         
-        public static Task<IEnumerable<TReturn>> QueryByIdAsync<TFirst, TSecond, TThird, TFourth, TFifth, TReturn>(
+        public static Task<IEnumerable<TReturn>> QueryByMapAsync<TFirst, TSecond, TThird, TFourth, TFifth, TReturn>(
             this IDbConnection cnn, 
-            string sqlId, 
+            string sqlMapName, 
             Func<TFirst, TSecond, TThird, TFourth, TFifth, TReturn> map, 
             object param = null, 
             IDbTransaction transaction = null, 
@@ -202,13 +202,13 @@ namespace sdmap.Extensions
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryAsync(sql, map, param, transaction, buffered, splitOn, commandTimeout, commandType);
         }
         
-        public static Task<IEnumerable<TReturn>> QueryByIdAsync<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TReturn>(
+        public static Task<IEnumerable<TReturn>> QueryByMapAsync<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TReturn>(
             this IDbConnection cnn, 
-            string sqlId, 
+            string sqlMapName, 
             Func<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TReturn> map, 
             object param = null, 
             IDbTransaction transaction = null, 
@@ -217,13 +217,13 @@ namespace sdmap.Extensions
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryAsync(sql, map, param, transaction, buffered, splitOn, commandTimeout, commandType);
         }
         
-        public static Task<IEnumerable<TReturn>> QueryByIdAsync<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TReturn>(
+        public static Task<IEnumerable<TReturn>> QueryByMapAsync<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TReturn>(
             this IDbConnection cnn, 
-            string sqlId, 
+            string sqlMapName, 
             Func<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TReturn> map,
             object param = null, 
             IDbTransaction transaction = null, 
@@ -232,12 +232,12 @@ namespace sdmap.Extensions
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryAsync(sql, map, param, transaction, buffered, splitOn, commandTimeout, commandType);
         }
         
-        public static Task<IEnumerable<TReturn>> QueryByIdAsync<TReturn>(this IDbConnection cnn, 
-            string sqlId, 
+        public static Task<IEnumerable<TReturn>> QueryByMapAsync<TReturn>(this IDbConnection cnn, 
+            string sqlMapName, 
             Type[] types, 
             Func<object[], TReturn> map, 
             object param = null, 
@@ -247,41 +247,41 @@ namespace sdmap.Extensions
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryAsync(sql, types, map, param, transaction, buffered, splitOn, commandTimeout, commandType);
         }
         
-        public static Task<SqlMapper.GridReader> QueryMultipleByIdAsync(
+        public static Task<SqlMapper.GridReader> QueryMultipleByMapAsync(
             this IDbConnection cnn, 
-            string sqlId, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.QueryMultipleAsync(sql, param, transaction, commandTimeout, commandType);
         }
         
-        public static Task<IDataReader> ExecuteReaderByIdAsync(this IDbConnection cnn, 
-            string sqlId, 
+        public static Task<IDataReader> ExecuteReaderByMapAsync(this IDbConnection cnn, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.ExecuteReaderAsync(sql, param, transaction, commandTimeout, commandType);
         }
         
-        public static Task<object> ExecuteScalarByIdAsync(this IDbConnection cnn, 
-            string sqlId, 
+        public static Task<object> ExecuteScalarByMapAsync(this IDbConnection cnn, 
+            string sqlMapName, 
             object param = null, 
             IDbTransaction transaction = null, 
             int? commandTimeout = null, 
             CommandType? commandType = null)
         {
-            var sql = EmitSql(sqlId, param);
+            var sql = EmitSql(sqlMapName, param);
             return cnn.ExecuteScalarAsync(sql, param, transaction, commandTimeout, commandType);
         }
     }
