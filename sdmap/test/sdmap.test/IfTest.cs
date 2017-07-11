@@ -85,7 +85,6 @@ namespace sdmap.IntegratedTest
         public void MixIfAndMacroTest()
         {
             var code = "sql v1{#if(A){A}#prop<A>}";
-            Debugger.Launch();
             var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", new
