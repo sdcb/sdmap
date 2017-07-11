@@ -6,14 +6,18 @@
     <AssemblyName>sdmap.ext</AssemblyName>
     <PackageId>sdmap.ext</PackageId>
     <PackageTags>dynamic sql;sdmap</PackageTags>
-    <PackageReleaseNotes>https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md</PackageReleaseNotes>
+    <PackageReleaseNotes>Note:
+This version contains a BREAKING CHANGES than 0.10.1
+
+For more information, please view:
+https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md</PackageReleaseNotes>
     <PackageLicenseUrl>https://github.com/sdcb/sdmap/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/sdcb/sdmap</RepositoryUrl>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>0.10.1</Version>
+    <Version>0.10.5</Version>
     <Description>Useful extensions for sdmap/Dapper.</Description>
     <PackageProjectUrl>https://github.com/sdcb/sdmap</PackageProjectUrl>
     <Authors>sdcb</Authors>
