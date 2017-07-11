@@ -26,7 +26,7 @@ OpNot:
 	'!';
 
 OpenCurlyBrace: 
-	'{'{if (bracePrefix == "sql") PushMode(SQL);};
+	'{'{if (bracePrefix == "sql" || bracePrefix == "if") PushMode(SQL);};
 
 CloseCurlyBrace:
 	'}'{bracePrefix = "";};
@@ -109,7 +109,7 @@ SQLText:
 	~('#' | '}')+;
 
 CloseSql:
-	'}' -> popMode;
+	'}'{if (bracePrefix == "if") {PopMode(); bracePrefix = "sql";}PopMode();};
 
 Hash: 
 	'#' -> pushMode(DEFAULT_MODE);

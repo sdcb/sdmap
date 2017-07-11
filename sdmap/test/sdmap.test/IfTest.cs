@@ -82,9 +82,9 @@ namespace sdmap.IntegratedTest
         }
 
         [Fact]
-        public void IfWithMacroTest()
+        public void MixIfAndMacroTest()
         {
-            var code = "sql v1{#if(A){A}#val<A>}";
+            var code = "sql v1{#if(A){A}#prop<A>}";
             Debugger.Launch();
             var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
@@ -92,7 +92,7 @@ namespace sdmap.IntegratedTest
             {
                 A = true,
             });
-            Assert.Equal("Atrue", result);
+            Assert.Equal("ATrue", result);
         }
     }
 }
