@@ -1,15 +1,22 @@
 # sdmap
 A template engine for writing dynamic sql.
 
-# How to Compile
-1. Install .NET Core SDK(https://www.microsoft.com/net/download/core)
-2. Install JRE 1.6+(http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
-3. run: "dotnet restore"
-4. Run Parser/G4/build.bat to generate ANTLR related lexer and parser
-5. run: "dotnet test" in /test/sdmap.test folder to run unit tests.
+## NuGet Package:
+* https://www.nuget.org/packages/sdmap
+* https://www.nuget.org/packages/sdmap.ext
 
-# Release notes: 
+## Visual Studio 2015/2017 extension:
+https://marketplace.visualstudio.com/vsgallery/6d5a8abf-987d-442a-bbca-05f899878508
+
+## How to Compile
+1. Install .NET Core SDK(https://www.microsoft.com/net/download/core)
+2. Download code(git clone https://github.com/sdcb/sdmap.git)
+3. JRE 1.6+ is preferred for building performance purpose but not required
+4. dotnet restore
+5. dotnet build
+
+## Release notes: 
 https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md
 
-# Document/Wiki
+## Document/Wiki
 https://github.com/sdcb/sdmap/wiki
