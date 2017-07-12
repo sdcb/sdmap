@@ -1,6 +1,8 @@
 ## 0.10.5
 - [core] fix mixed #if and macro runtime error.
 - [core] make the TryEmit method synchronizable.
+- [core-0.10.6] fix: null should be front of syntax
+- [core-0.10.6] upgrade to ANTLR 4.6.4
 - [ext-Breaking Change!] rename ***ById to ***ByMap.
 - [ext] add EmbeddedResourceSqlEmiter.
 - [vstool] fix the #if folding issue
