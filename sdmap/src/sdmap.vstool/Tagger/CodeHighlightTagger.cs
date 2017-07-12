@@ -58,7 +58,6 @@ namespace sdmap.Vstool.Tagger
                 case KSql:
                 case KNamespace:
                 case KIf:
-                case KElse:
                 case Null:
                     return svr.Keyword;
                 case OpenCurlyBrace:
