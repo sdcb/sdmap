@@ -6,7 +6,7 @@ A template engine for writing dynamic sql.
 * https://www.nuget.org/packages/sdmap.ext
 
 ## Visual Studio 2015/2017 extension:
-https://marketplace.visualstudio.com/vsgallery/6d5a8abf-987d-442a-bbca-05f899878508
+https://marketplace.visualstudio.com/items?itemName=sdmapvstool.sdmapvstool
 
 ## How to Compile
 1. Install .NET Core SDK(https://www.microsoft.com/net/download/core)
