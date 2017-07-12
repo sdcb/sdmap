@@ -69,7 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Antlr4.Runtime, Version=4.6.0.0, Culture=neutral, PublicKeyToken=09abb75b9ed49849, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Antlr4.Runtime.4.6.2\lib\net45\Antlr4.Runtime.dll</HintPath>
+      <HintPath>..\..\packages\Antlr4.Runtime.4.6.4\lib\net45\Antlr4.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.CSharp" />
@@ -99,8 +99,8 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="sdmap, Version=0.10.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\sdmap.0.10.5\lib\net451\sdmap.dll</HintPath>
+    <Reference Include="sdmap, Version=0.10.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\sdmap.0.10.6\lib\net451\sdmap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
