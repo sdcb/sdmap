@@ -69,16 +69,16 @@ namespace sdmap.IntegratedTest
         [Fact]
         public void NestedIfTest()
         {
-            var code = "sql v1{#if(A){A#if(B){B}#if(C){C}}}";
+            var code = "sql v1{#if(A){A#if(B){B}}T}";
             var rt = new SdmapCompiler();
+            Debugger.Launch();
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", new
             {
                 A = true,
-                B = false, 
-                C = true
+                B = true
             });
-            Assert.Equal("AC", result);
+            Assert.Equal("ABT", result);
         }
 
         [Fact]
