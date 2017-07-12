@@ -28,8 +28,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Antlr4.Runtime" Version="4.6.2" />
-    <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.2">
+    <Antlr4 Include="Parser/G4/SdmapLexer.g4">
+      <CustomToolNamespace>sdmap.Parser.G4</CustomToolNamespace>
+    </Antlr4>
+    <Antlr4 Include="Parser/G4/SdmapParser.g4">
+      <CustomToolNamespace>sdmap.Parser.G4</CustomToolNamespace>
+    </Antlr4>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime" Version="4.6.4" />
+    <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.4">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
