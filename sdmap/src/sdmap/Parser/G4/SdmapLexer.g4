@@ -13,6 +13,9 @@ KIf:
 KElse: 
 	'else'{bracePrefix = "sql";};
 
+Null: 
+	'null';
+
 KNamespace:
 	'namespace'{bracePrefix = "namespace";};
 
@@ -96,9 +99,6 @@ Equal:
 
 NotEqual: 
 	'!=';
-
-Null: 
-	'null';
 
 
 
