@@ -71,7 +71,6 @@ namespace sdmap.IntegratedTest
         {
             var code = "sql v1{#if(A){A#if(B){B}}T}";
             var rt = new SdmapCompiler();
-            Debugger.Launch();
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", new
             {

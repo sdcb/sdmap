@@ -1,23 +1,19 @@
 ﻿lexer grammar SdmapLexer;
 
 @lexer::members {
-private string bracePrefix = "";
 }
 
 KSql: 
-	'sql'{bracePrefix = "sql";};
+	'sql'{braceStack.Push("sql");};
 
 KIf: 
-	'if'{bracePrefix = "if";};
-
-KElse: 
-	'else'{bracePrefix = "sql";};
+	'if'{braceStack.Push("if");};
 
 Null: 
 	'null';
 
 KNamespace:
-	'namespace'{bracePrefix = "namespace";};
+	'namespace'{braceStack.Push("namespace");};
 
 OpAnd:
 	'&&';
@@ -32,7 +28,7 @@ OpenCurlyBrace:
 	'{'{if (bracePrefix == "sql" || bracePrefix == "if") PushMode(SQL);};
 
 CloseCurlyBrace:
-	'}'{bracePrefix = "";};
+	'}'{braceStack.Pop();};
 
 STRING:
 	'@"' (~'"' | '""')* '"' |
@@ -109,7 +105,14 @@ SQLText:
 	~('#' | '}')+;
 
 CloseSql:
-	'}'{if (bracePrefix == "if") {PopMode(); bracePrefix = "sql";}PopMode();};
+	'}'{
+	if (bracePrefix == "if") 
+	{
+		PopMode(); 
+	}
+	braceStack.Pop();
+	PopMode();
+};
 
 Hash: 
 	'#' -> pushMode(DEFAULT_MODE);
