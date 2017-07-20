@@ -3,6 +3,7 @@
 - [core] make the TryEmit method synchronizable.
 - [core-0.10.6] fix: null should be front of syntax
 - [core-0.10.6] upgrade to ANTLR 4.6.4
+- [core-0.10.8] add hasNoProp, isLessThan, isGreaterThan, isLessEqual, isGreaterEqual
 - [ext-Breaking Change!] rename ***ById to ***ByMap.
 - [ext] add EmbeddedResourceSqlEmiter.
 - [vstool] fix the #if folding issue
