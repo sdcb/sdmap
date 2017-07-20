@@ -37,6 +37,37 @@ namespace sdmap.unittest.MacroImplTest
         private Result<string> CallHasProp(object self, string prop, string result)
         {
             return CommonMacros.HasProp(SdmapCompilerContext.CreateEmpty(), "", self, new[] { prop, result });
+        }        
+    }
+
+    public class HasNoPropTest
+    {
+        [Fact]
+        public void HasNoPropShouldEmit()
+        {
+            var val = CallHasNoProp(new { A = 3 }, "B", "test");
+            Assert.True(val.IsSuccess);
+            Assert.Equal("test", val.Value);
+        }
+
+        [Fact]
+        public void HasPropShouldNotEmit()
+        {
+            var val = CallHasNoProp(new { A = 3 }, "A", "test");
+            Assert.True(val.IsSuccess);
+            Assert.Equal("", val.Value);
+        }
+
+        [Fact]
+        public void NullShouldFail()
+        {
+            var val = CallHasNoProp(null, "A", "test");
+            Assert.False(val.IsSuccess);
+        }
+
+        private Result<string> CallHasNoProp(object self, string prop, string result)
+        {
+            return CommonMacros.HasNoProp(SdmapCompilerContext.CreateEmpty(), "", self, new[] { prop, result });
         }
     }
 }

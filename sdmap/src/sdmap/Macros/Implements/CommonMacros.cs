@@ -82,6 +82,20 @@ namespace sdmap.Macros.Implements
             return Empty;
         }
 
+        [Macro("hasNoProp")]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql)]
+        public static Result<string> HasNoProp(SdmapCompilerContext context, 
+            string ns, object self, object[] arguments)
+        {
+            if (self == null) return RequireNotNull();
+
+            var prop = GetProp(self, arguments[0]);
+            if (prop == null)
+                return MacroUtil.EvalToString(arguments[1], context, self);
+
+            return Empty;
+        }
+
 
         [Macro("isEmpty")]
         [MacroArguments(SdmapTypes.Syntax, SdmapTypes.StringOrSql)]
@@ -180,6 +194,78 @@ namespace sdmap.Macros.Implements
             var val = GetPropValue(self, arguments[0]);
             var compare = arguments[1];
             if (!IsEqual(val, compare))
+                return MacroUtil.EvalToString(arguments[2], context, self);
+
+            return Empty;
+        }
+
+        [Macro("isLessThan")]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Number, SdmapTypes.StringOrSql)]
+        public static Result<string> IsLessThan(SdmapCompilerContext context,
+            string ns, object self, object[] arguments)
+        {
+            if (self == null) return RequireNotNull();
+
+            var prop = GetProp(self, arguments[0]);
+            if (prop == null) return RequirePropNotNull(arguments[0]);
+
+            var val = GetPropValue(self, arguments[0]);
+            var compare = Convert.ToDouble(arguments[1]);
+            if (Convert.ToDouble(val) < compare)
+                return MacroUtil.EvalToString(arguments[2], context, self);
+
+            return Empty;
+        }
+
+        [Macro("isGreaterThan")]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Number, SdmapTypes.StringOrSql)]
+        public static Result<string> IsGreaterThan(SdmapCompilerContext context,
+            string ns, object self, object[] arguments)
+        {
+            if (self == null) return RequireNotNull();
+
+            var prop = GetProp(self, arguments[0]);
+            if (prop == null) return RequirePropNotNull(arguments[0]);
+
+            var val = GetPropValue(self, arguments[0]);
+            var compare = Convert.ToDouble(arguments[1]);
+            if (Convert.ToDouble(val) > compare)
+                return MacroUtil.EvalToString(arguments[2], context, self);
+
+            return Empty;
+        }
+
+        [Macro("isLessEqual")]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Number, SdmapTypes.StringOrSql)]
+        public static Result<string> IsLessEqual(SdmapCompilerContext context,
+            string ns, object self, object[] arguments)
+        {
+            if (self == null) return RequireNotNull();
+
+            var prop = GetProp(self, arguments[0]);
+            if (prop == null) return RequirePropNotNull(arguments[0]);
+
+            var val = GetPropValue(self, arguments[0]);
+            var compare = Convert.ToDouble(arguments[1]);
+            if (Convert.ToDouble(val) <= compare)
+                return MacroUtil.EvalToString(arguments[2], context, self);
+
+            return Empty;
+        }
+
+        [Macro("isGreaterEqual")]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Number, SdmapTypes.StringOrSql)]
+        public static Result<string> IsGreaterEqual(SdmapCompilerContext context,
+            string ns, object self, object[] arguments)
+        {
+            if (self == null) return RequireNotNull();
+
+            var prop = GetProp(self, arguments[0]);
+            if (prop == null) return RequirePropNotNull(arguments[0]);
+
+            var val = GetPropValue(self, arguments[0]);
+            var compare = Convert.ToDouble(arguments[1]);
+            if (Convert.ToDouble(val) >= compare)
                 return MacroUtil.EvalToString(arguments[2], context, self);
 
             return Empty;
