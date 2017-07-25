@@ -17,12 +17,24 @@ namespace sdmap.Vstool.Tagger.Antlr
             var lexer = new Parser.G4.SdmapLexer(new UnbufferedCharStream(new TextSegmentsCharStream(segments)));
             while (true)
             {
-                IToken current = lexer.NextToken();
-                if (current.Type == Parser.G4.SdmapLexer.Eof)
-                    break;
-                yield return new SpannedToken(
+                IToken current = null;
+                try
+                {
+                    current = lexer.NextToken();
+                    if (current.Type == Parser.G4.SdmapLexer.Eof)
+                        break;
+                }
+                catch (InvalidOperationException e)
+                    when (e.HResult == -2146233079) // stack empty
+                {
+                }
+
+                if (current != null)
+                {
+                    yield return new SpannedToken(
                     current.Type,
                     new Span(current.StartIndex + offset, current.StopIndex - current.StartIndex + 1));
+                }
             }
         }
     }

@@ -43,7 +43,16 @@ namespace sdmap.Vstool.Tagger
             var listener = new SdmapRegionListener();
             parser.AddParseListener(listener);
             regions = listener.Regions;
-            parser.root();
+
+            try
+            {
+                parser.root();
+            }
+            catch (InvalidOperationException e)
+                when (e.HResult == -2146233079) // stack empty
+            {
+            }
+            
         }
 
         public IEnumerable<ITagSpan<IOutliningRegionTag>> GetTags(NormalizedSnapshotSpanCollection spans)
