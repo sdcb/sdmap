@@ -32,8 +32,8 @@ namespace sdmap.Vstool.Tagger.Antlr
                 if (current != null)
                 {
                     yield return new SpannedToken(
-                    current.Type,
-                    new Span(current.StartIndex + offset, current.StopIndex - current.StartIndex + 1));
+                        current.Type,
+                        new Span(current.StartIndex + offset, current.StopIndex - current.StartIndex + 1));
                 }
             }
         }
