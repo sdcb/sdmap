@@ -8,6 +8,7 @@
 - [ext] add EmbeddedResourceSqlEmiter.
 - [vstool] fix the #if folding issue
 - [vstool] fix the keyword 'null' syntax color issue.
+- [vstool-0.10.8] fix a Visual Studio crashing error.
 
 ## 0.10.0
 - [core] support #if(){} syntax.

@@ -113,6 +113,7 @@ namespace sdmap.Vstool.Tagger
                 if (startPos >= tokenBuffer.Count) startPos = tokenBuffer.Count - 1;
                 if (endPos >= tokenBuffer.Count) endPos = tokenBuffer.Count - 1;
 
+                if (startPos == -1) yield break;
                 for (var i = startPos; i <= endPos; ++i)
                 {
                     yield return tokenBuffer.Values[i];
