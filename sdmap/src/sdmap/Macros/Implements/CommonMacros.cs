@@ -58,7 +58,7 @@ namespace sdmap.Macros.Implements
 
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return RequirePropNotNull(arguments[0]);
-
+            
             if (prop.PropertyType != typeof(bool) && prop.PropertyType != typeof(bool?))
                 return RequirePropType(prop, "bool");
 
@@ -371,7 +371,7 @@ namespace sdmap.Macros.Implements
             return Result.Fail<string>($"Query requires property '{prop}' in macro '{caller}'.");
         }
 
-        private static Result<string> RequirePropType(PropertyInfo prop, string expected,
+        private static Result<string> RequirePropType(QueryPropertyInfo prop, string expected,
             [CallerMemberName] string caller = null)
         {
             return Result.Fail<string>($"Query property '{prop.Name}' expect type '{expected}' " +
@@ -385,25 +385,49 @@ namespace sdmap.Macros.Implements
                     $"but given '{type.FullName}' in macro '{caller}'.");
         }
 
-        public static PropertyInfo GetProp(object self, object syntax)
+        public static QueryPropertyInfo GetProp(object self, object syntax)
         {
             var props = (syntax as string).Split('.');
             var fronts = props.Take(props.Length - 1);
 
-            var frontValue = fronts.Aggregate(self, (s, p) =>
-                s?.GetType().GetTypeInfo().GetProperty(p)?.GetValue(s));
-            
-            return frontValue
-                ?.GetType()
-                .GetTypeInfo()
-                .GetProperty(props.Last());
+            if (self is IDictionary dicSelf)
+            {
+                if (!dicSelf.Contains(syntax))
+                    return null;
+
+                var val = dicSelf[syntax];
+                if (val == null)
+                    return new QueryPropertyInfo(props[0], typeof(object));
+
+                return new QueryPropertyInfo(props[0], val.GetType());
+            }
+            else
+            {
+                var frontValue = fronts.Aggregate(self, (s, p) =>
+                    s?.GetType().GetTypeInfo().GetProperty(p)?.GetValue(s));
+
+                var pi = frontValue
+                    ?.GetType()
+                    .GetTypeInfo()
+                    .GetProperty(props.Last());
+                if (pi == null) return null;
+
+                return new QueryPropertyInfo(pi.Name, pi.PropertyType);
+            }
         }
 
         public static object GetPropValue(object self, object syntax)
         {
-            var props = (syntax as string).Split('.');
-            return props.Aggregate(self, (s, p) =>
-                s?.GetType().GetTypeInfo().GetProperty(p)?.GetValue(s));
+            if (self is IDictionary dicSelf)
+            {
+                return dicSelf[syntax];
+            }
+            else
+            {
+                var props = (syntax as string).Split('.');
+                return props.Aggregate(self, (s, p) =>
+                    s?.GetType().GetTypeInfo().GetProperty(p)?.GetValue(s));
+            }
         }
 
         public static bool ArrayEmpty(object arr)
