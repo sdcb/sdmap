@@ -26,7 +26,7 @@ namespace sdmap.Vstool.NavigateTo
 
     internal class NavigateToItemProvider : INavigateToItemProvider
     {
-        private static NavigateToItemDisplayFactory _navigateToItemDisplayFactory 
+        private static NavigateToItemDisplayFactory _navigateToItemDisplayFactory
             = new NavigateToItemDisplayFactory();
 
         public void Dispose()
@@ -40,22 +40,22 @@ namespace sdmap.Vstool.NavigateTo
             {
                 var items = project.ProjectItems
                     .OfType<ProjectItem>()
+                    .Where(x => x.FileCount > 0)
+                    .Select(x =>
+                        {
+                            return x.FileNames[0];
+                        })
                     .ToList();
-                var fileNames = items.Where(x => x.FileCount > 0)
-                    .Select(x => x.FileNames[0])
-                    .ToList();
-                var names = items.Select(x => x.Name).ToList();
-                
-                Debug.WriteLine(project.Name);
+                Debug.WriteLine(items);
             }
 
             callback.AddItem(new NavigateToItem(
-                name: "name", 
-                kind: "kind", 
-                language: "language", 
-                secondarySort: "secondarySort", 
-                tag: "tag", 
-                matchKind: MatchKind.Exact, 
+                name: "name",
+                kind: "kind",
+                language: "language",
+                secondarySort: "secondarySort",
+                tag: "tag",
+                matchKind: MatchKind.Exact,
                 displayFactory: _navigateToItemDisplayFactory));
             callback.Done();
         }
@@ -65,7 +65,7 @@ namespace sdmap.Vstool.NavigateTo
             foreach (IVsHierarchy hier in GetProjectsInSolution(solution))
             {
                 EnvDTE.Project project = GetDTEProject(hier);
-                if (project != null)
+                if (project != null && project.Kind == "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}")
                     yield return project;
             }
         }
@@ -128,7 +128,7 @@ namespace sdmap.Vstool.NavigateTo
 
         public string Description => nameof(Description);
 
-        public ReadOnlyCollection<DescriptionItem> DescriptionItems => 
+        public ReadOnlyCollection<DescriptionItem> DescriptionItems =>
             new ReadOnlyCollection<DescriptionItem>(new List<DescriptionItem>());
 
         public void NavigateTo()
