@@ -39,7 +39,7 @@ namespace sdmap.ext
             CommandType? commandType = null)
         {
             var sql = EmitSql(sqlMapName, param);
-            return cnn.QueryFirstAsync<T>(sqlMapName, param, transaction, commandTimeout, commandType);
+            return cnn.QueryFirstAsync<T>(sql, param, transaction, commandTimeout, commandType);
         }
         
         public static Task<T> QueryFirstOrDefaultByMapAsync<T>(this IDbConnection cnn, 

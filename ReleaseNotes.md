@@ -1,5 +1,6 @@
 ## 0.11.0
 - [core] support IDictionary in parameter argument
+- [ext-0.11.1] fix QueryFirstByMapAsync query bug
 
 ## 0.10.5
 - [core] fix mixed #if and macro runtime error.
