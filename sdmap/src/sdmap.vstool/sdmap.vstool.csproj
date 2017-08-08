@@ -48,7 +48,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Definitions\SdmapDefinition.cs" />
+    <Compile Include="NavigateTo\NavigateToItemDisplay.cs" />
+    <Compile Include="NavigateTo\NavigateToItemDisplayFactory.cs" />
+    <Compile Include="NavigateTo\NavigateToItemProvider.cs" />
     <Compile Include="NavigateTo\NavigateToItemProviderFactory.cs" />
+    <Compile Include="NavigateTo\Util.cs" />
+    <Compile Include="NavigateTo\VsConsts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tagger\Antlr\SdmapLexer.cs" />
     <Compile Include="Tagger\Antlr\TextSegmentsCharStream.cs" />

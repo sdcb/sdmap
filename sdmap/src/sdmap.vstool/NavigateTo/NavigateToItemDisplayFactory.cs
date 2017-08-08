@@ -14,13 +14,11 @@ using EnvDTE;
 
 namespace sdmap.Vstool.NavigateTo
 {
-    [Export(typeof(INavigateToItemProviderFactory))]
-    internal class NavigateToItemProviderFactory : INavigateToItemProviderFactory
+    internal sealed class NavigateToItemDisplayFactory : INavigateToItemDisplayFactory
     {
-        public bool TryCreateNavigateToItemProvider(IServiceProvider serviceProvider, out INavigateToItemProvider provider)
+        public INavigateToItemDisplay CreateItemDisplay(NavigateToItem item)
         {
-            provider = new NavigateToItemProvider();
-            return true;
+            return new NavigateToItemDisplay();
         }
     }
 }
