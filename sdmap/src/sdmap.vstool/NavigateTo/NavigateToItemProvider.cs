@@ -28,13 +28,8 @@ namespace sdmap.Vstool.NavigateTo
             var solution = (IVsSolution)Package.GetGlobalService(typeof(IVsSolution));
             foreach (Project project in Util.GetCSharpProjects(solution))
             {
-                var items = project.ProjectItems
+                var files = project.ProjectItems
                     .OfType<ProjectItem>()
-                    .ToList();
-                var languages = items
-                    .Select(x => x.FileCodeModel?.Language)
-                    .ToList();
-                var files = items
                     .SelectMany(x =>
                     {
                         var filenames = new List<string>(x.FileCount);
@@ -44,8 +39,7 @@ namespace sdmap.Vstool.NavigateTo
                         }
                         return filenames;
                     })
-                    .ToList();
-                Debug.WriteLine(items);
+                    .Where(x => x.ToUpperInvariant().EndsWith(".sdmap"));
             }
 
             callback.AddItem(new NavigateToItem(
