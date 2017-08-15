@@ -122,5 +122,20 @@ namespace sdmap.IntegratedTest
             });
             Assert.Equal("A", result);
         }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void BooleanUnCheckTest(bool flag)
+        {
+            var code = @"sql v1{#if(" + (flag ? "A" : "!A") + "){A}}";
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("v1", new
+            {
+                A = !flag
+            });
+            Assert.Equal("", result);
+        }
     }
 }
