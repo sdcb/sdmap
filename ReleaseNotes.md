@@ -1,3 +1,6 @@
+## 0.11.5
+- [core] support double hash(##) emit single hash(#).
+
 ## 0.11.0
 - [core] support IDictionary in parameter argument
 - [ext-0.11.1] fix QueryFirstByMapAsync query bug

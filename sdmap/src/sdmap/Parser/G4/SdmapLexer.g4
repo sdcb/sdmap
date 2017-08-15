@@ -102,7 +102,7 @@ NotEqual:
 
 mode SQL;
 SQLText: 
-	~('#' | '}')+;
+	(~('#' | '}') | '##')+;
 
 CloseSql:
 	'}'{

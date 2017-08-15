@@ -207,10 +207,10 @@ namespace sdmap.Parser.Visitor
 
         public override Result VisitPlainText([NotNull] PlainTextContext context)
         {
-            var text = context.GetToken(SQLText, 0);
+            var text = SqlTextUtil.Parse(context.GetToken(SQLText, 0).GetText());
 
             _il.Emit(OpCodes.Ldloc_0);                                             // sb
-            _il.Emit(OpCodes.Ldstr, text.GetText());                               // sb str
+            _il.Emit(OpCodes.Ldstr, text);                                         // sb str
             _il.Emit(OpCodes.Call, typeof(StringBuilder)
                 .GetTypeInfo().GetMethod(nameof(StringBuilder.Append),
                 new[] { typeof(string), }));                                       // sb+str
