@@ -93,10 +93,10 @@ namespace sdmap.IntegratedTest
             Assert.Equal("ATrue", result);
         }
 
-        [Theory]
+        [Theory(Skip = "#if == true/false is currently not supported.")]
         [InlineData(true)]
         [InlineData(false)]
-        public void BooleanEqualTest(bool flag)
+        public void EqualBooleanTest(bool flag)
         {
             var code = @"sql v1{#if(A == " + flag.ToString().ToLowerInvariant() + "){A}}";
             var rt = new SdmapCompiler();
@@ -111,7 +111,7 @@ namespace sdmap.IntegratedTest
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void BooleanEqualTest2(bool flag)
+        public void BooleanCheckTest(bool flag)
         {
             var code = @"sql v1{#if(" + (flag ? "A" : "!A") + "){A}}";
             var rt = new SdmapCompiler();
