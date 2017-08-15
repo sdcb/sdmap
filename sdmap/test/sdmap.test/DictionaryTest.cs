@@ -34,7 +34,6 @@ namespace sdmap.test
                 ["A"] = true
             });
             Assert.True(result.IsSuccess);
-            Debugger.Launch();
             Assert.Equal("A", result.Value);
         }
     }
