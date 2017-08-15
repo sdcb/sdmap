@@ -14,7 +14,7 @@ using EnvDTE;
 
 namespace sdmap.Vstool.NavigateTo
 {
-    [Export(typeof(INavigateToItemProviderFactory))]
+    //[Export(typeof(INavigateToItemProviderFactory))]
     internal class NavigateToItemProviderFactory : INavigateToItemProviderFactory
     {
         public bool TryCreateNavigateToItemProvider(IServiceProvider serviceProvider, out INavigateToItemProvider provider)

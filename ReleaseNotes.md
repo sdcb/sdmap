@@ -1,5 +1,6 @@
 ## 0.11.5
 - [core] support double hash(##) emit single hash(#).
+- [vstool] upgrade to use 0.11.5 core version.
 
 ## 0.11.0
 - [core] support IDictionary in parameter argument
