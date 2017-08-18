@@ -52,6 +52,7 @@
     <Compile Include="NavigateTo\NavigateToItemDisplayFactory.cs" />
     <Compile Include="NavigateTo\NavigateToItemProvider.cs" />
     <Compile Include="NavigateTo\NavigateToItemProviderFactory.cs" />
+    <Compile Include="NavigateTo\SdmapIdListener.cs" />
     <Compile Include="NavigateTo\Util.cs" />
     <Compile Include="NavigateTo\VsConsts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

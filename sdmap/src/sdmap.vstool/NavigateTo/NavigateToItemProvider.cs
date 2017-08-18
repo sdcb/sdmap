@@ -11,6 +11,9 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.Diagnostics;
 using EnvDTE;
+using System.IO;
+using Antlr4.Runtime;
+using sdmap.Parser.G4;
 
 namespace sdmap.Vstool.NavigateTo
 {
@@ -25,33 +28,24 @@ namespace sdmap.Vstool.NavigateTo
 
         public void StartSearch(INavigateToCallback callback, string searchValue)
         {
-            var solution = (IVsSolution)Package.GetGlobalService(typeof(IVsSolution));
-            foreach (Project project in Util.GetCSharpProjects(solution))
+            var files = Util
+                .GetSolutionAllSdmapFiles()
+                .ToList();
+            for (var i = 0; i < files.Count; ++i)
             {
-                var files = project.ProjectItems
-                    .OfType<ProjectItem>()
-                    .SelectMany(x =>
-                    {
-                        var filenames = new List<string>(x.FileCount);
-                        for (short i = 0; i < x.FileCount; ++i)
-                        {
-                            filenames.Add(x.FileNames[i]);
-                        }
-                        return filenames;
-                    })
-                    .Where(x => x.ToUpperInvariant().EndsWith(".sdmap"));
+                var file = files[i];
+                var code = File.ReadAllText(file);
+
+                foreach (var match in SdmapIdListener.FindMatches(code, searchValue))
+                {
+                    callback.AddItem(match.ToNavigateToItem(_navigateToItemDisplayFactory));
+                }
+
+                callback.ReportProgress(i, files.Count);
             }
 
-            callback.AddItem(new NavigateToItem(
-                name: "name",
-                kind: "kind",
-                language: "language",
-                secondarySort: "secondarySort",
-                tag: "tag",
-                matchKind: MatchKind.Exact,
-                displayFactory: _navigateToItemDisplayFactory));
             callback.Done();
-        }        
+        }
 
         public void StopSearch()
         {

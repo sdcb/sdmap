@@ -16,6 +16,24 @@ namespace sdmap.Vstool.NavigateTo
 {
     internal static class Util
     {
+        public static IEnumerable<string> GetSolutionAllSdmapFiles()
+        {
+            var solution = (IVsSolution2)Package.GetGlobalService(typeof(IVsSolution2));
+            return GetCSharpProjects(solution)
+                .Select(x => x.ProjectItems)
+                .OfType<ProjectItem>()
+                .SelectMany(x =>
+                {
+                    var filenames = new List<string>(x.FileCount);
+                    for (short i = 0; i < x.FileCount; ++i)
+                    {
+                        filenames.Add(x.FileNames[i]);
+                    }
+                    return filenames;
+                })
+                .Where(x => x.ToUpperInvariant().EndsWith(".sdmap"));
+        }
+
         public static IEnumerable<EnvDTE.Project> GetCSharpProjects(IVsSolution solution)
         {
             foreach (IVsHierarchy hier in GetProjectsInSolution(solution))
