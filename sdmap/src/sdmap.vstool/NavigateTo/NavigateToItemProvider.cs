@@ -10,7 +10,6 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.Diagnostics;
-using EnvDTE;
 using System.IO;
 using Antlr4.Runtime;
 using sdmap.Parser.G4;
