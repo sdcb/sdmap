@@ -18,7 +18,7 @@ namespace sdmap.Vstool.NavigateTo
     {
         public bool TryCreateNavigateToItemProvider(IServiceProvider serviceProvider, out INavigateToItemProvider provider)
         {
-            provider = new NavigateToItemProvider();
+            provider = new NavigateToItemProvider(serviceProvider);
             return true;
         }
     }

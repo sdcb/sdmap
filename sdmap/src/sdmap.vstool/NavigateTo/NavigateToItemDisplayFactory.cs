@@ -17,7 +17,7 @@ namespace sdmap.Vstool.NavigateTo
     {
         public INavigateToItemDisplay CreateItemDisplay(NavigateToItem item)
         {
-            return new NavigateToItemDisplay();
+            return new NavigateToItemDisplay(item);
         }
     }
 }

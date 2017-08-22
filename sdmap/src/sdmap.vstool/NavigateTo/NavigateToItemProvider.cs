@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.IO;
 using Antlr4.Runtime;
 using sdmap.Parser.G4;
+using System.Threading;
 
 namespace sdmap.Vstool.NavigateTo
 {
@@ -21,33 +22,52 @@ namespace sdmap.Vstool.NavigateTo
         private static NavigateToItemDisplayFactory _navigateToItemDisplayFactory
             = new NavigateToItemDisplayFactory();
 
+        private CancellationTokenSource _cancellationTokenSource;
+
+        private readonly IServiceProvider _serviceProvider;
+
+        public NavigateToItemProvider(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
         public void Dispose()
         {
         }
 
         public void StartSearch(INavigateToCallback callback, string searchValue)
         {
-            var files = Util
-                .GetSolutionAllSdmapFiles()
-                .ToList();
-            for (var i = 0; i < files.Count; ++i)
+            _cancellationTokenSource = new CancellationTokenSource();
+            System.Threading.Tasks.Task.Run(() =>
             {
-                var file = files[i];
-                var code = File.ReadAllText(file);
+                Search();
+            }, _cancellationTokenSource.Token);
 
-                foreach (var match in SdmapIdListener.FindMatches(code, searchValue))
+            void Search()
+            {
+                var i = 0;
+                foreach (var file in Util.GetSolutionAllSdmapFiles(_serviceProvider))
                 {
-                    callback.AddItem(match.ToNavigateToItem(_navigateToItemDisplayFactory));
+                    if (_cancellationTokenSource.IsCancellationRequested)
+                        break;
+
+                    i += 1;
+
+                    foreach (var match in SdmapIdListener.FindMatches(file, searchValue))
+                    {
+                        callback.AddItem(match.ToNavigateToItem(_navigateToItemDisplayFactory));
+                    }
+
+                    callback.ReportProgress(i, Math.Max(100, i + 1));
                 }
 
-                callback.ReportProgress(i, files.Count);
+                callback.Done();
             }
-
-            callback.Done();
         }
 
         public void StopSearch()
         {
+            _cancellationTokenSource.Cancel();
         }
     }
 }

@@ -11,27 +11,40 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.Diagnostics;
 using EnvDTE;
+using System.IO;
 
 namespace sdmap.Vstool.NavigateTo
 {
     internal static class Util
     {
-        public static IEnumerable<string> GetSolutionAllSdmapFiles()
+        public static IEnumerable<ProjectItem> GetSolutionAllSdmapFiles(
+            IServiceProvider serviceProvider)
         {
-            var solution = (IVsSolution2)Package.GetGlobalService(typeof(IVsSolution2));
+            IEnumerable<ProjectItem> GetAllProjectItems(ProjectItems projectItems)
+            {
+                foreach (var item in projectItems.OfType<ProjectItem>())
+                {
+                    if (item.ProjectItems.Count > 0)
+                    {
+                        foreach (var subItem in GetAllProjectItems(item.ProjectItems))
+                        {
+                            yield return subItem;
+                        }
+                    }
+                    else
+                    {
+                        yield return item;
+                    }
+                }
+            }
+
+            var solution = (IVsSolution2)serviceProvider.GetService(typeof(IVsSolution));
             return GetCSharpProjects(solution)
                 .Select(x => x.ProjectItems)
-                .OfType<ProjectItem>()
-                .SelectMany(x =>
-                {
-                    var filenames = new List<string>(x.FileCount);
-                    for (short i = 0; i < x.FileCount; ++i)
-                    {
-                        filenames.Add(x.FileNames[i]);
-                    }
-                    return filenames;
-                })
-                .Where(x => x.ToUpperInvariant().EndsWith(".sdmap"));
+                .SelectMany(x => GetAllProjectItems(x))
+                .AsParallel()
+                .Where(x => x.FileCount == 1)
+                .Where(x => x.FileNames[0].ToUpperInvariant().EndsWith(".SDMAP"));
         }
 
         public static IEnumerable<EnvDTE.Project> GetCSharpProjects(IVsSolution solution)
