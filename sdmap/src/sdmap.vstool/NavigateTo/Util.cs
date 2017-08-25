@@ -81,6 +81,7 @@ namespace sdmap.Vstool.NavigateTo
         {
             return GetCSharpProjects(solution)
                 .Where(x => _keyProjectNames.Contains(x.FullName))
+                .AsParallel()
                 .Select(x => x.ProjectItems)
                 .SelectMany(x => GetAllProjectItems(x))
                 .Where(x => x.FileCount == 1)
