@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.Diagnostics;
+using EnvDTE;
 
 namespace sdmap.Vstool.NavigateTo
 {
@@ -40,7 +41,7 @@ namespace sdmap.Vstool.NavigateTo
             {
                 var window = Match.ProjectItem.Open();
                 window.Visible = true;
-                window.Activate();       
+                window.Activate();
                 window.DTE.ExecuteCommand("Edit.Goto", Match.Start.Line.ToString());
             }
         }

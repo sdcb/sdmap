@@ -40,9 +40,9 @@ namespace sdmap.Vstool.NavigateTo
 
             var solution = (IVsSolution2)serviceProvider.GetService(typeof(IVsSolution));
             return GetCSharpProjects(solution)
+                .AsParallel()
                 .Select(x => x.ProjectItems)
                 .SelectMany(x => GetAllProjectItems(x))
-                .AsParallel()
                 .Where(x => x.FileCount == 1)
                 .Where(x => x.FileNames[0].ToUpperInvariant().EndsWith(".SDMAP"));
         }
