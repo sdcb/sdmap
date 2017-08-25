@@ -17,17 +17,14 @@ namespace sdmap.Vstool.NavigateTo
 {
     internal static class Util
     {
-        private static string _solutionName;
-        private static List<string> _keyProjectNames;
-
         public static IEnumerable<ProjectItem> GetSolutionAllSdmapFiles(
             IServiceProvider serviceProvider)
         {
             var dte = (DTE)serviceProvider.GetService(typeof(DTE));
             var solution = (IVsSolution)serviceProvider.GetService(typeof(IVsSolution));
 
-            return _solutionName == dte.Solution.FullName ?
-                GetFromCacheProjects(solution) :
+            return SdmapProjectCacheManager.Exists(dte) ?
+                GetFromCacheProjects(solution, dte) :
                 GetAndRebuildCache(solution, dte);
         }
 
@@ -35,7 +32,7 @@ namespace sdmap.Vstool.NavigateTo
             IVsSolution solution, 
             DTE dte)
         {
-            var keyProjectNames = new List<string>();
+            var sdmapProjects = new List<string>();
             foreach (var project in GetCSharpProjects(solution))
             {
                 var items = GetAllProjectItems(project.ProjectItems)
@@ -51,12 +48,11 @@ namespace sdmap.Vstool.NavigateTo
                 }
 
                 if (hasSdmap)
-                    keyProjectNames.Add(project.FullName);
+                    sdmapProjects.Add(project.FullName);
             }
 
             // rebuild cache
-            _solutionName = dte.Solution.FullName;
-            _keyProjectNames = keyProjectNames;
+            SdmapProjectCacheManager.Cache(dte, sdmapProjects);
         }
 
         private static IEnumerable<ProjectItem> GetAllProjectItems(ProjectItems projectItems)
@@ -77,10 +73,13 @@ namespace sdmap.Vstool.NavigateTo
             }
         }
 
-        private static IEnumerable<ProjectItem> GetFromCacheProjects(IVsSolution solution)
+        private static IEnumerable<ProjectItem> GetFromCacheProjects(
+            IVsSolution solution, 
+            DTE dte)
         {
+            var sdmapProjectNames = SdmapProjectCacheManager.GetSdmapProjects(dte);
             return GetCSharpProjects(solution)
-                .Where(x => _keyProjectNames.Contains(x.FullName))
+                .Where(x => sdmapProjectNames.Contains(x.FullName))
                 .AsParallel()
                 .Select(x => x.ProjectItems)
                 .SelectMany(x => GetAllProjectItems(x))
