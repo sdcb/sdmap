@@ -20,11 +20,11 @@ namespace sdmap.Vstool.NavigateTo
 
         public System.Drawing.Icon Glyph => null;
 
-        public string AdditionalInformation => "sdmap";
+        public string AdditionalInformation { get; }
 
         public string Description => null;
 
-        public NavigateToMatch Match { get; set; }
+        public NavigateToMatch Match { get; }
 
         public ReadOnlyCollection<DescriptionItem> DescriptionItems =>
             new ReadOnlyCollection<DescriptionItem>(new List<DescriptionItem>());
@@ -33,6 +33,7 @@ namespace sdmap.Vstool.NavigateTo
         {
             Match = (NavigateToMatch)item.Tag;
             Name = Match.MatchedText;
+            AdditionalInformation = $"sdmap: {Match.IdKind}";
         }
 
         public void NavigateTo()
@@ -41,9 +42,11 @@ namespace sdmap.Vstool.NavigateTo
             {
                 var window = Match.ProjectItem.Open();
                 window.Visible = true;
-                window.Activate();
-                window.DTE.ExecuteCommand("Edit.Goto", Match.Start.Line.ToString());
             }
+            
+            Match.ProjectItem.Document.Activate();
+            Match.ProjectItem.Document.DTE.ExecuteCommand(
+                "Edit.Goto", Match.Start.Line.ToString());
         }
     }
 }

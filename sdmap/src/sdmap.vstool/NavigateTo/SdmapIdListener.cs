@@ -74,7 +74,7 @@ namespace sdmap.Vstool.NavigateTo
             var nsSyntax = prefix != "" ?
                 prefix + "." + syntax :
                 syntax;
-            match = Match(IdKind.NamedSql, nsSyntax, context);
+            match = Match(IdKind.SQL, nsSyntax, context);
             if (match.success) _matches.Add(match.match);
 
             base.ExitNamedSql(context);
@@ -142,7 +142,7 @@ namespace sdmap.Vstool.NavigateTo
     internal enum IdKind
     {
         Namespace,
-        NamedSql,
+        SQL,
     }
 
     internal class NavigateToMatch
