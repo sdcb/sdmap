@@ -48,7 +48,7 @@ namespace sdmap.Vstool.NavigateTo
                 }
 
                 if (hasSdmap)
-                    sdmapProjects.Add(project.FullName);
+                    sdmapProjects.Add(project.UniqueName);
             }
 
             // rebuild cache
@@ -79,7 +79,7 @@ namespace sdmap.Vstool.NavigateTo
         {
             var sdmapProjectNames = SdmapProjectCacheManager.GetSdmapProjects(dte);
             return GetCSharpProjects(solution)
-                .Where(x => sdmapProjectNames.Contains(x.FullName))
+                .Where(x => sdmapProjectNames.Contains(x.UniqueName))
                 .AsParallel()
                 .Select(x => x.ProjectItems)
                 .SelectMany(x => GetAllProjectItems(x))
