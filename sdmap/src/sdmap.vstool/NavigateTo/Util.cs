@@ -17,34 +17,74 @@ namespace sdmap.Vstool.NavigateTo
 {
     internal static class Util
     {
+        private static string _solutionName;
+        private static List<string> _keyProjectNames;
+
         public static IEnumerable<ProjectItem> GetSolutionAllSdmapFiles(
             IServiceProvider serviceProvider)
         {
-            IEnumerable<ProjectItem> GetAllProjectItems(ProjectItems projectItems)
+            var dte = (DTE)serviceProvider.GetService(typeof(DTE));
+            var solution = (IVsSolution)serviceProvider.GetService(typeof(IVsSolution));
+
+            return _solutionName == dte.Solution.FullName ?
+                GetFromCacheProjects(solution) :
+                GetAndRebuildCache(solution, dte);
+        }
+
+        private static IEnumerable<ProjectItem> GetAndRebuildCache(
+            IVsSolution solution, 
+            DTE dte)
+        {
+            var keyProjectNames = new List<string>();
+            foreach (var project in GetCSharpProjects(solution))
             {
-                foreach (var item in projectItems.OfType<ProjectItem>())
+                var items = GetAllProjectItems(project.ProjectItems)
+                    .AsParallel()
+                    .Where(x => x.FileCount == 1)
+                    .Where(x => x.FileNames[0].EndsWith(".sdmap"));
+
+                var hasSdmap = false;
+                foreach (var item in items)
                 {
-                    if (item.ProjectItems.Count > 0)
-                    {
-                        foreach (var subItem in GetAllProjectItems(item.ProjectItems))
-                        {
-                            yield return subItem;
-                        }
-                    }
-                    else
-                    {
-                        yield return item;
-                    }
+                    hasSdmap = true;
+                    yield return item;
                 }
+
+                if (hasSdmap)
+                    keyProjectNames.Add(project.FullName);
             }
 
-            var solution = (IVsSolution2)serviceProvider.GetService(typeof(IVsSolution));
+            // rebuild cache
+            _solutionName = dte.Solution.FullName;
+            _keyProjectNames = keyProjectNames;
+        }
+
+        private static IEnumerable<ProjectItem> GetAllProjectItems(ProjectItems projectItems)
+        {
+            foreach (var item in projectItems.OfType<ProjectItem>())
+            {
+                if (item.ProjectItems.Count > 0)
+                {
+                    foreach (var subItem in GetAllProjectItems(item.ProjectItems))
+                    {
+                        yield return subItem;
+                    }
+                }
+                else
+                {
+                    yield return item;
+                }
+            }
+        }
+
+        private static IEnumerable<ProjectItem> GetFromCacheProjects(IVsSolution solution)
+        {
             return GetCSharpProjects(solution)
-                .AsParallel()
+                .Where(x => _keyProjectNames.Contains(x.FullName))
                 .Select(x => x.ProjectItems)
                 .SelectMany(x => GetAllProjectItems(x))
                 .Where(x => x.FileCount == 1)
-                .Where(x => x.FileNames[0].ToUpperInvariant().EndsWith(".SDMAP"));
+                .Where(x => x.FileNames[0].EndsWith(".sdmap"));
         }
 
         public static IEnumerable<EnvDTE.Project> GetCSharpProjects(IVsSolution solution)

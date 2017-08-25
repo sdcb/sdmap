@@ -26,14 +26,11 @@ namespace sdmap.Vstool.NavigateTo
         private CancellationTokenSource _cancellationTokenSource;
 
         private readonly IServiceProvider _serviceProvider;
-        private Func<List<ProjectItem>> _sdmapFilesGetter;
 
         public NavigateToItemProvider(
-            IServiceProvider serviceProvider, 
-            Func<List<ProjectItem>> sdmapFilesGetter)
+            IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _sdmapFilesGetter = sdmapFilesGetter;
         }
 
         public void Dispose()
@@ -57,7 +54,7 @@ namespace sdmap.Vstool.NavigateTo
         private void Search(INavigateToCallback callback, string searchValue)
         {
             var i = 0;
-            foreach (var file in _sdmapFilesGetter())
+            foreach (var file in Util.GetSolutionAllSdmapFiles(_serviceProvider))
             {
                 if (_cancellationTokenSource.IsCancellationRequested)
                     break;
