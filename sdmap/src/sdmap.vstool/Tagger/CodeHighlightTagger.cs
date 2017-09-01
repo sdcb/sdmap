@@ -38,7 +38,7 @@ namespace sdmap.Vstool.Tagger
                         new ClassificationTag(GetClassificationTypeByToken(kv.TokenType, standardClassificationService)));
                 }
 
-                if (TagsChanged != null && args != null)
+                if (TagsChanged != null && args != null && args.Changes.Count > 0)
                 {
                     TagsChanged(this, new SnapshotSpanEventArgs(new SnapshotSpan(args.After, 
                         args.Changes[0].NewSpan)));
