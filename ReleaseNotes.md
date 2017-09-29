@@ -2,6 +2,7 @@
 - [core] support double hash(##) emit single hash(#).
 - [vstool] upgrade to use 0.11.5 core version.
 - [vstool-0.11.6] add NavigateTo service.
+- [ext-0.11.6] add missing ExecuteScalarByMapAsync<T>.
 
 ## 0.11.0
 - [core] support IDictionary in parameter argument

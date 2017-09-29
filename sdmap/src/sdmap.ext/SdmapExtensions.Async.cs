@@ -146,6 +146,17 @@ namespace sdmap.ext
             return cnn.ExecuteAsync(sql, param, transaction, commandTimeout, commandType);
         }
 
+        public static async Task<T> ExecuteScalarByMapAsync<T>(this IDbConnection cnn,
+            string sqlMapName,
+            object param = null,
+            IDbTransaction transaction = null,
+            int? commandTimeout = null,
+            CommandType? commandType = null)
+        {
+            var sql = EmitSql(sqlMapName, param);
+            return await cnn.ExecuteScalarAsync<T>(sql, param, transaction, commandTimeout, commandType);
+        }
+
         public static Task<IEnumerable<TReturn>> QueryByMapAsync<TFirst, TSecond, TReturn>(
             this IDbConnection cnn, 
             string sqlMapName, 
