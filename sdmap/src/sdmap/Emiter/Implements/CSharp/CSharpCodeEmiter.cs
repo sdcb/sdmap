@@ -19,11 +19,8 @@ namespace sdmap.Emiter.Implements.CSharp
             var cts = new CommonTokenStream(lexer);
             var parser = new SdmapParser(cts);
 
-            var listener = new CSharpCodeListener(writer, config, new CSharpDefine());
-            parser.AddParseListener(listener);
-            parser.root();
-
-            return Result.Ok();
+            var visitor = new CSharpCodeVisitor(writer, config, new CSharpDefine());
+            return visitor.StartVisit(parser.root());
         }
     }
 }

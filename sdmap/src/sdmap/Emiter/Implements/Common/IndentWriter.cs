@@ -16,14 +16,17 @@ namespace sdmap.Emiter.Implements.Common
 
         public void Write(string text)
         {
-            _writer.Write(new string(' ', _indent * 4));
             _writer.Write(text);
         }
 
         public void WriteLine(string text)
         {
-            _writer.Write(new string(' ', _indent * 4));
             _writer.WriteLine(text);
+        }
+
+        public void WriteLine()
+        {
+            _writer.WriteLine();
         }
 
         public void PushIndent()
@@ -38,9 +41,14 @@ namespace sdmap.Emiter.Implements.Common
                 throw new InvalidOperationException("Cannot PopIndent.");
         }
 
-        internal void Flush()
+        public void Flush()
         {
             _writer.Flush();
+        }
+
+        public void WriteIndent()
+        {
+            _writer.Write(new string(' ', _indent * 4));
         }
     }
 }

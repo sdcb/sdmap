@@ -4,6 +4,7 @@ using sdmap.Functional;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -17,11 +18,27 @@ namespace sdmap.unittest.EmiterTests.CSharpTests
             var source = "";
             var result = GetEmitText(source);
 
+            Assert.True(result.IsFailure);
+        }
+
+        [Fact]
+        public void EmptyNamespaceTest()
+        {
+            var source = "namespace id{}";
+            var result = GetEmitText(source);
+
             Assert.True(result.IsSuccess);
 
-            var expected = $"using System;\r\n";
-            Assert.Equal(expected, result.Value);
+            var expected = @"
+namespace id
+{
+}
+";
+            Assert.Equal(PreUsings + expected, result.Value);
         }
+
+        private readonly string PreUsings = string.Join("", new CSharpDefine().CommonUsings()
+                .Select(x => $"using {x};\r\n"));
 
         private Result<string> GetEmitText(string source, CodeEmiterConfig config = null)
         {
