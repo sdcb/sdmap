@@ -10,5 +10,11 @@ namespace sdmap.Utils
         {
             return sqlText.Replace("##", "#");
         }
+
+        public static string ToCSharpString(string text)
+        {
+            // " -> ""
+            return "@\"" + text.Replace("\"", "\"\"") + "\"";
+        }
     }
 }

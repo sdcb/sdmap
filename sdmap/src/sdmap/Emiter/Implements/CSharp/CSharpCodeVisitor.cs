@@ -7,6 +7,8 @@ using System.IO;
 using System.Text;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
+using sdmap.Utils;
+using static sdmap.Parser.G4.SdmapParser;
 
 namespace sdmap.Emiter.Implements.CSharp
 {
@@ -26,7 +28,7 @@ namespace sdmap.Emiter.Implements.CSharp
             _define = define;
         }
 
-        public Result StartVisit([NotNull] SdmapParser.RootContext context)
+        public Result StartVisit([NotNull] RootContext context)
         {
             if (context.ChildCount == 0)
             {
@@ -35,7 +37,7 @@ namespace sdmap.Emiter.Implements.CSharp
             return Visit(context);
         }
 
-        public override Result VisitRoot([NotNull] SdmapParser.RootContext context)
+        public override Result VisitRoot([NotNull] RootContext context)
         {
             foreach (var usingItem in _define.CommonUsings())
             {
@@ -46,7 +48,7 @@ namespace sdmap.Emiter.Implements.CSharp
             return result;
         }
 
-        public override Result VisitNamespace([NotNull] SdmapParser.NamespaceContext context)
+        public override Result VisitNamespace([NotNull] NamespaceContext context)
         {
             _writer.WriteLine();
             _writer.WriteIndent();                       // _  
@@ -64,7 +66,7 @@ namespace sdmap.Emiter.Implements.CSharp
             return result;
         }
 
-        public override Result VisitNamedSql([NotNull] SdmapParser.NamedSqlContext context)
+        public override Result VisitNamedSql([NotNull] NamedSqlContext context)
         {
             _writer.WriteLine();
             _writer.WriteIndent();                         // _
@@ -97,9 +99,18 @@ namespace sdmap.Emiter.Implements.CSharp
             Result MethodGeneration()
             {
                 _writer.WriteIndentLine("var sb = new StringBuilder();");
+                var r = base.VisitNamedSql(context);
                 _writer.WriteIndentLine("return sb;");
-                return Result.Ok();
+                return r;
             }
+        }
+
+        public override Result VisitPlainText([NotNull] PlainTextContext context)
+        {
+            var sqlText = SqlTextUtil.Parse(context.GetToken(SQLText, 0).GetText());
+            var csharpText = SqlTextUtil.ToCSharpString(sqlText);
+            _writer.WriteIndentLine($"sb.Append({csharpText});");
+            return Result.Ok();
         }
 
         protected override Result AggregateResult(Result aggregate, Result nextResult)

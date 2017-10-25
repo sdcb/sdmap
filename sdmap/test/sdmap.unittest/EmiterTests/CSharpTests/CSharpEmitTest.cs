@@ -29,12 +29,12 @@ namespace sdmap.unittest.EmiterTests.CSharpTests
 
             Assert.True(result.IsSuccess);
 
-            var expected = @"
+            var expected = PreUsings + @"
 namespace id
 {
 }
 ";
-            Assert.Equal(PreUsings + expected, result.Value);
+            Assert.Equal(expected, result.Value);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace id
             var result = GetEmitText(source);
 
             Assert.True(result.IsSuccess);
-            var expected = @"
+            var expected = PreUsings + @"
 internal class id
 {
     internal Result<string> BuildText()
@@ -54,7 +54,28 @@ internal class id
     }
 }
 ";
-            Assert.Equal(PreUsings + expected, result.Value);
+            Assert.Equal(expected, result.Value);
+        }
+
+        [Fact]
+        public void PlainTextTest()
+        {
+            var source = "sql id{Hello World}";
+            var result = GetEmitText(source);
+
+            Assert.True(result.IsSuccess);
+            var expected = PreUsings + @"
+internal class id
+{
+    internal Result<string> BuildText()
+    {
+        var sb = new StringBuilder();
+        sb.Append(@""Hello World"");
+        return sb;
+    }
+}
+";
+            Assert.Equal(expected, result.Value);
         }
 
         private readonly string PreUsings = string.Join("", new CSharpDefine().CommonUsings()
