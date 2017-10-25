@@ -42,6 +42,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Emiter\Implements\Common\CodeEmiterConfig.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Antlr4.Runtime" Version="4.6.4" />
     <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.4">
       <PrivateAssets>All</PrivateAssets>
