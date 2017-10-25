@@ -287,26 +287,11 @@ namespace sdmap.Parser.Visitor
 
         protected override Result AggregateResult(Result aggregate, Result nextResult)
         {
-            if (aggregate == null && nextResult != null)
+            return Result.Combine(new[]
             {
-                return nextResult;
-            }
-            if (aggregate != null && nextResult == null)
-            {
-                return aggregate;
-            }
-            else if (aggregate != null && nextResult != null)
-            {
-                if (aggregate.IsFailure)
-                    return aggregate;
-                if (nextResult.IsFailure)
-                    return nextResult;
-                return nextResult;
-            }
-            else
-            {
-                throw new ArgumentNullException();
-            }
+                aggregate, 
+                nextResult
+            });
         }
         
 

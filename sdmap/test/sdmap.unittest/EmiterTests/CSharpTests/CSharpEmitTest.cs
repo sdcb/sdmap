@@ -37,6 +37,26 @@ namespace id
             Assert.Equal(PreUsings + expected, result.Value);
         }
 
+        [Fact]
+        public void EmptySqlIdTest()
+        {
+            var source = "sql id{}";
+            var result = GetEmitText(source);
+
+            Assert.True(result.IsSuccess);
+            var expected = @"
+internal class id
+{
+    internal Result<string> BuildText()
+    {
+        var sb = new StringBuilder();
+        return sb;
+    }
+}
+";
+            Assert.Equal(PreUsings + expected, result.Value);
+        }
+
         private readonly string PreUsings = string.Join("", new CSharpDefine().CommonUsings()
                 .Select(x => $"using {x};\r\n"));
 

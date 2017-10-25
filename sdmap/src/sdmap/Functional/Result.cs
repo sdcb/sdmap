@@ -44,7 +44,7 @@ namespace sdmap.Functional
 
         public static Result Combine(IEnumerable<Result> results)
         {
-            foreach (Result result in results)
+            foreach (Result result in results.Where(x => x != null))
             {
                 if (result.IsFailure)
                     return result;

@@ -10,7 +10,9 @@ namespace sdmap.Emiter.Implements.CSharp
         {
             return new []
             {
-                "System"
+                "System",
+                "System.Text",      // for StringBuilder
+                "sdmap.Functional", // for Result<T>
             };
         }
     }

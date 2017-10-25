@@ -51,17 +51,64 @@ namespace sdmap.Emiter.Implements.CSharp
             _writer.WriteLine();
             _writer.WriteIndent();                       // _  
             _writer.Write("namespace ");                 // _ namespace
-            _writer.Write(context.nsSyntax().GetText()); // _ namespace id
-            _writer.WriteLine();                         // _ namespace id <CRLF>
+            _writer.Write(context.nsSyntax().GetText()); // _ namespace {id}
+            _writer.WriteLine();                         // _ namespace {id} <CRLF>
             _writer.WriteIndent();                       // _
             _writer.WriteLine("{");                      // _ { <CRLF>
 
-            //var result = base.VisitNamespace(context);
+            var result = base.VisitNamespace(context);
 
             _writer.WriteIndent();                       // _
             _writer.WriteLine("}");                      // _ }
 
-            return Result.Ok();
+            return result;
+        }
+
+        public override Result VisitNamedSql([NotNull] SdmapParser.NamedSqlContext context)
+        {
+            _writer.WriteLine();
+            _writer.WriteIndent();                         // _
+            _writer.Write(_config.AccessModifier);         // _ internal
+            _writer.Write(" class ");                      // _ internal class
+            _writer.WriteLine(context.SYNTAX().GetText()); // _ internal class {id} <CRLF>
+            _writer.WriteIndentLine("{");                  // _ { <CRLF>
+
+            _writer.PushIndent();
+            var result = ClassGeneration();
+            _writer.PopIndent();
+
+            _writer.WriteIndentLine("}");                  // _ } <CRLF>
+            return result;
+
+            Result ClassGeneration()
+            {
+                _writer.WriteIndentLine(      // _ internal res B()
+                    $"{_config.AccessModifier} Result<string> BuildText()");
+                _writer.WriteIndentLine("{"); // _ {
+
+                _writer.PushIndent();
+                var r = MethodGeneration();
+                _writer.PopIndent();
+
+                _writer.WriteIndentLine("}"); // _ }
+                return r;
+            }
+
+            Result MethodGeneration()
+            {
+                _writer.WriteIndentLine("var sb = new StringBuilder();");
+                _writer.WriteIndentLine("return sb;");
+                return Result.Ok();
+            }
+        }
+
+        protected override Result AggregateResult(Result aggregate, Result nextResult)
+        {
+            return Result.Combine(new[]
+            {
+                aggregate,
+                nextResult
+            });
         }
     }
 }

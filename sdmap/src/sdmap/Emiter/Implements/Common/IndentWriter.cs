@@ -24,6 +24,12 @@ namespace sdmap.Emiter.Implements.Common
             _writer.WriteLine(text);
         }
 
+        public void WriteIndentLine(string text)
+        {
+            WriteIndent();
+            WriteLine(text);
+        }
+
         public void WriteLine()
         {
             _writer.WriteLine();
