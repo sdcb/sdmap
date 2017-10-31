@@ -46,6 +46,7 @@ namespace id
             Assert.True(result.IsSuccess);
             var expected = PreUsings + @"
 internal class id
+    : ISdmapEmiter
 {
     internal Result<string> BuildText()
     {
@@ -66,6 +67,7 @@ internal class id
             Assert.True(result.IsSuccess);
             var expected = PreUsings + @"
 internal class id
+    : ISdmapEmiter
 {
     internal Result<string> BuildText()
     {

@@ -51,49 +51,36 @@ namespace sdmap.Emiter.Implements.CSharp
         public override Result VisitNamespace([NotNull] NamespaceContext context)
         {
             _writer.WriteLine();
-            _writer.WriteIndent();                       // _  
-            _writer.Write("namespace ");                 // _ namespace
-            _writer.Write(context.nsSyntax().GetText()); // _ namespace {id}
-            _writer.WriteLine();                         // _ namespace {id} <CRLF>
-            _writer.WriteIndent();                       // _
-            _writer.WriteLine("{");                      // _ { <CRLF>
-
-            var result = base.VisitNamespace(context);
-
-            _writer.WriteIndent();                       // _
-            _writer.WriteLine("}");                      // _ }
-
-            return result;
+            _writer.WriteIndentLine(                     // _ namespace {id} <CRLF>
+                $"namespace {context.nsSyntax().GetText()}");
+            return _writer.UsingIndent("{", "}", () =>
+            {
+                return base.VisitNamespace(context);
+            });
         }
 
         public override Result VisitNamedSql([NotNull] NamedSqlContext context)
         {
             _writer.WriteLine();
-            _writer.WriteIndent();                         // _
-            _writer.Write(_config.AccessModifier);         // _ internal
-            _writer.Write(" class ");                      // _ internal class
-            _writer.WriteLine(context.SYNTAX().GetText()); // _ internal class {id} <CRLF>
-            _writer.WriteIndentLine("{");                  // _ { <CRLF>
-
-            _writer.PushIndent();
-            var result = ClassGeneration();
-            _writer.PopIndent();
-
-            _writer.WriteIndentLine("}");                  // _ } <CRLF>
-            return result;
+            _writer.WriteIndentLine(
+                $"{_config.AccessModifier} class {context.SYNTAX().GetText()}");
+            _writer.PushIndent();                          // _ internal class {id} <CRLF>
+            _writer.WriteIndentLine($": {nameof(ISdmapEmiter)}");
+            _writer.PopIndent();                           // _ _ : IBase
+            return _writer.UsingIndent("{", "}", () =>
+            {
+                return ClassGeneration();
+            });
+            
 
             Result ClassGeneration()
             {
                 _writer.WriteIndentLine(      // _ internal res B()
                     $"{_config.AccessModifier} Result<string> BuildText()");
-                _writer.WriteIndentLine("{"); // _ {
-
-                _writer.PushIndent();
-                var r = MethodGeneration();
-                _writer.PopIndent();
-
-                _writer.WriteIndentLine("}"); // _ }
-                return r;
+                return _writer.UsingIndent("{", "}", () =>
+                {
+                    return MethodGeneration();
+                });
             }
 
             Result MethodGeneration()
@@ -111,6 +98,15 @@ namespace sdmap.Emiter.Implements.CSharp
             var csharpText = SqlTextUtil.ToCSharpString(sqlText);
             _writer.WriteIndentLine($"sb.Append({csharpText});");
             return Result.Ok();
+        }
+
+        public override Result VisitMacro([NotNull] MacroContext context)
+        {
+            var parameterCtxs = context.macroParameter();
+            return _writer.UsingIndent<Result>("{", "}", () =>
+            {
+                throw new NotImplementedException();
+            });
         }
 
         protected override Result AggregateResult(Result aggregate, Result nextResult)

@@ -30,6 +30,16 @@ namespace sdmap.Emiter.Implements.Common
             WriteLine(text);
         }
 
+        public T UsingIndent<T>(string start, string end, Func<T> body)
+        {
+            WriteIndentLine(start);
+            PushIndent();
+            var result = body();
+            PopIndent();
+            WriteIndentLine(end);
+            return result;
+        }
+
         public void WriteLine()
         {
             _writer.WriteLine();
