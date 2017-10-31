@@ -13,6 +13,7 @@ namespace sdmap.Emiter.Implements.CSharp
                 "System",
                 "System.Text",      // for StringBuilder
                 "sdmap.Functional", // for Result<T>
+                "sdmap.Emiter",     // for ISdmapEmiter
             };
         }
     }
