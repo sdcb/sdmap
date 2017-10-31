@@ -17,6 +17,8 @@ namespace sdmap.Emiter.Implements.CSharp
         private readonly CodeEmiterConfig _config;
         private readonly CSharpDefine _define;
         private readonly IndentWriter _writer;
+        private readonly Dictionary<string, Func<IndentWriter, Result>> _unnamedSqls =
+            new Dictionary<string, Func<IndentWriter, Result>>();
 
         internal CSharpCodeVisitor(
             TextWriter writer,
@@ -41,7 +43,7 @@ namespace sdmap.Emiter.Implements.CSharp
         {
             foreach (var usingItem in _define.CommonUsings())
             {
-                _writer.WriteLine($"using {usingItem};");
+                _writer.WriteIndentLine($"using {usingItem};");
             }
             var result = base.VisitRoot(context);
             _writer.Flush();
@@ -64,14 +66,15 @@ namespace sdmap.Emiter.Implements.CSharp
             _writer.WriteLine();
             _writer.WriteIndentLine(
                 $"{_config.AccessModifier} class {context.SYNTAX().GetText()}");
-            _writer.PushIndent();                          // _ internal class {id} <CRLF>
-            _writer.WriteIndentLine($": {nameof(ISdmapEmiter)}");
-            _writer.PopIndent();                           // _ _ : IBase
+            _writer.UsingIndent(() =>
+            {                                              // _ internal class {id} <CRLF>
+                _writer.WriteIndentLine($": {nameof(ISdmapEmiter)}");
+            });                                            // _ _ : IBase
             return _writer.UsingIndent("{", "}", () =>
             {
                 return ClassGeneration();
             });
-            
+
 
             Result ClassGeneration()
             {
@@ -87,7 +90,7 @@ namespace sdmap.Emiter.Implements.CSharp
             {
                 _writer.WriteIndentLine("var sb = new StringBuilder();");
                 var r = base.VisitNamedSql(context);
-                _writer.WriteIndentLine("return sb;");
+                _writer.WriteIndentLine("return Result.Ok(sb.ToString());");
                 return r;
             }
         }
@@ -102,10 +105,83 @@ namespace sdmap.Emiter.Implements.CSharp
 
         public override Result VisitMacro([NotNull] MacroContext context)
         {
-            var parameterCtxs = context.macroParameter();
-            return _writer.UsingIndent<Result>("{", "}", () =>
+            return _writer.UsingIndent("{", "}", () =>
             {
-                throw new NotImplementedException();
+                _writer.WriteIndentLine($"var result = {context.SYNTAX()}(");
+                _writer.UsingIndent(() =>
+                {
+                    var parameterCtxs = context.macroParameter();
+                    for (var i = 0; i < parameterCtxs.Length; ++i)
+                    {
+                        var parameter = parameterCtxs[i];
+
+                        if (parameter.nsSyntax() != null)
+                        {
+                            _writer.WriteIndent(
+                                SqlTextUtil.ToCSharpString(parameter.nsSyntax().GetText()));
+                        }
+                        else if (parameter.STRING() != null)
+                        {
+                            var result = StringUtil.Parse(parameter.STRING().GetText());
+                            if (result.IsFailure) return result;
+
+                            _writer.WriteIndent(SqlTextUtil.ToCSharpString(result.Value));
+                        }
+                        else if (parameter.NUMBER() != null)
+                        {
+                            // sdmap number are compatible with C# double
+                            _writer.WriteIndent(parameter.NUMBER().GetText());
+                        }
+                        else if (parameter.DATE() != null)
+                        {
+                            var result = DateUtil.Parse(parameter.DATE().GetText());
+                            if (result.IsFailure) return result;
+                            var date = result.Value;
+                            _writer.WriteIndent(
+                                $"new DateTime({date.Year}, {date.Month}, {date.Day})");
+                        }
+                        else if (parameter.Bool() != null)
+                        {
+                            // sdmap bool are compatible with C# bool
+                            _writer.WriteIndent(parameter.Bool().GetText());
+                        }
+                        else if (parameter.unnamedSql() != null)
+                        {
+                            var parseTree = parameter.unnamedSql();
+                            var id = NameUtil.GetFunctionName(parseTree);
+                            if (!_unnamedSqls.ContainsKey(id))
+                            {
+                                _unnamedSqls[id] = (writer) =>
+                                {
+
+                                    return Result.Ok();
+                                };
+                            }
+                            _writer.WriteIndent($"{id}()");
+                        }
+
+                        // every parameter should follow by a "," separator, 
+                        // except last parameter.
+                        if (i < parameterCtxs.Length - 1)
+                        {
+                            _writer.WriteLine(", ");
+                        }
+                    }
+                    _writer.WriteIndentLine(");");
+                    return Result.Ok();
+                });
+                _writer.WriteIndentLine($"if (result.{nameof(Result.IsSuccess)})");
+                _writer.UsingIndent("{", "}", () =>
+                {
+                    _writer.WriteIndentLine(
+                        $"sb.Append(result.{nameof(Result<int>.Value)});");
+                });
+                _writer.WriteIndentLine("else");
+                _writer.UsingIndent("{", "}", () =>
+                {
+                    _writer.WriteIndentLine("return result;");
+                });
+                return Result.Ok();
             });
         }
 

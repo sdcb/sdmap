@@ -40,6 +40,30 @@ namespace sdmap.Emiter.Implements.Common
             return result;
         }
 
+        public void UsingIndent(string start, string end, Action body)
+        {
+            WriteIndentLine(start);
+            PushIndent();
+            body();
+            PopIndent();
+            WriteIndentLine(end);
+        }
+
+        public void UsingIndent(Action body)
+        {
+            PushIndent();
+            body();
+            PopIndent();
+        }
+
+        public T UsingIndent<T>(Func<T> body)
+        {
+            PushIndent();
+            var result = body();
+            PopIndent();
+            return result;
+        }
+
         public void WriteLine()
         {
             _writer.WriteLine();
@@ -65,6 +89,12 @@ namespace sdmap.Emiter.Implements.Common
         public void WriteIndent()
         {
             _writer.Write(new string(' ', _indent * 4));
+        }
+
+        public void WriteIndent(string text)
+        {
+            WriteIndent();
+            Write(text);
         }
     }
 }

@@ -51,7 +51,7 @@ internal class id
     internal Result<string> BuildText()
     {
         var sb = new StringBuilder();
-        return sb;
+        return Result.Ok(sb.ToString());
     }
 }
 ";
@@ -73,7 +73,7 @@ internal class id
     {
         var sb = new StringBuilder();
         sb.Append(@""Hello World"");
-        return sb;
+        return Result.Ok(sb.ToString());
     }
 }
 ";
