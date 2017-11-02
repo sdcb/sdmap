@@ -13,7 +13,7 @@ namespace sdmap.Utils
     {
         public static bool PropertyExistsAndEvalToTrue(object obj, string propName)
         {
-            var val = CommonMacros.GetPropValue(obj, propName);
+            var val = DynamicRuntimeMacros.GetPropValue(obj, propName);
             if (val is bool) return (bool)val;
             if (val is bool?) return ((bool?)val).GetValueOrDefault();
 
@@ -22,7 +22,7 @@ namespace sdmap.Utils
 
         public static object LoadProp(object obj, string propName)
         {
-            return CommonMacros.GetPropValue(obj, propName);
+            return DynamicRuntimeMacros.GetPropValue(obj, propName);
         }
 
         public static Result<string> ExecuteEmiter(EmitFunction ef, SdmapCompilerContext ctx, object obj)
@@ -34,7 +34,7 @@ namespace sdmap.Utils
         {
             if (obj == null) return true;
             if (obj is string) return string.IsNullOrEmpty((string)obj);
-            if (obj is IEnumerable) return CommonMacros.ArrayEmpty(obj);
+            if (obj is IEnumerable) return DynamicRuntimeMacros.ArrayEmpty(obj);
             return false;
         }
     }

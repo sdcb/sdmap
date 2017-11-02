@@ -136,8 +136,8 @@ namespace sdmap.Parser.Visitor
             {
                 _il.Emit(OpCodes.Ldarg_1);
                 _il.Emit(OpCodes.Ldstr, exp.GetText());
-                _il.Emit(OpCodes.Call, typeof(CommonMacros).GetTypeInfo()
-                    .GetMethod(nameof(CommonMacros.GetPropValue)));
+                _il.Emit(OpCodes.Call, typeof(DynamicRuntimeMacros).GetTypeInfo()
+                    .GetMethod(nameof(DynamicRuntimeMacros.GetPropValue)));
             }
 
             switch (syntax)

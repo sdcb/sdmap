@@ -14,7 +14,7 @@ namespace sdmap.unittest.MacroImplTest
         public void HelloWorld()
         {
             var val = "Hello World";
-            var actual = CommonMacros.Val(SdmapCompilerContext.CreateEmpty(), "", val, null);
+            var actual = DynamicRuntimeMacros.Val(SdmapCompilerContext.CreateEmpty(), "", val, null);
             Assert.True(actual.IsSuccess);
             Assert.Equal(val, actual.Value);
         }
@@ -23,7 +23,7 @@ namespace sdmap.unittest.MacroImplTest
         public void InputNullWillBeEmpty()
         {
             string val = null;
-            var actual = CommonMacros.Val(SdmapCompilerContext.CreateEmpty(), "", val, null);
+            var actual = DynamicRuntimeMacros.Val(SdmapCompilerContext.CreateEmpty(), "", val, null);
             Assert.True(actual.IsSuccess);
             Assert.Equal(string.Empty, actual.Value);
         }

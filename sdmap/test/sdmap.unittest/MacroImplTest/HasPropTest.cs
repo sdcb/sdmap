@@ -36,7 +36,7 @@ namespace sdmap.unittest.MacroImplTest
 
         private Result<string> CallHasProp(object self, string prop, string result)
         {
-            return CommonMacros.HasProp(SdmapCompilerContext.CreateEmpty(), "", self, new[] { prop, result });
+            return DynamicRuntimeMacros.HasProp(SdmapCompilerContext.CreateEmpty(), "", self, new[] { prop, result });
         }        
     }
 
@@ -67,7 +67,7 @@ namespace sdmap.unittest.MacroImplTest
 
         private Result<string> CallHasNoProp(object self, string prop, string result)
         {
-            return CommonMacros.HasNoProp(SdmapCompilerContext.CreateEmpty(), "", self, new[] { prop, result });
+            return DynamicRuntimeMacros.HasNoProp(SdmapCompilerContext.CreateEmpty(), "", self, new[] { prop, result });
         }
     }
 }

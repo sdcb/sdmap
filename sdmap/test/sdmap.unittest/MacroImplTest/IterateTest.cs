@@ -55,27 +55,27 @@ namespace sdmap.unittest.MacroImplTest
 
         private Result<string> CallIterate(object self, string joiner, EmitFunction ef)
         {
-            return CommonMacros.Iterate(SdmapCompilerContext.CreateEmpty(), 
+            return DynamicRuntimeMacros.Iterate(SdmapCompilerContext.CreateEmpty(), 
                 "", self, new object[] { joiner, ef });
         }
 
         private Result<string> CallIterate(object self, string joiner, string text)
         {
-            return CommonMacros.Iterate(SdmapCompilerContext.CreateEmpty(),
+            return DynamicRuntimeMacros.Iterate(SdmapCompilerContext.CreateEmpty(),
                 "", self, new object[] { joiner, text });
         }
 
         private Result<string> CallEach(object self, 
             string prop, string joiner, EmitFunction ef)
         {
-            return CommonMacros.Each(SdmapCompilerContext.CreateEmpty(),
+            return DynamicRuntimeMacros.Each(SdmapCompilerContext.CreateEmpty(),
                 "", self, new object[] { prop, joiner, ef });
         }
 
         private Result<string> CallEach(object self, 
             string prop, string joiner, string text)
         {
-            return CommonMacros.Each(SdmapCompilerContext.CreateEmpty(),
+            return DynamicRuntimeMacros.Each(SdmapCompilerContext.CreateEmpty(),
                 "", self, new object[] { prop, joiner, text });
         }
     }

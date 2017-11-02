@@ -50,6 +50,7 @@
     <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.4">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

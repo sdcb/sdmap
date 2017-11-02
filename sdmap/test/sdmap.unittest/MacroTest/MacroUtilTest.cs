@@ -14,7 +14,7 @@ namespace sdmap.unittest.MacroTest
         public void GetSimplePropOk()
         {
             var val = new { A = 3 };
-            var prop = CommonMacros.GetProp(val, "A");
+            var prop = DynamicRuntimeMacros.GetProp(val, "A");
             Assert.NotNull(prop);
         }
 
@@ -22,7 +22,7 @@ namespace sdmap.unittest.MacroTest
         public void GetNestedPropOk()
         {
             var val = new { A = new { A = 3 } };
-            var prop = CommonMacros.GetProp(val, "A.A");
+            var prop = DynamicRuntimeMacros.GetProp(val, "A.A");
             Assert.NotNull(prop);
         }
 
@@ -30,7 +30,7 @@ namespace sdmap.unittest.MacroTest
         public void GetNotExistPropWillReturnNull()
         {
             var val = new { A = 3 };
-            var prop = CommonMacros.GetProp(val, "A.A");
+            var prop = DynamicRuntimeMacros.GetProp(val, "A.A");
             Assert.Null(prop);
         }
 
@@ -38,14 +38,14 @@ namespace sdmap.unittest.MacroTest
         public void GetNotExistPropWillNotThrow()
         {
             var val = new { A = 3 };
-            var prop = CommonMacros.GetProp(val, "B.C.D");
+            var prop = DynamicRuntimeMacros.GetProp(val, "B.C.D");
         }
 
         [Fact]
         public void CanGetNextedObjectValue()
         {
             var val = new { A = new { B = 4 } };
-            var getted = CommonMacros.GetPropValue(val, "A.B");
+            var getted = DynamicRuntimeMacros.GetPropValue(val, "A.B");
             Assert.Equal(4, getted);
         }
 
@@ -53,33 +53,33 @@ namespace sdmap.unittest.MacroTest
         public void CanDetectEmptyArray()
         {
             var arr = Enumerable.Range(1, 0);
-            Assert.True(CommonMacros.ArrayEmpty(arr));
+            Assert.True(DynamicRuntimeMacros.ArrayEmpty(arr));
         }
 
         [Fact]
         public void CanDetectNotEmptyArray()
         {
             var arr = Enumerable.Range(1, 10);
-            Assert.False(CommonMacros.ArrayEmpty(arr));
+            Assert.False(DynamicRuntimeMacros.ArrayEmpty(arr));
         }
 
         [Fact]
         public void BoolEqualBool()
         {
-            Assert.True(CommonMacros.IsEqual(true, true));
+            Assert.True(DynamicRuntimeMacros.IsEqual(true, true));
         }
 
         [Fact]
         public void NumberEqualsNumber()
         {
-            Assert.True(CommonMacros.IsEqual(3.14m, 3.14));
+            Assert.True(DynamicRuntimeMacros.IsEqual(3.14m, 3.14));
         }
 
         [Fact]
         public void DateEqualsDate()
         {
             var date = new DateTime(2016, 1, 1);
-            Assert.True(CommonMacros.IsEqual(date, DateUtil.Parse("2016/1/1").Value));
+            Assert.True(DynamicRuntimeMacros.IsEqual(date, DateUtil.Parse("2016/1/1").Value));
         }
     }
 }
