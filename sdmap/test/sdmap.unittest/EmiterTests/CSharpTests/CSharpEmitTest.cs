@@ -48,7 +48,7 @@ namespace id
 internal class id
     : ISdmapEmiter
 {
-    internal Result<string> BuildText()
+    internal Result<string> BuildText(object self)
     {
         var sb = new StringBuilder();
         return Result.Ok(sb.ToString());
@@ -69,7 +69,7 @@ internal class id
 internal class id
     : ISdmapEmiter
 {
-    internal Result<string> BuildText()
+    internal Result<string> BuildText(object self)
     {
         var sb = new StringBuilder();
         sb.Append(@""Hello World"");

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using sdmap.Macros.Implements;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -17,5 +18,7 @@ namespace sdmap.Emiter.Implements.CSharp
         {
             return GetEmiterImplement(typeof(T));
         }
+
+        public static RuntimeMacros RuntimeMacros { get; set; } = new RuntimeMacros();
     }
 }

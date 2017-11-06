@@ -79,10 +79,12 @@ namespace sdmap.Emiter.Implements.CSharp
             Result ClassGeneration()
             {
                 _writer.WriteIndentLine(      // _ internal res B()
-                    $"{_config.AccessModifier} Result<string> BuildText()");
+                    $"{_config.AccessModifier} Result<string> BuildText(object self)");
                 return _writer.UsingIndent("{", "}", () =>
                 {
-                    return MethodGeneration();
+                    return Result.Combine(
+                        MethodGeneration(), 
+                        UnnamedSqlGeneration());
                 });
             }
 
@@ -92,6 +94,21 @@ namespace sdmap.Emiter.Implements.CSharp
                 var r = base.VisitNamedSql(context);
                 _writer.WriteIndentLine("return Result.Ok(sb.ToString());");
                 return r;
+            }
+
+            Result UnnamedSqlGeneration()
+            {
+                foreach (var unnamed in _unnamedSqls)
+                {
+                    _writer.WriteLine();
+                    _writer.WriteIndentLine($"private Result<string> {unnamed.Key}(object self)");
+                    var ok = _writer.UsingIndent("{", "}", () =>
+                    {
+                        return unnamed.Value(_writer);
+                    });
+                    if (ok.IsFailure) return ok;
+                }
+                return Result.Ok();
             }
         }
 
@@ -107,69 +124,19 @@ namespace sdmap.Emiter.Implements.CSharp
         {
             return _writer.UsingIndent("{", "}", () =>
             {
-                _writer.WriteIndentLine($"var result = {context.SYNTAX()}(");
-                _writer.UsingIndent(() =>
+                var id = context.SYNTAX().GetText();
+                if (id == "include")
                 {
-                    var parameterCtxs = context.macroParameter();
-                    for (var i = 0; i < parameterCtxs.Length; ++i)
-                    {
-                        var parameter = parameterCtxs[i];
+                    _writer.WriteIndentLine($"var emiter = EmiterProvider.GetEmiter<{id}>();");
+                    _writer.WriteIndentLine($"var result = emiter.{nameof(ISdmapEmiter.BuildText)}(self);");
+                }
+                else
+                {
+                    _writer.WriteIndentLine($"var result = EmiterProvider.{context.SYNTAX()}(");
+                    _writer.UsingIndent(() =>
+                        WriteMacroParameters(context.macroParameter()));
+                }
 
-                        if (parameter.nsSyntax() != null)
-                        {
-                            _writer.WriteIndent(
-                                SqlTextUtil.ToCSharpString(parameter.nsSyntax().GetText()));
-                        }
-                        else if (parameter.STRING() != null)
-                        {
-                            var result = StringUtil.Parse(parameter.STRING().GetText());
-                            if (result.IsFailure) return result;
-
-                            _writer.WriteIndent(SqlTextUtil.ToCSharpString(result.Value));
-                        }
-                        else if (parameter.NUMBER() != null)
-                        {
-                            // sdmap number are compatible with C# double
-                            _writer.WriteIndent(parameter.NUMBER().GetText());
-                        }
-                        else if (parameter.DATE() != null)
-                        {
-                            var result = DateUtil.Parse(parameter.DATE().GetText());
-                            if (result.IsFailure) return result;
-                            var date = result.Value;
-                            _writer.WriteIndent(
-                                $"new DateTime({date.Year}, {date.Month}, {date.Day})");
-                        }
-                        else if (parameter.Bool() != null)
-                        {
-                            // sdmap bool are compatible with C# bool
-                            _writer.WriteIndent(parameter.Bool().GetText());
-                        }
-                        else if (parameter.unnamedSql() != null)
-                        {
-                            var parseTree = parameter.unnamedSql();
-                            var id = NameUtil.GetFunctionName(parseTree);
-                            if (!_unnamedSqls.ContainsKey(id))
-                            {
-                                _unnamedSqls[id] = (writer) =>
-                                {
-
-                                    return Result.Ok();
-                                };
-                            }
-                            _writer.WriteIndent($"{id}()");
-                        }
-
-                        // every parameter should follow by a "," separator, 
-                        // except last parameter.
-                        if (i < parameterCtxs.Length - 1)
-                        {
-                            _writer.WriteLine(", ");
-                        }
-                    }
-                    _writer.WriteIndentLine(");");
-                    return Result.Ok();
-                });
                 _writer.WriteIndentLine($"if (result.{nameof(Result.IsSuccess)})");
                 _writer.UsingIndent("{", "}", () =>
                 {
@@ -183,6 +150,67 @@ namespace sdmap.Emiter.Implements.CSharp
                 });
                 return Result.Ok();
             });
+        }
+
+        private Result WriteMacroParameters(MacroParameterContext[] parameterCtxs)
+        {
+            for (var i = 0; i < parameterCtxs.Length; ++i)
+            {
+                var parameter = parameterCtxs[i];
+
+                if (parameter.nsSyntax() != null)
+                {
+                    _writer.WriteIndent(
+                        SqlTextUtil.ToCSharpString(parameter.nsSyntax().GetText()));
+                }
+                else if (parameter.STRING() != null)
+                {
+                    var result = StringUtil.Parse(parameter.STRING().GetText());
+                    if (result.IsFailure) return result;
+
+                    _writer.WriteIndent(SqlTextUtil.ToCSharpString(result.Value));
+                }
+                else if (parameter.NUMBER() != null)
+                {
+                    // sdmap number are compatible with C# double
+                    _writer.WriteIndent(parameter.NUMBER().GetText());
+                }
+                else if (parameter.DATE() != null)
+                {
+                    var result = DateUtil.Parse(parameter.DATE().GetText());
+                    if (result.IsFailure) return result;
+                    var date = result.Value;
+                    _writer.WriteIndent(
+                        $"new DateTime({date.Year}, {date.Month}, {date.Day})");
+                }
+                else if (parameter.Bool() != null)
+                {
+                    // sdmap bool are compatible with C# bool
+                    _writer.WriteIndent(parameter.Bool().GetText());
+                }
+                else if (parameter.unnamedSql() != null)
+                {
+                    var parseTree = parameter.unnamedSql();
+                    var id = NameUtil.GetFunctionName(parseTree);
+                    if (!_unnamedSqls.ContainsKey(id))
+                    {
+                        _unnamedSqls[id] = (writer) =>
+                        {
+                            return Visit(parseTree.coreSql());
+                        };
+                    }
+                    _writer.WriteIndent($"{id}()");
+                }
+
+                // every parameter should follow by a "," separator, 
+                // except last parameter.
+                if (i < parameterCtxs.Length - 1)
+                {
+                    _writer.WriteLine(", ");
+                }
+            }
+            _writer.WriteIndentLine(");");
+            return Result.Ok();
         }
 
         protected override Result AggregateResult(Result aggregate, Result nextResult)

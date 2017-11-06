@@ -52,6 +52,11 @@ namespace sdmap.Functional
 
             return Ok();
         }
+
+        public static Result Combine(params Result[] results)
+        {
+            return Combine((IEnumerable<Result>)results);
+        }
     }
 
 

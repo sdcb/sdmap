@@ -418,53 +418,17 @@ namespace sdmap.Macros.Implements
 
         public static object GetPropValue(object self, object syntax)
         {
-            if (self is IDictionary dicSelf)
-            {
-                return dicSelf[syntax];
-            }
-            else
-            {
-                var props = (syntax as string).Split('.');
-                return props.Aggregate(self, (s, p) =>
-                    s?.GetType().GetTypeInfo().GetProperty(p)?.GetValue(s));
-            }
+            return RuntimeMacros.GetPropValue(self, (string)syntax);
         }
 
-        public static bool ArrayEmpty(object arr)
+        public static bool IsEqual(object v1, object v2)
         {
-            return !((IEnumerable)arr).GetEnumerator().MoveNext();
-        }
-
-        public static bool IsEqual(object val1, object val2)
-        {            
-            if (val2 is string)
-            {
-                return (val2 as string).Equals(val1);
-            }
-            else if (val2 is bool)
-            {
-                return (val2 as bool?).Equals(val1);
-            }
-            else if (val2 is double)
-            {
-                return Convert.ToDecimal(val2).Equals(val1);
-            }
-            else if (val2 is DateTime)
-            {
-                return (val2 as DateTime?).Equals(val1);
-            }
-            return false;
+            return RuntimeMacros.IsEqual(v1, v2);
         }
 
         public static bool IsEmpty(object v)
         {
-            if (v == null)
-                return true;
-            if (v is string)
-                return string.IsNullOrWhiteSpace((string)v);
-            if (v is IEnumerable)
-                return ArrayEmpty(v);
-            return false;
+            return RuntimeMacros.IsEmpty(v);
         }
     }
 }

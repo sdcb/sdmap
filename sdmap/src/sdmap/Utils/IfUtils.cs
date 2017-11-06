@@ -21,21 +21,12 @@ namespace sdmap.Utils
         }
 
         public static object LoadProp(object obj, string propName)
-        {
-            return DynamicRuntimeMacros.GetPropValue(obj, propName);
-        }
+            => DynamicRuntimeMacros.GetPropValue(obj, propName);
 
         public static Result<string> ExecuteEmiter(EmitFunction ef, SdmapCompilerContext ctx, object obj)
-        {
-            return ef(ctx, obj);
-        }
+            => ef(ctx, obj);
 
         public static bool IsEmpty(object obj)
-        {
-            if (obj == null) return true;
-            if (obj is string) return string.IsNullOrEmpty((string)obj);
-            if (obj is IEnumerable) return DynamicRuntimeMacros.ArrayEmpty(obj);
-            return false;
-        }
+            => RuntimeMacros.IsEmpty(obj);
     }
 }

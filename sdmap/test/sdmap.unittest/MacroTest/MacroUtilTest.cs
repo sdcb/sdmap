@@ -53,14 +53,14 @@ namespace sdmap.unittest.MacroTest
         public void CanDetectEmptyArray()
         {
             var arr = Enumerable.Range(1, 0);
-            Assert.True(DynamicRuntimeMacros.ArrayEmpty(arr));
+            Assert.True(RuntimeMacros.ArrayEmpty(arr));
         }
 
         [Fact]
         public void CanDetectNotEmptyArray()
         {
             var arr = Enumerable.Range(1, 10);
-            Assert.False(DynamicRuntimeMacros.ArrayEmpty(arr));
+            Assert.False(RuntimeMacros.ArrayEmpty(arr));
         }
 
         [Fact]
@@ -72,7 +72,13 @@ namespace sdmap.unittest.MacroTest
         [Fact]
         public void NumberEqualsNumber()
         {
-            Assert.True(DynamicRuntimeMacros.IsEqual(3.14m, 3.14));
+            Assert.False(DynamicRuntimeMacros.IsEqual(3.14m, 3.14));
+        }
+
+        [Fact]
+        public void DecimalEqualToDecimal()
+        {
+            Assert.True(DynamicRuntimeMacros.IsEqual(3.14m, 3.14m));
         }
 
         [Fact]
