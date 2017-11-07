@@ -5,7 +5,7 @@ using System.Text;
 
 namespace sdmap.Emiter.Implements.CSharp
 {
-    public static class EmiterProvider
+    public static class RuntimeProviders
     {
         public static Func<Type, ISdmapEmiter> GetEmiterImplement = DefaultGetService;
 

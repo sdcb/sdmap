@@ -45,6 +45,7 @@ namespace sdmap.Emiter.Implements.CSharp
             {
                 _writer.WriteIndentLine($"using {usingItem};");
             }
+            _writer.WriteLine();
             var result = base.VisitRoot(context);
             _writer.Flush();
             return result;
@@ -52,7 +53,6 @@ namespace sdmap.Emiter.Implements.CSharp
 
         public override Result VisitNamespace([NotNull] NamespaceContext context)
         {
-            _writer.WriteLine();
             _writer.WriteIndentLine(                     // _ namespace {id} <CRLF>
                 $"namespace {context.nsSyntax().GetText()}");
             return _writer.UsingIndent("{", "}", () =>
@@ -63,7 +63,6 @@ namespace sdmap.Emiter.Implements.CSharp
 
         public override Result VisitNamedSql([NotNull] NamedSqlContext context)
         {
-            _writer.WriteLine();
             _writer.WriteIndentLine(
                 $"{_config.AccessModifier} class {context.SYNTAX().GetText()}");
             _writer.UsingIndent(() =>
@@ -127,14 +126,15 @@ namespace sdmap.Emiter.Implements.CSharp
                 var id = context.SYNTAX().GetText();
                 if (id == "include")
                 {
-                    _writer.WriteIndentLine($"var emiter = EmiterProvider.GetEmiter<{id}>();");
+                    var provider = $"{nameof(RuntimeProviders)}.{nameof(RuntimeProviders.GetEmiter)}";
+                    _writer.WriteIndentLine($"var emiter = {provider}<{id}>();");
                     _writer.WriteIndentLine($"var result = emiter.{nameof(ISdmapEmiter.BuildText)}(self);");
                 }
                 else
                 {
-                    _writer.WriteIndentLine($"var result = EmiterProvider.{context.SYNTAX()}(");
-                    _writer.UsingIndent(() =>
-                        WriteMacroParameters(context.macroParameter()));
+                    var provider = $"{nameof(RuntimeProviders)}.{nameof(RuntimeProviders.RuntimeMacros)}";
+                    _writer.WriteIndent($"var result = {provider}.{context.SYNTAX()}(");
+                    WriteMacroParameters(context.macroParameter());
                 }
 
                 _writer.WriteIndentLine($"if (result.{nameof(Result.IsSuccess)})");
@@ -160,7 +160,7 @@ namespace sdmap.Emiter.Implements.CSharp
 
                 if (parameter.nsSyntax() != null)
                 {
-                    _writer.WriteIndent(
+                    _writer.Write(
                         SqlTextUtil.ToCSharpString(parameter.nsSyntax().GetText()));
                 }
                 else if (parameter.STRING() != null)
@@ -168,25 +168,25 @@ namespace sdmap.Emiter.Implements.CSharp
                     var result = StringUtil.Parse(parameter.STRING().GetText());
                     if (result.IsFailure) return result;
 
-                    _writer.WriteIndent(SqlTextUtil.ToCSharpString(result.Value));
+                    _writer.Write(SqlTextUtil.ToCSharpString(result.Value));
                 }
                 else if (parameter.NUMBER() != null)
                 {
                     // sdmap number are compatible with C# double
-                    _writer.WriteIndent(parameter.NUMBER().GetText());
+                    _writer.Write(parameter.NUMBER().GetText());
                 }
                 else if (parameter.DATE() != null)
                 {
                     var result = DateUtil.Parse(parameter.DATE().GetText());
                     if (result.IsFailure) return result;
                     var date = result.Value;
-                    _writer.WriteIndent(
+                    _writer.Write(
                         $"new DateTime({date.Year}, {date.Month}, {date.Day})");
                 }
                 else if (parameter.Bool() != null)
                 {
                     // sdmap bool are compatible with C# bool
-                    _writer.WriteIndent(parameter.Bool().GetText());
+                    _writer.Write(parameter.Bool().GetText());
                 }
                 else if (parameter.unnamedSql() != null)
                 {
@@ -199,17 +199,17 @@ namespace sdmap.Emiter.Implements.CSharp
                             return Visit(parseTree.coreSql());
                         };
                     }
-                    _writer.WriteIndent($"{id}()");
+                    _writer.Write($"{id}()");
                 }
 
                 // every parameter should follow by a "," separator, 
                 // except last parameter.
                 if (i < parameterCtxs.Length - 1)
                 {
-                    _writer.WriteLine(", ");
+                    _writer.Write(", ");
                 }
             }
-            _writer.WriteIndentLine(");");
+            _writer.WriteLine(");");
             return Result.Ok();
         }
 
