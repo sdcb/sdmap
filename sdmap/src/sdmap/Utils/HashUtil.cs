@@ -14,7 +14,11 @@ namespace sdmap.Utils
             using (var sha256 = System.Security.Cryptography.SHA256.Create())
             {
                 var cipher = sha256.ComputeHash(bytes);
-                return Convert.ToBase64String(cipher);
+                return Convert
+                    .ToBase64String(cipher)
+                    .Replace("=", "")
+                    .Replace("+", "_")
+                    .Replace("/", "θ");
             }
         }
     }
