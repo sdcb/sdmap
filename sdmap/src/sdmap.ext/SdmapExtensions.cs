@@ -30,6 +30,11 @@ namespace sdmap.ext
             SetSqlEmiter(EmbeddedResourceSqlEmiter.CreateFrom(assembly));
         }
 
+        public static void SetEmbeddedSqlAssemblies(params Assembly[] assemblies)
+        {
+            SetSqlEmiter(MultipleAssemblyEmbeddedResourceSqlEmiter.CreateFrom(assemblies));
+        }
+
         public static void SetSqlEmiter(ISqlEmiter sqlEmiter)
         {
             SqlEmiter = sqlEmiter;
