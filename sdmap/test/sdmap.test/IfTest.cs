@@ -60,7 +60,7 @@ namespace sdmap.IntegratedTest
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", new
             {
-                A = true, 
+                A = true,
                 B = new[] { 1, 2, 3 }
             });
             Assert.Equal("Emit", result);
@@ -136,6 +136,20 @@ namespace sdmap.IntegratedTest
                 A = !flag
             });
             Assert.Equal("", result);
+        }
+
+        [Fact]
+        public void TwoIsEmptyWithOr()
+        {
+            var code = "sql v1{#if(!isEmpty(A) || !isEmpty(B))   {OK}}";
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode(code);
+            var result1 = rt.Emit("v1", new { A = "", B = "" });
+            var result2 = rt.Emit("v1", new { A = new int[0], B = "abc" });
+            var result3 = rt.Emit("v1", new { A = "b", B = "b" });
+            Assert.Equal("", result1);
+            Assert.Equal("OK", result2);
+            Assert.Equal("OK", result3);
         }
     }
 }

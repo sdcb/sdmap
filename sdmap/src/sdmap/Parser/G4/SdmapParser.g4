@@ -33,14 +33,14 @@ if:
 	CloseSql;
 
 boolExpression: 
+    OpNot boolExpression                                     #BoolOpNot     |
     SYNTAX OpenBrace nsSyntax? (Comma nsSyntax)* CloseBrace  #BoolFunc      |
 	Bool                                                     #BoolLeteral   |
 	OpenBrace boolExpression CloseBrace                      #BoolBrace     |
 	nsSyntax (Equal | NotEqual) Null                         #BoolNull      |
 	nsSyntax                                                 #BoolNsSyntax  |
 	boolExpression OpAnd boolExpression                      #BoolOpAnd     |
-	boolExpression OpOr  boolExpression                      #BoolOpOr      |
-	OpNot boolExpression                                     #BoolOpNot;
+	boolExpression OpOr  boolExpression                      #BoolOpOr;
 
 macro:
 	Hash SYNTAX OpenAngleBracket
