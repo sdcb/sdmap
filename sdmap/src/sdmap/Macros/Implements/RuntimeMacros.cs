@@ -188,23 +188,23 @@ namespace sdmap.Macros.Implements
 
         public static bool IsEqual(object v1, object v2)
         {
-            if (v2 is string str)
-                return str.Equals(v1);
+            if (v1 is string str)
+                return str.Equals((string)v2);
 
-            if (v2 is bool b)
-                return b.Equals(v1);
+            if (v1 is bool b)
+                return b.Equals((bool)v2);
 
-            if (v2 is int integer)
-                return integer.Equals(v1);
+            if (v1 is int integer)
+                return integer.Equals(Convert.ToInt32(v2));
 
-            if (v2 is double db)
-                return db.Equals(v1);
+            if (v1 is double db)
+                return db.Equals(Convert.ToDouble(v2));
 
-            if (v2 is DateTime date)
-                return date.Equals(v1);
+            if (v1 is decimal dm)
+                return dm.Equals(Convert.ToDecimal(v2));
 
-            if (v2 is decimal dec)
-                return dec.Equals(v1);
+            if (v1 is DateTime date)
+                return date.Equals((DateTime)v2);
 
             return v1 == v2;
         }

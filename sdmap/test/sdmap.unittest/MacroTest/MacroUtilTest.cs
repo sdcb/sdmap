@@ -72,7 +72,7 @@ namespace sdmap.unittest.MacroTest
         [Fact]
         public void NumberEqualsNumber()
         {
-            Assert.False(DynamicRuntimeMacros.IsEqual(3.14m, 3.14));
+            Assert.True(DynamicRuntimeMacros.IsEqual(3.11m, 3.11));
         }
 
         [Fact]
