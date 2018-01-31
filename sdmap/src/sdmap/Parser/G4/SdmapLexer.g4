@@ -28,7 +28,12 @@ OpenCurlyBrace:
 	'{'{if (bracePrefix == "sql" || bracePrefix == "if") PushMode(SQL);};
 
 CloseCurlyBrace:
-	'}'{braceStack.Pop();};
+	'}'{
+	if (braceStack.Count > 0) 
+		braceStack.Pop();
+	else
+		Skip();
+};
 
 STRING:
 	'@"' (~'"' | '""')* '"' |
@@ -102,13 +107,13 @@ NotEqual:
 
 mode SQL;
 SQLText: 
-	(~('#' | '}') | '##')+;
+	(~('#' | '}') | '\\#' | '\\}')+;
 
 CloseSql:
 	'}'{
-	if (bracePrefix == "if") 
+	if (bracePrefix == "if")
 	{
-		PopMode(); 
+		PopMode();
 	}
 	braceStack.Pop();
 	PopMode();

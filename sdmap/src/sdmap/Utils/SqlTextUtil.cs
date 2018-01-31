@@ -8,7 +8,9 @@ namespace sdmap.Utils
     {
         public static string Parse(string sqlText)
         {
-            return sqlText.Replace("##", "#");
+            return sqlText
+                .Replace("\\#", "#")
+                .Replace("\\}", "}");
         }
 
         public static string ToCSharpString(string text)

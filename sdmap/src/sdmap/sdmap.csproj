@@ -33,12 +33,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Parser\G4\SdmapLexer.g4" />
+    <None Remove="Parser\G4\SdmapParser.g4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Antlr4 Include="Parser/G4/SdmapLexer.g4">
       <CustomToolNamespace>sdmap.Parser.G4</CustomToolNamespace>
     </Antlr4>
     <Antlr4 Include="Parser/G4/SdmapParser.g4">
       <CustomToolNamespace>sdmap.Parser.G4</CustomToolNamespace>
     </Antlr4>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Parser\G4\SdmapLexer.g4" />
+    <Content Include="Parser\G4\SdmapParser.g4" />
   </ItemGroup>
 
   <ItemGroup>
