@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace sdmap.ext.Dapper
 {
-    public static partial class SdmapExtensions
+    public static partial class DbConnectionExtensions
     {
         private static ISdmapEmiter SqlEmiter;
 

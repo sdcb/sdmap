@@ -22,8 +22,8 @@ namespace sdmap.ext.test
         [Fact]
         public void SqlEmiterTest()
         {
-            SdmapExtensions.SetSqlEmiter(new SimpleSqlEmiter());
-            var actual = SdmapExtensions.EmitSql("test", null);
+            DbConnectionExtensions.SetSqlEmiter(new SimpleSqlEmiter());
+            var actual = DbConnectionExtensions.EmitSql("test", null);
             Assert.Equal("test", actual);
         }
 
@@ -33,13 +33,13 @@ namespace sdmap.ext.test
             Directory.CreateDirectory("sqls");
             var tempFile = @"sqls\test.sdmap";
             File.WriteAllText(tempFile, "sql Hello{Hello}");
-            SdmapExtensions.SetSqlDirectoryAndWatch(@".\sqls");
+            DbConnectionExtensions.SetSqlDirectoryAndWatch(@".\sqls");
 
             try
             {
                 File.WriteAllText(tempFile, "sql Hello{Hello2}");
                 Thread.Sleep(30);
-                var text = SdmapExtensions.EmitSql("Hello", null);
+                var text = DbConnectionExtensions.EmitSql("Hello", null);
                 Assert.Equal("Hello2", text);
             }
             finally

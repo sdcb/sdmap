@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace sdmap.ext.Dapper
 {
-    public static partial class SdmapExtensions
+    public static partial class DbConnectionExtensions
     {
         public static Task<IEnumerable<dynamic>> QueryByMapAsync(this IDbConnection cnn, 
             string sqlMapName, 
