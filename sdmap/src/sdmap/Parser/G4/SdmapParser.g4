@@ -38,6 +38,7 @@ boolExpression:
 	Bool                                                     #BoolLeteral   |
 	OpenBrace boolExpression CloseBrace                      #BoolBrace     |
 	nsSyntax (Equal | NotEqual) Null                         #BoolNull      |
+	nsSyntax (Equal | NotEqual) Bool                         #BoolBool      |
 	nsSyntax                                                 #BoolNsSyntax  |
 	boolExpression OpAnd boolExpression                      #BoolOpAnd     |
 	boolExpression OpOr  boolExpression                      #BoolOpOr;

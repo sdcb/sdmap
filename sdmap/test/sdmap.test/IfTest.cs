@@ -92,8 +92,7 @@ namespace sdmap.IntegratedTest
             });
             Assert.Equal("ATrue", result);
         }
-
-        [Theory(Skip = "#if == true/false is currently not supported.")]
+        
         [InlineData(true)]
         [InlineData(false)]
         public void EqualBooleanTest(bool flag)

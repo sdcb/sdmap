@@ -49,6 +49,32 @@ namespace sdmap.Parser.Visitor
             return Result.Fail($"Operator '{op}' is not allowed in bool-null expression.");
         }
 
+        public override Result VisitBoolBool([NotNull] BoolBoolContext context)
+        {
+            var op = context.children[1].GetText();
+            _il.Emit(OpCodes.Ldarg_1);                              // self
+            _il.Emit(OpCodes.Ldstr, context.children[0].GetText()); // self propName
+            _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo().GetMethod(
+                nameof(IfUtils.LoadProp)));                         // obj
+
+            var boolVal = bool.Parse(context.Bool().GetText());
+            var boolOpcode = boolVal ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0;
+            switch (op)
+            {
+                case "==":
+                    _il.Emit(boolOpcode);
+                    _il.Emit(OpCodes.Ceq);
+                    return Result.Ok();
+                case "!=":
+                    _il.Emit(boolOpcode);
+                    _il.Emit(OpCodes.Ceq);
+                    _il.Emit(OpCodes.Ldc_I4_0);
+                    _il.Emit(OpCodes.Ceq);
+                    return Result.Ok();
+            }
+            return Result.Fail($"Operator '{op}' is not allowed in bool-bool expression.");
+        }
+
         public override Result VisitBoolNsSyntax([NotNull] BoolNsSyntaxContext context)
         {
             _il.Emit(OpCodes.Ldarg_1);                              // stack: self
