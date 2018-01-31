@@ -1,5 +1,6 @@
 ## 0.12.0
 - [core-Breaking Change] hash literal now using "\#" instead of "##"
+- [all] upgrade project to netcoreapp2.0
 - [core] if statement now support equals to boolean literal(== true/false)
 - [core] sdmap can now live with error close curly brace } harmony.
 - [core] sdmap can now support close curly brace } litera, using "\}"
