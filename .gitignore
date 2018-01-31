@@ -12,3 +12,4 @@ project.lock.json
 obj/
 bin/
 /sdmap/packages
+*.nupkg

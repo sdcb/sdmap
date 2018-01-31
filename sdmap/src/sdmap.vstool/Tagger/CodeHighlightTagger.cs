@@ -9,7 +9,6 @@ using Microsoft.VisualStudio.Language.StandardClassification;
 using sdmap.Parser.G4;
 using Microsoft.VisualStudio.Text.Classification;
 using static sdmap.Parser.G4.SdmapLexer;
-using System.Reactive.Linq;
 
 namespace sdmap.Vstool.Tagger
 {
@@ -45,9 +44,19 @@ namespace sdmap.Vstool.Tagger
                 }
             };
 
-            Observable.FromEventPattern<TextContentChangedEventArgs>(buffer, nameof(buffer.Changed))
-                .Throttle(TimeSpan.FromMilliseconds(100.0))
-                .Subscribe(e => WriteBuffer(e.EventArgs));
+            bool commiting = false;
+            TextContentChangedEventArgs lastArgs = null;
+            buffer.Changed += async (o, e) =>
+            {
+                lastArgs = e;
+                if (!commiting)
+                {
+                    commiting = true;
+                    await Task.Delay(100);
+                    WriteBuffer(lastArgs);
+                    commiting = false;
+                }
+            };
             WriteBuffer(null);
         }
 
