@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\sdmap.ext.Dapper\sdmap.ext.Dapper.csproj" />
     <ProjectReference Include="..\..\src\sdmap.ext\sdmap.ext.csproj" />
   </ItemGroup>
 
