@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace sdmap.ext
+namespace sdmap.ext.Dapper
 {
     public static partial class SdmapExtensions
     {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace sdmap.ext
 {
@@ -67,13 +68,13 @@ namespace sdmap.ext
             var watcher = new FileSystemWatcher(sqlDirectory);
             watcher.EnableRaisingEvents = true;
             watcher.NotifyFilter = NotifyFilters.LastWrite;
-            watcher.Changed += (o, e) =>
-            {
-                GC.KeepAlive(watcher);
-                Thread.Sleep(1);
+            watcher.Changed += async (o, e) =>
+            {                
+                await Task.Delay(1);
                 result._compiler = CreateCompilerFromSqlDirectory(
                     sqlDirectory,
                     ensureCompiled);
+                GC.KeepAlive(watcher);
             };
 
             return result;

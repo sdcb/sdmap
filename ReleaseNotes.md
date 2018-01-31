@@ -6,6 +6,7 @@
 - [ext] add SdmapContext
 - [ext] rename ISqlEmiter to ISdmapEmiter
 - [ext] rename EmitSql in ISqlEmiter to Emit
+- [ext] not rely on System.Threading.Thread package.
 
 ## 0.11.5
 - [core] support double hash(##) emit single hash(#).
