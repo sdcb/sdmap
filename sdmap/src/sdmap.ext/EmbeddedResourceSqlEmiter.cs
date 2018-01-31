@@ -8,13 +8,13 @@ using System.Text;
 
 namespace sdmap.ext
 {
-    public class EmbeddedResourceSqlEmiter : ISqlEmiter
+    public class EmbeddedResourceSqlEmiter : ISdmapEmiter
     {
         private SdmapCompiler _compiler = new SdmapCompiler();
 
-        public string EmitSql(string sqlMapName, object queryObject)
+        public string Emit(string statementId, object parameters)
         {
-            return _compiler.Emit(sqlMapName, queryObject);
+            return _compiler.Emit(statementId, parameters);
         }
 
         public static EmbeddedResourceSqlEmiter CreateFrom(Assembly assembly)
@@ -34,13 +34,13 @@ namespace sdmap.ext
         }
     }
 
-    public class MultipleAssemblyEmbeddedResourceSqlEmiter : ISqlEmiter
+    public class MultipleAssemblyEmbeddedResourceSqlEmiter : ISdmapEmiter
     {
         private SdmapCompiler _compiler = new SdmapCompiler();
 
-        public string EmitSql(string sqlMapName, object queryObject)
+        public string Emit(string statementId, object parameters)
         {
-            return _compiler.Emit(sqlMapName, queryObject);
+            return _compiler.Emit(statementId, parameters);
         }
 
         public void AddAssembly(Assembly assembly)

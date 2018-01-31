@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace sdmap.ext
 {
-    public class FileSystemSqlEmiter : ISqlEmiter
+    public class FileSystemSqlEmiter : ISdmapEmiter
     {
         private SdmapCompiler _compiler = null;
 
@@ -16,9 +16,9 @@ namespace sdmap.ext
             _compiler = compiler;
         }
 
-        public string EmitSql(string sqlMapName, object queryObject)
+        public string Emit(string statementId, object parameters)
         {
-            return _compiler.Emit(sqlMapName, queryObject);
+            return _compiler.Emit(statementId, parameters);
         }
 
         private static SdmapCompiler CreateCompilerFromSqlDirectory(

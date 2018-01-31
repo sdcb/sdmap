@@ -13,7 +13,7 @@ namespace sdmap.ext
 {
     public static partial class SdmapExtensions
     {
-        private static ISqlEmiter SqlEmiter;
+        private static ISdmapEmiter SqlEmiter;
 
         public static void SetSqlDirectory(string sqlDirectory)
         {
@@ -35,14 +35,14 @@ namespace sdmap.ext
             SetSqlEmiter(MultipleAssemblyEmbeddedResourceSqlEmiter.CreateFrom(assemblies));
         }
 
-        public static void SetSqlEmiter(ISqlEmiter sqlEmiter)
+        public static void SetSqlEmiter(ISdmapEmiter sqlEmiter)
         {
             SqlEmiter = sqlEmiter;
         }
 
         public static string EmitSql(string sqlMapId, object param)
         {
-            return SqlEmiter.EmitSql(sqlMapId, param);
+            return SqlEmiter.Emit(sqlMapId, param);
         }
 
         public static int ExecuteByMap(this IDbConnection cnn,

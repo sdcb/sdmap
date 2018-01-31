@@ -10,9 +10,9 @@ namespace sdmap.ext.test
 {
     public class SmokeTest
     {
-        private class SimpleSqlEmiter : ISqlEmiter
+        private class SimpleSqlEmiter : ISdmapEmiter
         {
-            public string EmitSql(string sqlId, object queryObject)
+            public string Emit(string sqlId, object queryObject)
             {
                 return sqlId;
             }
