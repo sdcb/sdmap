@@ -135,6 +135,7 @@
   <ItemGroup>
     <ProjectReference Include="..\sdmap\sdmap.csproj">
       <Project>{dee11876-5627-4ffa-9d61-aaf166b479fc}</Project>
+      <AdditionalProperties>TargetFramework=net451</AdditionalProperties>
       <Name>sdmap</Name>
     </ProjectReference>
   </ItemGroup>
