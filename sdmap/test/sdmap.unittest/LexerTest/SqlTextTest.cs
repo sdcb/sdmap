@@ -44,6 +44,15 @@ namespace sdmap.unittest.LexerTest
         }
 
         [Fact]
+        public void ErrorCurlyInMacro()
+        {
+            var code = "sql v1{#test<sql{}}>}";
+            var ats = new AntlrInputStream(code);
+            var lexer = new SdmapLexer(ats);
+            var tokens = lexer.GetAllTokens();
+        }
+
+        [Fact]
         public void SingleHashIsMacro()
         {
             var code = "sql v1{#}";

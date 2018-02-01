@@ -32,11 +32,11 @@ namespace sdmap.test
             Assert.Equal("test", result);
         }
 
-        public static string Run(string code, string sqlId)
+        public static string Run(string code, string sqlId, object obj = null)
         {
             var c = new SdmapCompiler();
             c.AddSourceCode(code);
-            return c.Emit(sqlId, null);
+            return c.Emit(sqlId, obj);
         }
     }
 }

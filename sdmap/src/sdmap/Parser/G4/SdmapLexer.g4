@@ -111,12 +111,20 @@ SQLText:
 
 CloseSql:
 	'}'{
-	if (bracePrefix == "if")
+	if (braceStack.Count > 0)
 	{
+		if (bracePrefix == "if")
+		{
+			PopMode();
+		}
+		braceStack.Pop();
+
 		PopMode();
 	}
-	braceStack.Pop();
-	PopMode();
+	else
+	{
+		Skip();
+	}
 };
 
 Hash: 
