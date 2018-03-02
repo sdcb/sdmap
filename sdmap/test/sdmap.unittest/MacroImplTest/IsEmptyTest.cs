@@ -45,7 +45,7 @@ namespace sdmap.unittest.MacroImplTest
         [Fact]
         public void ValueIsNotEmpty()
         {
-            var val = DynamicRuntimeMacros.IsNotEmpty(SdmapCompilerContext.CreateEmpty(),
+            var val = DynamicRuntimeMacros.IsNotEmpty(ParentEmiterContext.CreateEmpty(),
                 "",
                 new { A = DateTime.Now },
                 new object[] { "A", "Ok" });
@@ -55,17 +55,17 @@ namespace sdmap.unittest.MacroImplTest
 
         private Result<string> CallIsEmpty(object self, string prop, string result)
         {
-            return DynamicRuntimeMacros.IsEmpty(SdmapCompilerContext.CreateEmpty(), "", self, new[] { prop, result });
+            return DynamicRuntimeMacros.IsEmpty(ParentEmiterContext.CreateEmpty(), "", self, new[] { prop, result });
         }
 
         private Result<string> CallIsNotEmpty(object self, string prop, string result)
         {
-            return DynamicRuntimeMacros.IsNotEmpty(SdmapCompilerContext.CreateEmpty(), "", self, new[] { prop, result });
+            return DynamicRuntimeMacros.IsNotEmpty(ParentEmiterContext.CreateEmpty(), "", self, new[] { prop, result });
         }
 
         private Result<string> CallIsNotNull(object self, string prop, string result)
         {
-            return DynamicRuntimeMacros.IsNotNull(SdmapCompilerContext.CreateEmpty(), "", self, new[] { prop, result });
+            return DynamicRuntimeMacros.IsNotNull(ParentEmiterContext.CreateEmpty(), "", self, new[] { prop, result });
         }
     }
 }

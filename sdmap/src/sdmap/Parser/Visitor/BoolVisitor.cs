@@ -29,7 +29,8 @@ namespace sdmap.Parser.Visitor
         public override Result VisitBoolNull([NotNull] BoolNullContext context)
         {
             var op = context.children[1].GetText();
-            _il.Emit(OpCodes.Ldarg_1);                              // self
+            _il.Emit(OpCodes.Ldarg_0);                              // ctx
+            _il.Emit(OpCodes.Call, ParentEmiterContext.GetObj);     // self
             _il.Emit(OpCodes.Ldstr, context.children[0].GetText()); // self propName
             _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo().GetMethod(
                 nameof(IfUtils.LoadProp)));                         // obj
@@ -52,7 +53,8 @@ namespace sdmap.Parser.Visitor
         public override Result VisitBoolBool([NotNull] BoolBoolContext context)
         {
             var op = context.children[1].GetText();
-            _il.Emit(OpCodes.Ldarg_1);                              // self
+            _il.Emit(OpCodes.Ldarg_0);                              // ctx
+            _il.Emit(OpCodes.Call, ParentEmiterContext.GetObj);     // self
             _il.Emit(OpCodes.Ldstr, context.children[0].GetText()); // self propName
             _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo().GetMethod(
                 nameof(IfUtils.LoadProp)));                         // obj
@@ -77,8 +79,9 @@ namespace sdmap.Parser.Visitor
 
         public override Result VisitBoolNsSyntax([NotNull] BoolNsSyntaxContext context)
         {
-            _il.Emit(OpCodes.Ldarg_1);                              // stack: self
-            _il.Emit(OpCodes.Ldstr, context.children[0].GetText()); // stack: self propName
+            _il.Emit(OpCodes.Ldarg_0);                              // ctx
+            _il.Emit(OpCodes.Call, ParentEmiterContext.GetObj);     // self
+            _il.Emit(OpCodes.Ldstr, context.children[0].GetText()); // self propName
             _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo().GetMethod(
                 nameof(IfUtils.PropertyExistsAndEvalToTrue)));
             return Result.Ok();
@@ -160,10 +163,11 @@ namespace sdmap.Parser.Visitor
 
             foreach (var exp in exps)
             {
-                _il.Emit(OpCodes.Ldarg_1);
-                _il.Emit(OpCodes.Ldstr, exp.GetText());
-                _il.Emit(OpCodes.Call, typeof(DynamicRuntimeMacros).GetTypeInfo()
-                    .GetMethod(nameof(DynamicRuntimeMacros.GetPropValue)));
+                _il.Emit(OpCodes.Ldarg_0);                              // ctx
+                _il.Emit(OpCodes.Call, ParentEmiterContext.GetObj);     // self
+                _il.Emit(OpCodes.Ldstr, exp.GetText());                 // self prop
+                _il.Emit(OpCodes.Call, typeof(DynamicRuntimeMacros).GetMethod(
+                    nameof(DynamicRuntimeMacros.GetPropValue)));        // val
             }
 
             switch (syntax)

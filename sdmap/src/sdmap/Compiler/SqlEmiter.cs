@@ -6,6 +6,7 @@ using sdmap.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using static sdmap.Parser.G4.SdmapParser;
 
@@ -42,16 +43,16 @@ namespace sdmap.Compiler
                 });
         }
 
-        public Result<string> TryEmit(object v, SdmapCompilerContext context)
+        public Result<string> TryEmit(ParentEmiterContext ctx)
         {
-            return EnsureCompiled(context)
-                .OnSuccess(() => Emiter(context, v))
+            return EnsureCompiled(ctx.Compiler)
+                .OnSuccess(() => Emiter(ctx))
                 .Unwrap();
         }
 
-        public string Emit(object v, SdmapCompilerContext context)
+        public string Emit(ParentEmiterContext ctx)
         {
-            return TryEmit(v, context).Value;
+            return TryEmit(ctx).Value;
         }
 
         private Result<EmitFunction> CompileInternal(SdmapCompilerContext context)
@@ -71,5 +72,52 @@ namespace sdmap.Compiler
     public delegate Result<EmitFunction> CompileFunction(
         SdmapCompilerContext context);
 
-    public delegate Result<string> EmitFunction(SdmapCompilerContext context, object obj);
+    public delegate Result<string> EmitFunction(ParentEmiterContext parent);
+    
+    public class ParentEmiterContext
+    {
+        public ParentEmiterContext(SdmapCompilerContext compilerContext, object obj)
+        {
+            Compiler = compilerContext;
+            Obj = obj;
+            Defs = new List<KeyValuePair<string, Result<string>>>();
+            Deps = new HashSet<string>();
+        }
+
+        public ParentEmiterContext(SdmapCompilerContext compilerContext, object obj,
+            List<KeyValuePair<string, Result<string>>> defs, 
+            HashSet<string> deps)
+        {
+            Compiler = compilerContext;
+            Obj = obj;
+            Defs = defs;
+            Deps = deps;
+        }
+
+        public SdmapCompilerContext Compiler { get; }
+
+        public object Obj { get; }
+
+        public List<KeyValuePair<string, Result<string>>> Defs { get; }
+            = new List<KeyValuePair<string, Result<string>>>();
+
+        public HashSet<string> Deps { get; }
+            = new HashSet<string>();
+
+        public static ParentEmiterContext CreateEmpty()
+        {
+            return new ParentEmiterContext(SdmapCompilerContext.CreateEmpty(), null);
+        }
+
+        public static ParentEmiterContext CreateByObj(object obj)
+        {
+            return new ParentEmiterContext(SdmapCompilerContext.CreateEmpty(), obj);
+        }
+
+        private static Type ThisType = typeof(ParentEmiterContext);
+        internal static MethodInfo GetCompiler = ThisType.GetMethod("get_" + nameof(Compiler));
+        internal static MethodInfo GetObj = ThisType.GetMethod("get_" + nameof(Obj));
+        internal static MethodInfo GetDefs = ThisType.GetMethod("get_" + nameof(Defs));
+        internal static MethodInfo GetDeps = ThisType.GetMethod("get_" + nameof(Deps));
+    }
 }
