@@ -50,12 +50,22 @@ namespace sdmap.Macros
         }
 
         public static Result<string> Execute(SdmapCompilerContext context, string name, 
-            string ns, object self, object[] arguments)
+            string ns, object self, object[] arguments, 
+            List<KeyValuePair<string, Result<string>>> defs, 
+            HashSet<string> deps)
         {
             Macro macro;
             if (!context.MacroManager.Methods.TryGetValue(name, out macro))
             {
-                return Result.Fail<string>($"Macro: '{name}' cannot be found.");
+                switch (name)
+                {
+                    case "def":
+                        return DynamicRuntimeMacros.Def(context, ns, self, arguments, defs);
+                    case "deps":
+                        return DynamicRuntimeMacros.Deps(context, ns, self, arguments, deps);
+                    default:
+                        return Result.Fail<string>($"Macro: '{name}' cannot be found.");
+                }
             }
 
             var rtCheck = RuntimeCheck(arguments, macro);
@@ -66,5 +76,11 @@ namespace sdmap.Macros
 
             return macro.Method(context, ns, self, arguments);
         }
+
+        private static Macro DefMacro = new Macro
+        {
+            Name = "def", 
+            Arguments = new[] { SdmapTypes.Syntax, SdmapTypes.StringOrSql }
+        };
     }
 }

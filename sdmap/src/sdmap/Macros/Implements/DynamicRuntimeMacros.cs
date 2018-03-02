@@ -358,6 +358,25 @@ namespace sdmap.Macros.Implements
             }
         }
 
+        public static Result<string> Def(SdmapCompilerContext context,
+            string ns, object self, object[] arguments, List<KeyValuePair<string, Result<string>>> defs)
+        {
+            var id = (string)arguments[0];
+            Result<string> result = MacroUtil.EvalToString(arguments[1], context, self);
+            defs.Add(new KeyValuePair<string, Result<string>>(id, result));
+            return Result.Ok($"<?{id}>");
+        }
+
+        public static Result<string> Deps(SdmapCompilerContext context,
+            string ns, object self, object[] arguments, HashSet<string> deps)
+        {
+            foreach (var dep in arguments.Select(x => (string)x))
+            {
+                deps.Add(dep);
+            }
+            return Result.Ok(string.Empty);
+        }
+
         private static readonly Result<string> Empty = Result.Ok("");
 
         private static Result<string> RequireNotNull([CallerMemberName] string caller = null)

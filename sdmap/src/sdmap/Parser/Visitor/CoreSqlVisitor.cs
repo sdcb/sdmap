@@ -39,15 +39,17 @@ namespace sdmap.Parser.Visitor
             void returnBlock()
             {
                 _il.Emit(OpCodes.Ldloc_0);                                        // sb
-                var okMethod = typeof(Result)
+                MethodInfo combineDeps = typeof(CoreSqlVisitor)
                     .GetTypeInfo()
                     .GetMethods()
-                    .Single(x => x.IsGenericMethod && x.Name == "Ok")
-                    .MakeGenericMethod(typeof(string));
+                    .Single(x => x.Name == nameof(CoreSqlVisitor.CombineDeps));
+
                 _il.Emit(OpCodes.Call, typeof(StringBuilder)
                     .GetTypeInfo()
                     .GetMethod(nameof(StringBuilder.ToString), Type.EmptyTypes)); // str
-                _il.Emit(OpCodes.Call, okMethod);                                 // result<str>                
+                _il.Emit(OpCodes.Ldloc_1);                                        // str defs
+                _il.Emit(OpCodes.Ldloc_2);                                        // str defs deps
+                _il.Emit(OpCodes.Call, combineDeps);                              // result<str>
 
                 _il.Emit(OpCodes.Ret);                                            // [empty-returned]
                 Function = (EmitFunction)method.CreateDelegate(typeof(EmitFunction));
@@ -64,6 +66,16 @@ namespace sdmap.Parser.Visitor
                 .GetTypeInfo()
                 .GetConstructor(Type.EmptyTypes));                                    // sb
             _il.Emit(OpCodes.Stloc_0);                                                // [empty]
+            _il.DeclareLocal(typeof(List<KeyValuePair<string, Result<string>>>));
+            _il.Emit(OpCodes.Newobj, typeof(List<KeyValuePair<string, Result<string>>>)
+                .GetTypeInfo()
+                .GetConstructor(Type.EmptyTypes));                                    // defs-dictionary
+            _il.Emit(OpCodes.Stloc_1);                                                // [empty]
+            _il.DeclareLocal(typeof(HashSet<string>));
+            _il.Emit(OpCodes.Newobj, typeof(HashSet<string>)
+                .GetTypeInfo()
+                .GetConstructor(Type.EmptyTypes));                                    // deps-list
+            _il.Emit(OpCodes.Stloc_2);                                                // [empty]
 
             return Visit(parseRule)
                 .OnSuccess(() =>                                                      // [must be empty]
@@ -180,6 +192,8 @@ namespace sdmap.Parser.Visitor
                 _il.Emit(OpCodes.Stelem_Ref);                               // -> ctx name ns self args
             }
 
+            _il.Emit(OpCodes.Ldloc_1);                                      // ctx name ns self args defs
+            _il.Emit(OpCodes.Ldloc_2);                                      // ctx name ns self args defs deps
             _il.Emit(OpCodes.Call, typeof(MacroManager).GetTypeInfo()
                 .GetMethod(nameof(MacroManager.Execute)));                  // result<str>
             _il.Emit(OpCodes.Dup);                                          // result<str> x 2
@@ -294,6 +308,30 @@ namespace sdmap.Parser.Visitor
             });
         }
         
+        public static Result<string> CombineDeps(string result, 
+            List<KeyValuePair<string, Result<string>>> defs, 
+            HashSet<string> deps)
+        {
+            if (defs.Count == 0)
+                return Result.Ok(result);
+
+            foreach (var def in defs)
+            {
+                var replaceKey = $"<?{def.Key}>";
+                if (deps.Contains(def.Key))
+                {
+                    if (def.Value.IsFailure)
+                        return def.Value;
+                    result = result.Replace(replaceKey, def.Value.Value);
+                }
+                else
+                {
+                    result = result.Replace(replaceKey, "");
+                }
+            }
+
+            return Result.Ok(result);
+        }
 
         public static Result<EmitFunction> CompileCore(
             CoreSqlContext coreSql, 
