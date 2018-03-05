@@ -1,3 +1,6 @@
+## 0.13.0
+- [core] introduce #def<> and #deps<>
+
 ## 0.12.0
 - [core-Breaking Change] hash literal now using "\#" instead of "##"
 - [all] upgrade project to netcoreapp2.0
