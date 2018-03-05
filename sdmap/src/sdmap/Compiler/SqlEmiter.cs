@@ -104,6 +104,11 @@ namespace sdmap.Compiler
         public HashSet<string> Deps { get; }
             = new HashSet<string>();
 
+        public ParentEmiterContext DupSelf(object newSelf)
+        {
+            return new ParentEmiterContext(Compiler, newSelf, Defs, Deps);
+        }
+
         public static ParentEmiterContext CreateEmpty()
         {
             return new ParentEmiterContext(SdmapCompilerContext.CreateEmpty(), null);
