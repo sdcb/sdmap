@@ -105,12 +105,12 @@ namespace sdmap.Macros.Implements
                 $"argument {i + 1} requires {mac} but provides {arg.GetType().Name}.");
         }
 
-        public static Result<string> EvalToString(object value, SdmapCompilerContext context, object self)
+        public static Result<string> EvalToString(object value, ParentEmiterContext context, object self)
         {
             if (value is string)
                 return Result.Ok((string)value);
             if (value is EmitFunction)
-                return ((EmitFunction)value)(context, self);
+                return ((EmitFunction)value)(context.DupSelf(self));
             throw new ArgumentOutOfRangeException(nameof(value));
         }
     }

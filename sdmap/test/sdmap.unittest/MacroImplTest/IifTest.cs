@@ -13,7 +13,7 @@ namespace sdmap.unittest.MacroImplTest
         [Fact]
         public void Smoke()
         {
-            var val = DynamicRuntimeMacros.Iif(SdmapCompilerContext.CreateEmpty(),
+            var val = DynamicRuntimeMacros.Iif(ParentEmiterContext.CreateEmpty(),
                 "",
                 new { A = true }, 
                 new object[] { "A", "true", "false" });
@@ -24,7 +24,7 @@ namespace sdmap.unittest.MacroImplTest
         [Fact]
         public void NullableOk()
         {
-            var val = DynamicRuntimeMacros.Iif(SdmapCompilerContext.CreateEmpty(),
+            var val = DynamicRuntimeMacros.Iif(ParentEmiterContext.CreateEmpty(),
                 "",
                 new { A = new bool?(true) },
                 new object[] { "A", "true", "false" });
@@ -35,7 +35,7 @@ namespace sdmap.unittest.MacroImplTest
         [Fact]
         public void EmptyNullShouldTreatFalsy()
         {
-            var val = DynamicRuntimeMacros.Iif(SdmapCompilerContext.CreateEmpty(),
+            var val = DynamicRuntimeMacros.Iif(ParentEmiterContext.CreateEmpty(),
                 "",
                 new { A = new bool?() },
                 new object[] { "A", "true", "false" });
@@ -46,7 +46,7 @@ namespace sdmap.unittest.MacroImplTest
         [Fact]
         public void NotExistPropShouldFail()
         {
-            var val = DynamicRuntimeMacros.Iif(SdmapCompilerContext.CreateEmpty(),
+            var val = DynamicRuntimeMacros.Iif(ParentEmiterContext.CreateEmpty(),
                 "",
                 new { A = new bool?() },
                 new object[] { "B", "true", "false" });

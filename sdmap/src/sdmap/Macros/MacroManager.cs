@@ -49,11 +49,10 @@ namespace sdmap.Macros
             return Result.Ok();
         }
 
-        public static Result<string> Execute(SdmapCompilerContext context, string name, 
+        public static Result<string> Execute(ParentEmiterContext context, string name,
             string ns, object self, object[] arguments)
         {
-            Macro macro;
-            if (!context.MacroManager.Methods.TryGetValue(name, out macro))
+            if (!context.Compiler.MacroManager.Methods.TryGetValue(name, out Macro macro))
             {
                 return Result.Fail<string>($"Macro: '{name}' cannot be found.");
             }
