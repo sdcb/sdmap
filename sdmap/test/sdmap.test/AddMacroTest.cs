@@ -27,6 +27,34 @@ namespace sdmap.IntegratedTest
         }
 
         [Fact]
+        public void CanImplementDepInMacro()
+        {
+            var code = "sql v1{#def<B, 'Nice'>#isNotEmptyWithDeps<A, sql {ABCDEFG}, B>}";
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode(code);
+            string id = "isNotEmptyWithDeps";
+            rt.AddMacro(id, (context, ns, self, arguments) =>
+            {
+                if (self == null) return Result.Fail<string>($"Query requires not null in macro '{id}'."); ;
+
+                var prop =  DynamicRuntimeMacros.GetProp(self, arguments[0]);
+                if (prop == null) return Result.Fail<string>($"Query requires property '{prop}' in macro '{id}'.");
+
+                if (!RuntimeMacros.IsEmpty(RuntimeMacros.GetPropValue(self, (string)arguments[0])))
+                {
+                    foreach (var dep in arguments.Skip(2).OfType<string>())
+                    {
+                        context.Deps.Add(dep);
+                    }
+                    return MacroUtil.EvalToString(arguments[1], context, self);
+                }   
+                return Result.Ok(string.Empty);
+            });
+            var result = rt.Emit("v1", new { A = new[] { 1, 2, 3 } });
+            Assert.Equal("NiceABCDEFG", result);
+        }
+
+        [Fact]
         public void CanAddArgumentMacro()
         {
             var code = "sql v1{#hello<sql{#val<>}>}";
