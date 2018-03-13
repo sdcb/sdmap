@@ -1,6 +1,7 @@
 ## 0.13.0
 - [core] introduce #def<> and #deps<>
 - [core-0.13.1] #def support reference def.
+- [core-0.13.1.1] fix the issue not emit the property name when isEmpty/isNotEmpty fail.
 
 ## 0.12.0
 - [core-Breaking Change] hash literal now using "\#" instead of "##"
