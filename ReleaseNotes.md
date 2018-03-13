@@ -1,5 +1,6 @@
 ## 0.13.0
 - [core] introduce #def<> and #deps<>
+- [core-0.13.1] #def support reference def.
 
 ## 0.12.0
 - [core-Breaking Change] hash literal now using "\#" instead of "##"
