@@ -67,5 +67,14 @@ namespace sdmap.test
             string result = rt.Emit("v1", null);
             Assert.Equal("AB", result);
         }
+
+        [Fact]
+        public void ReferencedDefDepInMacro()
+        {
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode("sql v1{#def<A, 'A'>#def<B, sql{#deps<A>B}>#isNotNull<B, sql {#deps<B>C}}}");
+            string result = rt.Emit("v1", new { B = "" });
+            Assert.Equal("ABC", result);
+        }
     }
 }
