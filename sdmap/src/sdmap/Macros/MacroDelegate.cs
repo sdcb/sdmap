@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace sdmap.Macros
 {
-    public delegate Result<string> MacroDelegate(ParentEmiterContext context, 
+    public delegate Result<string> MacroDelegate(OneCallContext context, 
         string ns, object self, object[] arguments);
 }

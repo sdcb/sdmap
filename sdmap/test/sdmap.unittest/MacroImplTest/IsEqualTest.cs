@@ -38,14 +38,14 @@ namespace sdmap.unittest.MacroImplTest
         private Result<string> CallIsEqual(object self, string prop, object val, string result)
         {
             if (val is int) val = Convert.ToDouble(val);
-            return DynamicRuntimeMacros.IsEqual(ParentEmiterContext.CreateEmpty(), 
+            return DynamicRuntimeMacros.IsEqual(OneCallContext.CreateEmpty(), 
                 "", self, new object[] { prop, val, result });
         }
 
         private Result<string> CallIsNotEqual(object self, string prop, object val, string result)
         {
             if (val is int) val = Convert.ToDouble(val);
-            return DynamicRuntimeMacros.IsNotEqual(ParentEmiterContext.CreateEmpty(), 
+            return DynamicRuntimeMacros.IsNotEqual(OneCallContext.CreateEmpty(), 
                 "", self, new object[] { prop, val, result });
         }
     }

@@ -49,7 +49,7 @@ namespace sdmap.Macros
             return Result.Ok();
         }
 
-        public static Result<string> Execute(ParentEmiterContext context, string name,
+        public static Result<string> Execute(OneCallContext context, string name,
             string ns, object self, object[] arguments)
         {
             if (!context.Compiler.MacroManager.Methods.TryGetValue(name, out Macro macro))

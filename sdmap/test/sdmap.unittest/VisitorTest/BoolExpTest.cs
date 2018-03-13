@@ -21,7 +21,7 @@ namespace sdmap.unittest.VisitorTest
         {
             var ctx = SdmapCompilerContext.CreateEmpty();
             var func = CompileExpression($"A {op}", ctx);
-            var result = func(new ParentEmiterContext(ctx, new { A = propValue }));
+            var result = func(new OneCallContext(ctx, new { A = propValue }));
             Assert.Equal(expected, result);
         }
 
@@ -32,7 +32,7 @@ namespace sdmap.unittest.VisitorTest
         {
             var ctx = SdmapCompilerContext.CreateEmpty();
             var func = CompileExpression("A", ctx);
-            var actual = func(new ParentEmiterContext(ctx, new { A = expected }));
+            var actual = func(new OneCallContext(ctx, new { A = expected }));
             Assert.Equal(expected, actual);
         }
 
@@ -41,7 +41,7 @@ namespace sdmap.unittest.VisitorTest
         {
             var ctx = SdmapCompilerContext.CreateEmpty();
             var func = CompileExpression("(A)", ctx);
-            var actual = func(new ParentEmiterContext(ctx, new { A = true }));
+            var actual = func(new OneCallContext(ctx, new { A = true }));
             Assert.Equal(true, actual);
         }
 
@@ -50,7 +50,7 @@ namespace sdmap.unittest.VisitorTest
         {
             var ctx = SdmapCompilerContext.CreateEmpty();
             var func = CompileExpression("A.B", ctx);
-            var actual = func(new ParentEmiterContext(ctx, new { A = new { B = true } }));
+            var actual = func(new OneCallContext(ctx, new { A = new { B = true } }));
             Assert.Equal(true, actual);
         }
 
@@ -59,7 +59,7 @@ namespace sdmap.unittest.VisitorTest
         {
             var ctx = SdmapCompilerContext.CreateEmpty();
             var func = CompileExpression("A.B.C.D", ctx);
-            var actual = func(new ParentEmiterContext(ctx, new
+            var actual = func(new OneCallContext(ctx, new
             {
                 A = new { B = new { C = new { D = false } } }
             }));
@@ -73,7 +73,7 @@ namespace sdmap.unittest.VisitorTest
         {
             var ctx = SdmapCompilerContext.CreateEmpty();
             var func = CompileExpression(input, ctx);
-            var actual = func(new ParentEmiterContext(ctx, null));
+            var actual = func(new OneCallContext(ctx, null));
             Assert.Equal(expected, actual);
         }
 
@@ -86,7 +86,7 @@ namespace sdmap.unittest.VisitorTest
         {
             var ctx = SdmapCompilerContext.CreateEmpty();
             var func = CompileExpression(code, ctx);
-            var actual = func(new ParentEmiterContext(ctx, null));
+            var actual = func(new OneCallContext(ctx, null));
             Assert.Equal(expected, actual);
         }
 
@@ -99,7 +99,7 @@ namespace sdmap.unittest.VisitorTest
         {
             var ctx = SdmapCompilerContext.CreateEmpty();
             var func = CompileExpression(code, ctx);
-            var actual = func(new ParentEmiterContext(ctx, null));
+            var actual = func(new OneCallContext(ctx, null));
             Assert.Equal(expected, actual);
         }
 
@@ -113,7 +113,7 @@ namespace sdmap.unittest.VisitorTest
                 A = new BoolWithAccessCount(false),
                 B = new BoolWithAccessCount(true)
             };
-            var actual = func(new ParentEmiterContext(ctx, obj));
+            var actual = func(new OneCallContext(ctx, obj));
             Assert.False(actual);
             Assert.Equal(0, obj.B.AccessCount);
             Assert.Equal(1, obj.A.AccessCount);
@@ -129,7 +129,7 @@ namespace sdmap.unittest.VisitorTest
                 A = new BoolWithAccessCount(true),
                 B = new BoolWithAccessCount(false)
             };
-            var actual = func(new ParentEmiterContext(ctx, obj));
+            var actual = func(new OneCallContext(ctx, obj));
             Assert.True(actual);
             Assert.Equal(0, obj.B.AccessCount);
             Assert.Equal(1, obj.A.AccessCount);
@@ -142,7 +142,7 @@ namespace sdmap.unittest.VisitorTest
         {
             var ctx = SdmapCompilerContext.CreateEmpty();
             var func = CompileExpression(code, ctx);
-            var actual = func(new ParentEmiterContext(ctx, null));
+            var actual = func(new OneCallContext(ctx, null));
             Assert.Equal(expected, actual);
         }
 
@@ -153,7 +153,7 @@ namespace sdmap.unittest.VisitorTest
         {
             var ctx = SdmapCompilerContext.CreateEmpty();
             var func = CompileExpression(code, ctx);
-            var actual = func(new ParentEmiterContext(ctx, new { A = value }));
+            var actual = func(new OneCallContext(ctx, new { A = value }));
             Assert.Equal(expected, actual);
         }
 
@@ -164,7 +164,7 @@ namespace sdmap.unittest.VisitorTest
         {
             var ctx = SdmapCompilerContext.CreateEmpty();
             var func = CompileExpression(code, ctx);
-            var actual = func(new ParentEmiterContext(ctx, new
+            var actual = func(new OneCallContext(ctx, new
             {
                 A = emptyArray ? new int[] { } : new[] { 1 }
             }));
@@ -176,7 +176,7 @@ namespace sdmap.unittest.VisitorTest
         {
             var ctx = SdmapCompilerContext.CreateEmpty();
             var func = CompileExpression("isNotEmpty(A)", ctx);
-            var actual = func(new ParentEmiterContext(ctx, new { A = new[] { 1 } }));
+            var actual = func(new OneCallContext(ctx, new { A = new[] { 1 } }));
             Assert.Equal(true, actual);
         }
 
@@ -185,7 +185,7 @@ namespace sdmap.unittest.VisitorTest
             var dm = new DynamicMethod(
                 "test",
                 typeof(bool),
-                new[] { typeof(ParentEmiterContext) });
+                new[] { typeof(OneCallContext) });
             var il = dm.GetILGenerator();
 
             var visitOk = new BoolVisitor(il).Visit(GetParser(code).boolExpression());
@@ -195,7 +195,7 @@ namespace sdmap.unittest.VisitorTest
             return (BoolVisitorDelegate)dm.CreateDelegate(typeof(BoolVisitorDelegate));
         }
 
-        public delegate bool BoolVisitorDelegate(ParentEmiterContext ctx);
+        public delegate bool BoolVisitorDelegate(OneCallContext ctx);
 
         private class BoolWithAccessCount
         {

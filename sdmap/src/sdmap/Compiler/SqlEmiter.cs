@@ -43,14 +43,14 @@ namespace sdmap.Compiler
                 });
         }
 
-        public Result<string> TryEmit(ParentEmiterContext ctx)
+        public Result<string> TryEmit(OneCallContext ctx)
         {
             return EnsureCompiled(ctx.Compiler)
                 .OnSuccess(() => Emiter(ctx))
                 .Unwrap();
         }
 
-        public string Emit(ParentEmiterContext ctx)
+        public string Emit(OneCallContext ctx)
         {
             return TryEmit(ctx).Value;
         }
@@ -72,57 +72,5 @@ namespace sdmap.Compiler
     public delegate Result<EmitFunction> CompileFunction(
         SdmapCompilerContext context);
 
-    public delegate Result<string> EmitFunction(ParentEmiterContext parent);
-    
-    public class ParentEmiterContext
-    {
-        public ParentEmiterContext(SdmapCompilerContext compilerContext, object obj)
-        {
-            Compiler = compilerContext;
-            Obj = obj;
-            Defs = new List<KeyValuePair<string, Result<string>>>();
-            Deps = new HashSet<string>();
-        }
-
-        public ParentEmiterContext(SdmapCompilerContext compilerContext, object obj,
-            List<KeyValuePair<string, Result<string>>> defs, 
-            HashSet<string> deps)
-        {
-            Compiler = compilerContext;
-            Obj = obj;
-            Defs = defs;
-            Deps = deps;
-        }
-
-        public SdmapCompilerContext Compiler { get; }
-
-        public object Obj { get; }
-
-        public List<KeyValuePair<string, Result<string>>> Defs { get; }
-            = new List<KeyValuePair<string, Result<string>>>();
-
-        public HashSet<string> Deps { get; }
-            = new HashSet<string>();
-
-        public ParentEmiterContext DupSelf(object newSelf)
-        {
-            return new ParentEmiterContext(Compiler, newSelf, Defs, Deps);
-        }
-
-        public static ParentEmiterContext CreateEmpty()
-        {
-            return new ParentEmiterContext(SdmapCompilerContext.CreateEmpty(), null);
-        }
-
-        public static ParentEmiterContext CreateByObj(object obj)
-        {
-            return new ParentEmiterContext(SdmapCompilerContext.CreateEmpty(), obj);
-        }
-
-        private static Type ThisType = typeof(ParentEmiterContext);
-        internal static MethodInfo GetCompiler = ThisType.GetMethod("get_" + nameof(Compiler));
-        internal static MethodInfo GetObj = ThisType.GetMethod("get_" + nameof(Obj));
-        internal static MethodInfo GetDefs = ThisType.GetMethod("get_" + nameof(Defs));
-        internal static MethodInfo GetDeps = ThisType.GetMethod("get_" + nameof(Deps));
-    }
+    public delegate Result<string> EmitFunction(OneCallContext parent);
 }

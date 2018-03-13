@@ -23,7 +23,7 @@ namespace sdmap.Utils
         public static object LoadProp(object obj, string propName)
             => DynamicRuntimeMacros.GetPropValue(obj, propName);
 
-        public static Result<string> ExecuteEmiter(EmitFunction ef, ParentEmiterContext ctx)
+        public static Result<string> ExecuteEmiter(EmitFunction ef, OneCallContext ctx)
             => ef(ctx);
 
         public static bool IsEmpty(object obj)

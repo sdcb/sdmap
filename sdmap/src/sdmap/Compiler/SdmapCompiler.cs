@@ -60,7 +60,7 @@ namespace sdmap.Compiler
             lock(_context)
             {
                 return _context.TryGetEmiter(id, _context.CurrentNs)
-                    .OnSuccess(emiter => emiter.TryEmit(new ParentEmiterContext(_context, query)));
+                    .OnSuccess(emiter => emiter.TryEmit(new OneCallContext(_context, query)));
             }
         }
 

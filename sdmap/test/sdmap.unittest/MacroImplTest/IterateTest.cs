@@ -22,7 +22,7 @@ namespace sdmap.unittest.MacroImplTest
         [Fact]
         public void IterateFunction()
         {
-            EmitFunction ef = (ParentEmiterContext ctx) => 
+            EmitFunction ef = (OneCallContext ctx) => 
             {
                 return Result.Ok(ctx.Obj.ToString());
             };
@@ -43,7 +43,7 @@ namespace sdmap.unittest.MacroImplTest
         [Fact]
         public void EachFunction()
         {
-            EmitFunction ef = (ParentEmiterContext ctx) =>
+            EmitFunction ef = (OneCallContext ctx) =>
             {
                 return Result.Ok(ctx.Obj.ToString());
             };
@@ -55,27 +55,27 @@ namespace sdmap.unittest.MacroImplTest
 
         private Result<string> CallIterate(object self, string joiner, EmitFunction ef)
         {
-            return DynamicRuntimeMacros.Iterate(ParentEmiterContext.CreateByObj(self), 
+            return DynamicRuntimeMacros.Iterate(OneCallContext.CreateByObj(self), 
                 "", self, new object[] { joiner, ef });
         }
 
         private Result<string> CallIterate(object self, string joiner, string text)
         {
-            return DynamicRuntimeMacros.Iterate(ParentEmiterContext.CreateByObj(self),
+            return DynamicRuntimeMacros.Iterate(OneCallContext.CreateByObj(self),
                 "", self, new object[] { joiner, text });
         }
 
         private Result<string> CallEach(object self, 
             string prop, string joiner, EmitFunction ef)
         {
-            return DynamicRuntimeMacros.Each(ParentEmiterContext.CreateEmpty(),
+            return DynamicRuntimeMacros.Each(OneCallContext.CreateEmpty(),
                 "", self, new object[] { prop, joiner, ef });
         }
 
         private Result<string> CallEach(object self, 
             string prop, string joiner, string text)
         {
-            return DynamicRuntimeMacros.Each(ParentEmiterContext.CreateEmpty(),
+            return DynamicRuntimeMacros.Each(OneCallContext.CreateEmpty(),
                 "", self, new object[] { prop, joiner, text });
         }
     }

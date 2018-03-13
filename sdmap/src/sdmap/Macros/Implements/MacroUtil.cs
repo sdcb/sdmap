@@ -105,7 +105,7 @@ namespace sdmap.Macros.Implements
                 $"argument {i + 1} requires {mac} but provides {arg.GetType().Name}.");
         }
 
-        public static Result<string> EvalToString(object value, ParentEmiterContext context, object self)
+        public static Result<string> EvalToString(object value, OneCallContext context, object self)
         {
             if (value is string)
                 return Result.Ok((string)value);

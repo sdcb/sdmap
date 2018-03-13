@@ -69,16 +69,16 @@ namespace sdmap.unittest.MacroImplTest
             switch (op)
             {
                 case ">":
-                    return DynamicRuntimeMacros.IsGreaterThan(ParentEmiterContext.CreateEmpty(), 
+                    return DynamicRuntimeMacros.IsGreaterThan(OneCallContext.CreateEmpty(), 
                         "", self, new object[] { prop, val, result });
                 case "<":
-                    return DynamicRuntimeMacros.IsLessThan(ParentEmiterContext.CreateEmpty(),
+                    return DynamicRuntimeMacros.IsLessThan(OneCallContext.CreateEmpty(),
                         "", self, new object[] { prop, val, result });
                 case ">=":
-                    return DynamicRuntimeMacros.IsGreaterEqual(ParentEmiterContext.CreateEmpty(),
+                    return DynamicRuntimeMacros.IsGreaterEqual(OneCallContext.CreateEmpty(),
                         "", self, new object[] { prop, val, result });
                 case "<=":
-                    return DynamicRuntimeMacros.IsLessEqual(ParentEmiterContext.CreateEmpty(),
+                    return DynamicRuntimeMacros.IsLessEqual(OneCallContext.CreateEmpty(),
                         "", self, new object[] { prop, val, result });
                 default:
                     throw new ArgumentOutOfRangeException(nameof(op));

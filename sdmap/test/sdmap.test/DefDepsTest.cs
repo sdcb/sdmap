@@ -49,5 +49,23 @@ namespace sdmap.test
 
             Assert.Equal(load ? "AB" : "", result);
         }
+
+        [Fact]
+        public void DefDepEmitNothing()
+        {
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode("sql v1{#def<A, 'A'>#def<B, sql {#deps<A>B}}");
+            string result = rt.Emit("v1", null);
+            Assert.Equal("", result);
+        }
+
+        [Fact]
+        public void DefDepEmitAll()
+        {
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode("sql v1{#def<A, 'A'>#def<B, sql{#deps<A>B}>#deps<B>}");
+            string result = rt.Emit("v1", null);
+            Assert.Equal("AB", result);
+        }
     }
 }

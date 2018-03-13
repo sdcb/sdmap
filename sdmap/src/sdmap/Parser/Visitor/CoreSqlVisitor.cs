@@ -33,23 +33,31 @@ namespace sdmap.Parser.Visitor
         public Result Process(CoreSqlContext parseRule, string functionName)
         {
             var method = new DynamicMethod(functionName,
-                typeof(Result<string>), new[] { typeof(ParentEmiterContext) });
+                typeof(Result<string>), new[] { typeof(OneCallContext) });
             _il = method.GetILGenerator();
 
             void returnBlock()
             {
+                var name = functionName;
                 _il.Emit(OpCodes.Ldloc_0);                                        // sb
-                MethodInfo combineDeps = typeof(CoreSqlVisitor)
-                    .GetMethod(nameof(CoreSqlVisitor.CombineDeps));
 
                 _il.Emit(OpCodes.Call, typeof(StringBuilder)
                     .GetTypeInfo()
                     .GetMethod(nameof(StringBuilder.ToString), Type.EmptyTypes)); // str
-                _il.Emit(OpCodes.Ldarg_0);                                        // str ctx 
-                _il.Emit(OpCodes.Call, ParentEmiterContext.GetDefs);              // str defs
-                _il.Emit(OpCodes.Ldarg_0);                                        // str defs ctx
-                _il.Emit(OpCodes.Call, ParentEmiterContext.GetDeps);              // str defs deps
-                _il.Emit(OpCodes.Call, combineDeps);                              // result<str>
+                if (!NameUtil.IsUnnamed(functionName))
+                {
+                    MethodInfo combineDeps = typeof(CoreSqlVisitor)
+                        .GetMethod(nameof(CoreSqlVisitor.CombineDeps));
+                    _il.Emit(OpCodes.Ldarg_0);                                    // ctx
+                    _il.Emit(OpCodes.Call, combineDeps);                          // result<str>
+                }
+                else
+                {
+                    MethodInfo ok = typeof(Result).GetMethods()
+                        .Single(x => x.IsGenericMethod && x.Name == nameof(Result.Ok))
+                        .MakeGenericMethod(typeof(string));
+                    _il.Emit(OpCodes.Call, ok);                                   // result<str>
+                }
 
                 _il.Emit(OpCodes.Ret);                                            // [empty-returned]
                 Function = (EmitFunction)method.CreateDelegate(typeof(EmitFunction));
@@ -82,7 +90,7 @@ namespace sdmap.Parser.Visitor
             _il.Emit(OpCodes.Ldstr, macroName);                             // ctx name
             _il.Emit(OpCodes.Ldstr, _context.CurrentNs);                    // ctx name ns
             _il.Emit(OpCodes.Ldarg_0);                                      // ctx name ns ctx
-            _il.Emit(OpCodes.Call, ParentEmiterContext.GetObj);             // ctx name ns self
+            _il.Emit(OpCodes.Call, OneCallContext.GetObj);             // ctx name ns self
 
             var contexts = context.GetRuleContexts<MacroParameterContext>();
             _il.Emit(OpCodes.Ldc_I4, contexts.Length);                      // ctx name ns self
@@ -170,7 +178,7 @@ namespace sdmap.Parser.Visitor
                     }
 
                     _il.Emit(OpCodes.Ldarg_0);                              // .. -> args idx ctx
-                    _il.Emit(OpCodes.Call, ParentEmiterContext.GetCompiler);// .. -> args ids compiler
+                    _il.Emit(OpCodes.Call, OneCallContext.GetCompiler);// .. -> args ids compiler
                     _il.Emit(OpCodes.Ldstr, id);                            // .. -> args idx compiler id
                     _il.Emit(OpCodes.Ldstr, _context.CurrentNs);            // .. -> args idx compiler id ns
                     _il.Emit(OpCodes.Call, typeof(SqlEmiterUtil).GetTypeInfo()
@@ -183,7 +191,7 @@ namespace sdmap.Parser.Visitor
 
                 _il.Emit(OpCodes.Stelem_Ref);                               // -> ctx name ns self args
             }
-            
+
             _il.Emit(OpCodes.Call, typeof(MacroManager).GetTypeInfo()
                 .GetMethod(nameof(MacroManager.Execute)));                  // result<str>
             _il.Emit(OpCodes.Dup);                                          // result<str> x 2
@@ -251,10 +259,10 @@ namespace sdmap.Parser.Visitor
                 {
                     var ifSkip = _il.DefineLabel();
                     _il.Emit(OpCodes.Ldc_I4_0);
-                    _il.Emit(OpCodes.Beq, ifSkip);                    
+                    _il.Emit(OpCodes.Beq, ifSkip);
 
                     _il.Emit(OpCodes.Ldarg_0);                              // ctx
-                    _il.Emit(OpCodes.Call, ParentEmiterContext.GetCompiler);// compiler
+                    _il.Emit(OpCodes.Call, OneCallContext.GetCompiler);// compiler
                     _il.Emit(OpCodes.Ldstr, id);                            // compiler id
                     _il.Emit(OpCodes.Ldstr, _context.CurrentNs);            // compiler id ns
                     _il.Emit(OpCodes.Call, typeof(SqlEmiterUtil)
@@ -280,7 +288,7 @@ namespace sdmap.Parser.Visitor
                     _il.Emit(OpCodes.Stloc, strLocal);
                     _il.Emit(OpCodes.Ldloc_0);
                     _il.Emit(OpCodes.Ldloc, strLocal);
-                    _il.Emit(OpCodes.Call, 
+                    _il.Emit(OpCodes.Call,
                         typeof(StringBuilder).GetTypeInfo().GetMethod(nameof(StringBuilder.Append),
                         new[] { typeof(string), }));                                // sb+str
                     _il.Emit(OpCodes.Pop);
@@ -293,39 +301,59 @@ namespace sdmap.Parser.Visitor
         {
             return Result.Combine(new[]
             {
-                aggregate, 
+                aggregate,
                 nextResult
             });
         }
-        
-        public static Result<string> CombineDeps(string result, 
-            List<KeyValuePair<string, Result<string>>> defs, 
-            HashSet<string> deps)
+
+        public static Result<string> CombineDeps(string result,
+            OneCallContext ctx)
         {
-            if (defs.Count == 0)
-                return Result.Ok(result);
+            var defs = ctx.Defs.ToList();
+            bool shouldContinue;
+            do
+            {
+                shouldContinue = false;
+                if (ctx.Defs.Count == 0)
+                    return Result.Ok(result);
+
+                var toRemove = new List<KeyValuePair<string, object>>();
+                foreach (var def in ctx.Defs)
+                {
+                    if (ctx.Deps.Contains(def.Key))
+                    {
+                        defs.Remove(def);
+                        var replaceKey = $"<?{def.Key}>";
+                        var defObj = def.Value;
+                        if (defObj is string sql)
+                        {
+                            result = result.Replace(replaceKey, sql);
+                        }
+                        else if (defObj is EmitFunction emiter)
+                        {
+                            int depCount = ctx.Deps.Count;
+                            Result<string> partial = emiter(ctx);
+                            if (partial.IsFailure) return partial;
+
+                            if (depCount < ctx.Deps.Count) shouldContinue = true;
+                            result = result.Replace(replaceKey, partial.Value);
+                        }
+                    }
+                }
+            } while (shouldContinue);
 
             foreach (var def in defs)
             {
                 var replaceKey = $"<?{def.Key}>";
-                if (deps.Contains(def.Key))
-                {
-                    if (def.Value.IsFailure)
-                        return def.Value;
-                    result = result.Replace(replaceKey, def.Value.Value);
-                }
-                else
-                {
-                    result = result.Replace(replaceKey, "");
-                }
+                result = result.Replace(replaceKey, "");
             }
 
             return Result.Ok(result);
         }
 
         public static Result<EmitFunction> CompileCore(
-            CoreSqlContext coreSql, 
-            SdmapCompilerContext context, 
+            CoreSqlContext coreSql,
+            SdmapCompilerContext context,
             string functionName)
         {
             var visitor = new CoreSqlVisitor(context);

@@ -22,7 +22,7 @@ namespace sdmap.unittest.VisitorTest
             Assert.True(result.IsSuccess);
 
             var function = result.Value;
-            var output = function(ParentEmiterContext.CreateEmpty());
+            var output = function(OneCallContext.CreateEmpty());
             Assert.Equal("Hello World", output.Value);
         }
 
@@ -39,7 +39,7 @@ namespace sdmap.unittest.VisitorTest
             Assert.True(result.IsSuccess);
 
             var function = result.Value;
-            var output = function(ParentEmiterContext.CreateEmpty());
+            var output = function(OneCallContext.CreateEmpty());
             Assert.Equal(sql, output.Value);
         }
 
@@ -60,7 +60,7 @@ namespace sdmap.unittest.VisitorTest
             Assert.True(result.IsSuccess);
 
             var function = result.Value;
-            var output = function(ParentEmiterContext.CreateEmpty());
+            var output = function(OneCallContext.CreateEmpty());
             Assert.Equal(sql, output.Value);
         }
     }
