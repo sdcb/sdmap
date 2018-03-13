@@ -53,6 +53,17 @@ namespace sdmap.unittest.MacroImplTest
             Assert.Equal("Ok", val.Value);
         }
 
+        [Fact]
+        public void WillEmitPropNameWhenFail()
+        {
+            var val = DynamicRuntimeMacros.IsNotEmpty(OneCallContext.CreateEmpty(),
+                "",
+                new { A = DateTime.Now },
+                new object[] { "ThePropertyName", "Ok" });
+            Assert.True(val.IsFailure);
+            Assert.Contains("ThePropertyName", val.Error);
+        }
+
         private Result<string> CallIsEmpty(object self, string prop, string result)
         {
             return DynamicRuntimeMacros.IsEmpty(OneCallContext.CreateEmpty(), "", self, new[] { prop, result });

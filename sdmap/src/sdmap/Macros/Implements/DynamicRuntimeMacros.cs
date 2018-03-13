@@ -105,7 +105,7 @@ namespace sdmap.Macros.Implements
             if (self == null) return RequireNotNull();
 
             var prop = GetProp(self, arguments[0]);
-            if (prop == null) return RequirePropNotNull(prop);
+            if (prop == null) return RequirePropNotNull(arguments[0]);
 
             if (IsEmpty(GetPropValue(self, arguments[0])))
                 return MacroUtil.EvalToString(arguments[1], context, self);
@@ -121,7 +121,7 @@ namespace sdmap.Macros.Implements
             if (self == null) return RequireNotNull();
 
             var prop = GetProp(self, arguments[0]);
-            if (prop == null) return RequirePropNotNull(prop);
+            if (prop == null) return RequirePropNotNull(arguments[0]);
 
             if (!IsEmpty(GetPropValue(self, arguments[0])))
                 return MacroUtil.EvalToString(arguments[1], context, self);
