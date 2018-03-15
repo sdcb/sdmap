@@ -23,7 +23,7 @@ namespace sdmap.Macros.Implements
         {
             var contextId = (string)arguments[0];
             return context.Compiler.TryGetEmiter(contextId, ns)
-                .OnSuccess(emiter => emiter.Emit(context));
+                .OnSuccess(emiter => emiter.Emit(context.Dig(self)));
         }
 
 
@@ -366,17 +366,21 @@ namespace sdmap.Macros.Implements
             var id = (string)arguments[0];
             if (arguments[1] is string sql)
             {
-                context.Defs.Add(new KeyValuePair<string, object>(id, sql));
+                var fragment = new RawSegmentDef(id, sql);
+                context.Fragments.Add(fragment);
+                context.Defs.Add(fragment);
             }
-            else if (arguments[1] is EmitFunction emitFunction)
+            else if (arguments[1] is EmitFunction emiter)
             {
-                context.Defs.Add(new KeyValuePair<string, object>(id, emitFunction));
+                var fragment = new EmiterSegmentDef(id, emiter);
+                context.Fragments.Add(fragment);
+                context.Defs.Add(fragment);
             }
             else
             {
                 return Result.Fail<string>("argument 1 must be string or sql statement.");
             }
-            return Result.Ok($"<?{id}>");
+            return Empty;
         }
 
         [Macro("deps", SkipArgumentRuntimeCheck = true)]

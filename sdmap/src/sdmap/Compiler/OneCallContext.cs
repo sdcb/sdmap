@@ -11,12 +11,12 @@ namespace sdmap.Compiler
         {
             Compiler = compilerContext;
             Obj = obj;
-            Defs = new List<KeyValuePair<string, object>>();
+            Defs = new List<SegmentDef>();
             Deps = new HashSet<string>();
         }
 
         public OneCallContext(SdmapCompilerContext compilerContext, object obj,
-            List<KeyValuePair<string, object>> defs, 
+            List<SegmentDef> defs, 
             HashSet<string> deps)
         {
             Compiler = compilerContext;
@@ -25,19 +25,29 @@ namespace sdmap.Compiler
             Deps = deps;
         }
 
+        public int Level { get; private set; }
+
+        public List<object> Fragments { get; private set; }
+            = new List<object>();
+
+        public bool IsRoot => Level == 0;
+
         public SdmapCompilerContext Compiler { get; }
 
         public object Obj { get; }
 
-        public List<KeyValuePair<string, object>> Defs { get; }
-            = new List<KeyValuePair<string, object>>(); // object must be string or EmitFunction
+        public List<SegmentDef> Defs { get; }
+            = new List<SegmentDef>();
 
         public HashSet<string> Deps { get; }
             = new HashSet<string>();
 
-        public OneCallContext DupSelf(object newSelf)
+        public OneCallContext Dig(object newSelf)
         {
-            return new OneCallContext(Compiler, newSelf, Defs, Deps);
+            return new OneCallContext(Compiler, newSelf, Defs, Deps)
+            {
+                Level = Level + 1
+            };
         }
 
         public static OneCallContext CreateEmpty()
@@ -51,6 +61,8 @@ namespace sdmap.Compiler
         }
 
         private static Type ThisType = typeof(OneCallContext);
+        internal static MethodInfo GetIsRoot = ThisType.GetMethod("get_" + nameof(IsRoot));
+        internal static MethodInfo GetTempStore = ThisType.GetMethod("get_" + nameof(Fragments));
         internal static MethodInfo GetCompiler = ThisType.GetMethod("get_" + nameof(Compiler));
         internal static MethodInfo GetObj = ThisType.GetMethod("get_" + nameof(Obj));
         internal static MethodInfo GetDefs = ThisType.GetMethod("get_" + nameof(Defs));

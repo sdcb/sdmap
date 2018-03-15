@@ -110,7 +110,7 @@ namespace sdmap.Macros.Implements
             if (value is string)
                 return Result.Ok((string)value);
             if (value is EmitFunction)
-                return ((EmitFunction)value)(context.DupSelf(self));
+                return ((EmitFunction)value)(context.Dig(self));
             throw new ArgumentOutOfRangeException(nameof(value));
         }
     }

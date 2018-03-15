@@ -39,6 +39,7 @@
     <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.4">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
   </ItemGroup>
 
 </Project>
