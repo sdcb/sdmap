@@ -37,7 +37,7 @@ namespace sdmap.IntegratedTest
             {
                 if (self == null) return Result.Fail<string>($"Query requires not null in macro '{id}'."); ;
 
-                var prop =  DynamicRuntimeMacros.GetProp(self, arguments[0]);
+                var prop = self.GetType().GetProperty((string)arguments[0]);
                 if (prop == null) return Result.Fail<string>($"Query requires property '{prop}' in macro '{id}'.");
 
                 if (!RuntimeMacros.IsEmpty(RuntimeMacros.GetPropValue(self, (string)arguments[0])))
@@ -46,7 +46,7 @@ namespace sdmap.IntegratedTest
                     {
                         context.Deps.Add(dep);
                     }
-                    return MacroUtil.EvalToString(arguments[1], context, self);
+                    return ((EmitFunction)arguments[1])(context.Dig(self));
                 }   
                 return Result.Ok(string.Empty);
             });
@@ -62,8 +62,8 @@ namespace sdmap.IntegratedTest
             rt.AddSourceCode(code);
             rt.AddMacro("hello", new[] { SdmapTypes.StringOrSql }, (context, ns, self, arguments) =>
             {
-                return Result.Ok($"Hello " + 
-                    MacroUtil.EvalToString(arguments[0], context, self).Value);
+                return Result.Ok($"Hello " +
+                    ((EmitFunction)arguments[0])(context.Dig(self)).Value);
             });
             var result = rt.Emit("v1", "World");
             Assert.Equal("Hello World", result);
