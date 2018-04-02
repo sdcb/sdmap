@@ -76,5 +76,14 @@ namespace sdmap.test
             string result = rt.Emit("v1", new { B = "" });
             Assert.Equal("ABC", result);
         }
+
+        [Fact]
+        public void IncludedDefAlsoWorks()
+        {
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode("sql v1{#include<v2>3#deps<B>} sql v2{1#def<B, '2'>}");
+            string result = rt.Emit("v1", null);
+            Assert.Equal("13", result);
+        }
     }
 }

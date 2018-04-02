@@ -55,7 +55,7 @@ namespace sdmap.Compiler
             return new OneCallContext(SdmapCompilerContext.CreateEmpty(), null);
         }
 
-        public static OneCallContext CreateByObj(object obj)
+        internal static OneCallContext CreateByObj(object obj)
         {
             return new OneCallContext(SdmapCompilerContext.CreateEmpty(), obj);
         }
