@@ -17,12 +17,14 @@ namespace sdmap.Compiler
 
         public OneCallContext(SdmapCompilerContext compilerContext, object obj,
             List<SegmentDef> defs, 
-            HashSet<string> deps)
+            HashSet<string> deps, 
+            List<object> fragments)
         {
             Compiler = compilerContext;
             Obj = obj;
             Defs = defs;
             Deps = deps;
+            Fragments = fragments;
         }
 
         public int Level { get; private set; }
@@ -44,7 +46,15 @@ namespace sdmap.Compiler
 
         public OneCallContext Dig(object newSelf)
         {
-            return new OneCallContext(Compiler, newSelf, Defs, Deps)
+            return new OneCallContext(Compiler, newSelf, Defs, Deps, Fragments)
+            {
+                Level = Level + 1
+            };
+        }
+
+        public OneCallContext DigNewFragments(object newSelf)
+        {
+            return new OneCallContext(Compiler, newSelf, Defs, Deps, new List<object>())
             {
                 Level = Level + 1
             };

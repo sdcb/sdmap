@@ -62,8 +62,9 @@ namespace sdmap.IntegratedTest
             rt.AddSourceCode(code);
             rt.AddMacro("hello", new[] { SdmapTypes.StringOrSql }, (context, ns, self, arguments) =>
             {
-                return Result.Ok($"Hello " +
-                    ((EmitFunction)arguments[0])(context.Dig(self)).Value);
+                context.Fragments.Add("Hello ");
+                context.Fragments.Add(((EmitFunction)arguments[0])(context.Dig(self)).Value);
+                return Result.Ok("");
             });
             var result = rt.Emit("v1", "World");
             Assert.Equal("Hello World", result);

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using sdmap.Parser.Visitor;
 
 namespace sdmap.Macros.Implements
 {
@@ -110,7 +111,13 @@ namespace sdmap.Macros.Implements
             if (value is string)
                 return Result.Ok((string)value);
             if (value is EmitFunction)
-                return ((EmitFunction)value)(context.Dig(self));
+            {
+                var newCtx = context.DigNewFragments(self);
+                var result = ((EmitFunction)value)(newCtx);
+                if (result.IsSuccess && result.Value == "")
+                    return CoreSqlVisitorHelper.CombineStrings(newCtx);
+                return result;
+            }
             throw new ArgumentOutOfRangeException(nameof(value));
         }
     }

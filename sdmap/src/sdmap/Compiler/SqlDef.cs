@@ -1,4 +1,6 @@
 ﻿using sdmap.Functional;
+using sdmap.Macros.Implements;
+using sdmap.Parser.Visitor;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -55,11 +57,10 @@ namespace sdmap.Compiler
         public override (Result<string> result, bool hasMore) TurnOn(OneCallContext ctx)
         {
             Enabled = true;
-            int currentCount = ctx.Deps.Count;
-            Result<string> result = Emiter(ctx.Dig(ctx.Obj));
+            int currentCount = ctx.Deps.Count;            
+            var result = MacroUtil.EvalToString(Emiter, ctx, ctx.Obj);
             bool hasMore = ctx.Deps.Count > currentCount;
             if (result.IsSuccess) _finalSql = result.Value;
-
             return (result, hasMore);
         }
     }

@@ -58,10 +58,10 @@ namespace sdmap.Parser.Visitor
                 }
                 _il.MarkLabel(childExit);
                 {
-                    MethodInfo combineDeps = typeof(CoreSqlVisitorHelper)
-                        .GetMethod(nameof(CoreSqlVisitorHelper.CombineStrings));
-                    _il.Emit(OpCodes.Ldarg_0);                                    // ctx
-                    _il.Emit(OpCodes.Call, combineDeps);                          // result<str>
+                    MethodInfo ok = typeof(Result).GetMethods()
+                        .Single(x => x.IsGenericMethod && x.Name == nameof(Result.Ok))
+                        .MakeGenericMethod(typeof(string));
+                    _il.Emit(OpCodes.Call, ok);
                     _il.Emit(OpCodes.Ret);                                        // 
                 }
                 
