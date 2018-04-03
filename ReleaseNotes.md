@@ -1,3 +1,7 @@
+## 0.14.0
+- [core] support #def in included sql
+- [core-internal] switch string append to array combine.
+
 ## 0.13.0
 - [core] introduce #def<> and #deps<>
 - [core-0.13.1] #def support reference def.
