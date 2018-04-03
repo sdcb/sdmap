@@ -61,7 +61,8 @@ namespace sdmap.Parser.Visitor
                     MethodInfo ok = typeof(Result).GetMethods()
                         .Single(x => x.IsGenericMethod && x.Name == nameof(Result.Ok))
                         .MakeGenericMethod(typeof(string));
-                    _il.Emit(OpCodes.Call, ok);
+                    _il.Emit(OpCodes.Ldstr, "");                                  // [empty]
+                    _il.Emit(OpCodes.Call, ok);                                   // result<empty>
                     _il.Emit(OpCodes.Ret);                                        // 
                 }
                 
