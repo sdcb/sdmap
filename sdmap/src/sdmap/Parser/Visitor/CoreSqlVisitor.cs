@@ -41,22 +41,34 @@ namespace sdmap.Parser.Visitor
 
             void returnBlock()
             {
-                Label rootExit = _il.DefineLabel();
-                Label childExit = _il.DefineLabel();
-                _il.Emit(OpCodes.Ldarg_0);                        // ctx
-                _il.Emit(OpCodes.Call, OneCallContext.GetIsRoot); // isRoot
-                _il.Emit(OpCodes.Ldc_I4_0);                       // if(!isRoot)
-                _il.Emit(OpCodes.Beq, childExit);                 // ->goto childExit
+                bool isNamed = NameUtil.IsNamed(functionName);
+                // root: 
+                //     combine deps
+                // child-named:
+                //     not combine
+                // child-unnamed:
+                //     combine strings
 
-                _il.MarkLabel(rootExit);
+                Label defaultExit = _il.DefineLabel();
+                Label childNamedNotCombine = _il.DefineLabel();
+                _il.Emit(OpCodes.Ldarg_0);                        // ctx
+                _il.Emit(OpCodes.Call, OneCallContext.GetIsChild);// isChild
+                _il.Emit(isNamed ?
+                    OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0);         // isNamed
+                _il.Emit(OpCodes.And);                            // if (isChild && isNamed)
+                _il.Emit(OpCodes.Brtrue_S, childNamedNotCombine); //     goto notCombine
+
+                _il.MarkLabel(defaultExit);
                 {
-                    MethodInfo combineDeps = typeof(CoreSqlVisitorHelper)
-                        .GetMethod(nameof(CoreSqlVisitorHelper.CombineDeps));
-                    _il.Emit(OpCodes.Ldarg_0);                                    // ctx
-                    _il.Emit(OpCodes.Call, combineDeps);                          // result<str>
-                    _il.Emit(OpCodes.Ret);                                        // 
+                    string methodName = isNamed ?
+                        nameof(CoreSqlVisitorHelper.CombineDeps) :
+                        nameof(CoreSqlVisitorHelper.CombineStrings);
+                    MethodInfo combineMethod = typeof(CoreSqlVisitorHelper).GetMethod(methodName);
+                    _il.Emit(OpCodes.Ldarg_0);                                   // ctx
+                    _il.Emit(OpCodes.Call, combineMethod);                       // result<str>
+                    _il.Emit(OpCodes.Ret);                                       // 
                 }
-                _il.MarkLabel(childExit);
+                _il.MarkLabel(childNamedNotCombine);
                 {
                     MethodInfo ok = typeof(Result).GetMethods()
                         .Single(x => x.IsGenericMethod && x.Name == nameof(Result.Ok))
@@ -267,6 +279,7 @@ namespace sdmap.Parser.Visitor
                     _il.Emit(OpCodes.Call, typeof(SqlEmiterUtil)
                         .GetMethod(nameof(SqlEmiterUtil.EmiterFromId)));    // emiter
                     _il.Emit(OpCodes.Ldarg_0);                              // emiter ctx
+                    _il.Emit(OpCodes.Call, OneCallContext.CallDupNewFragments); // emiter newCtx
                     _il.Emit(OpCodes.Call, typeof(IfUtils)
                         .GetMethod(nameof(IfUtils.ExecuteEmiter)));         // result<str>
 

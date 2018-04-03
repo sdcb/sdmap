@@ -46,7 +46,7 @@ namespace sdmap.IntegratedTest
                     {
                         context.Deps.Add(dep);
                     }
-                    return ((EmitFunction)arguments[1])(context.Dig(self));
+                    return ((EmitFunction)arguments[1])(context.DupNewFragments());
                 }   
                 return Result.Ok(string.Empty);
             });
@@ -62,9 +62,7 @@ namespace sdmap.IntegratedTest
             rt.AddSourceCode(code);
             rt.AddMacro("hello", new[] { SdmapTypes.StringOrSql }, (context, ns, self, arguments) =>
             {
-                context.Fragments.Add("Hello ");
-                context.Fragments.Add(((EmitFunction)arguments[0])(context.Dig(self)).Value);
-                return Result.Ok("");
+                return Result.Ok("Hello " + ((EmitFunction)arguments[0])(context.DupNewFragments()).Value);
             });
             var result = rt.Emit("v1", "World");
             Assert.Equal("Hello World", result);

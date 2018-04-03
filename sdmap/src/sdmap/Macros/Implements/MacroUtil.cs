@@ -111,13 +111,7 @@ namespace sdmap.Macros.Implements
             if (value is string)
                 return Result.Ok((string)value);
             if (value is EmitFunction)
-            {
-                var newCtx = context.DigNewFragments(self);
-                var result = ((EmitFunction)value)(newCtx);
-                if (result.IsSuccess && result.Value == "")
-                    return CoreSqlVisitorHelper.CombineStrings(newCtx);
-                return result;
-            }
+                return ((EmitFunction)value)(context.DigNewFragments(self));
             throw new ArgumentOutOfRangeException(nameof(value));
         }
     }

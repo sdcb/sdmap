@@ -34,6 +34,8 @@ namespace sdmap.Compiler
 
         public bool IsRoot => Level == 0;
 
+        public bool IsChild => Level > 0;
+
         public SdmapCompilerContext Compiler { get; }
 
         public object Obj { get; }
@@ -60,6 +62,14 @@ namespace sdmap.Compiler
             };
         }
 
+        public OneCallContext DupNewFragments()
+        {
+            return new OneCallContext(Compiler, Obj, Defs, Deps, new List<object>())
+            {
+                Level = Level + 1
+            };
+        }
+
         public static OneCallContext CreateEmpty()
         {
             return new OneCallContext(SdmapCompilerContext.CreateEmpty(), null);
@@ -72,10 +82,12 @@ namespace sdmap.Compiler
 
         private static Type ThisType = typeof(OneCallContext);
         internal static MethodInfo GetIsRoot = ThisType.GetMethod("get_" + nameof(IsRoot));
+        internal static MethodInfo GetIsChild = ThisType.GetMethod("get_" + nameof(IsChild));
         internal static MethodInfo GetTempStore = ThisType.GetMethod("get_" + nameof(Fragments));
         internal static MethodInfo GetCompiler = ThisType.GetMethod("get_" + nameof(Compiler));
         internal static MethodInfo GetObj = ThisType.GetMethod("get_" + nameof(Obj));
         internal static MethodInfo GetDefs = ThisType.GetMethod("get_" + nameof(Defs));
         internal static MethodInfo GetDeps = ThisType.GetMethod("get_" + nameof(Deps));
+        internal static MethodInfo CallDupNewFragments = ThisType.GetMethod(nameof(DupNewFragments));
     }
 }

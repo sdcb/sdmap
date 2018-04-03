@@ -15,9 +15,9 @@ namespace sdmap.Utils
             return "Unnamed" + HashUtil.Base64SHA256(context.GetText());
         }
 
-        public static bool IsUnnamed(string name)
+        public static bool IsNamed(string name)
         {
-            return name.StartsWith("Unnamed");
+            return !name.StartsWith("Unnamed");
         }
     }
 }
