@@ -13,9 +13,9 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>0.14.0.1</Version>
-    <AssemblyVersion>0.14.0.1</AssemblyVersion>
-    <FileVersion>0.14.0.1</FileVersion>
+    <Version>0.14.1</Version>
+    <AssemblyVersion>0.14.1</AssemblyVersion>
+    <FileVersion>0.14.1</FileVersion>
     <Authors>sdcb</Authors>
     <Copyright>MIT</Copyright>
     <PackageProjectUrl>https://github.com/sdcb/sdmap</PackageProjectUrl>
@@ -39,11 +39,5 @@
     <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.4">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net451'">
-    <PackageReference Include="System.ValueTuple" Version="4.3.1" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
   </ItemGroup>
 </Project>

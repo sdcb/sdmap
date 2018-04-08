@@ -2,6 +2,7 @@
 - [core] support #def in included sql
 - [core-internal] switch string append to array combine.
 - [core-0.14.0.1] .net451 use valuetuple 4.3.1 instead of 4.4.0
+- [core-0.14.1] introduce TurnOnResult, not reference to valuetuple.
 
 ## 0.13.0
 - [core] introduce #def<> and #deps<>

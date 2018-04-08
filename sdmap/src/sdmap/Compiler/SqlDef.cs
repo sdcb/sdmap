@@ -15,7 +15,7 @@ namespace sdmap.Compiler
 
         protected string _finalSql = string.Empty;
 
-        public abstract (Result<string> result, bool hasMore) TurnOn(OneCallContext ctx);
+        public abstract Result<TurnOnResult> TurnOn(OneCallContext ctx);
 
         public SegmentDef(string id)
         {
@@ -28,7 +28,14 @@ namespace sdmap.Compiler
         }
     }
 
-    public class RawSegmentDef : SegmentDef
+    public class TurnOnResult
+    {
+        public bool HasMore { get; set; }
+
+        public string Sql { get; set; }
+    }
+
+    internal class RawSegmentDef : SegmentDef
     {
         public string Sql { get; }
 
@@ -37,15 +44,19 @@ namespace sdmap.Compiler
             Sql = sql;
         }
 
-        public override (Result<string> result, bool hasMore) TurnOn(OneCallContext ctx)
+        public override Result<TurnOnResult> TurnOn(OneCallContext ctx)
         {
             Enabled = true;
             _finalSql = Sql;
-            return (Result.Ok(_finalSql), false);
+            return Result.Ok(new TurnOnResult
+            {
+                Sql = _finalSql,
+                HasMore = false
+            });
         }
     }
 
-    public class EmiterSegmentDef : SegmentDef
+    internal class EmiterSegmentDef : SegmentDef
     {
         public EmitFunction Emiter { get; }
 
@@ -54,14 +65,18 @@ namespace sdmap.Compiler
             Emiter = emiter;
         }
 
-        public override (Result<string> result, bool hasMore) TurnOn(OneCallContext ctx)
+        public override Result<TurnOnResult> TurnOn(OneCallContext ctx)
         {
             Enabled = true;
             int currentCount = ctx.Deps.Count;            
             var result = MacroUtil.EvalToString(Emiter, ctx, ctx.Obj);
             bool hasMore = ctx.Deps.Count > currentCount;
             if (result.IsSuccess) _finalSql = result.Value;
-            return (result, hasMore);
+            return result.OnSuccess(s => new TurnOnResult
+            {
+                Sql = s, 
+                HasMore = hasMore
+            });
         }
     }
 }

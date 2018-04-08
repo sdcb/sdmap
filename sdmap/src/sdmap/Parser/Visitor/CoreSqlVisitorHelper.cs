@@ -23,10 +23,10 @@ namespace sdmap.Parser.Visitor
                     if (!ctx.Deps.Contains(def.Id))
                         continue;
 
-                    var (result, hasMore) = def.TurnOn(ctx);
-                    if (result.IsFailure) return result;
+                    var result = def.TurnOn(ctx);
+                    if (result.IsFailure) return result.Map(r => r.Sql);
 
-                    if (hasMore) shouldContinue = true;
+                    if (result.Value.HasMore) shouldContinue = true;
                 }
             } while (shouldContinue);
 
