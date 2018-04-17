@@ -206,6 +206,14 @@ namespace sdmap.Macros.Implements
             if (v1 is DateTime date)
                 return date.Equals((DateTime)v2);
 
+            if (v1 is Enum @enum)
+            {
+                if (v2 is string v2s)
+                    return @enum.ToString() == v2s;
+                if (v2 is double v2d)
+                    return Convert.ToInt64(@enum) == v2d;
+            }
+
             return v1 == v2;
         }
 

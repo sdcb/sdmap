@@ -1,6 +1,7 @@
 ﻿using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -27,6 +28,21 @@ namespace sdmap.IntegratedTest
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", new { A = 3 });
             Assert.Equal("Yes", result);
+        }
+
+        [Theory]
+        [InlineData(FileAccess.Read, "'Read'", true)]
+        [InlineData(FileAccess.Read, "'read'", false)]
+        [InlineData(FileAccess.Read, "1", true)]
+        [InlineData(FileAccess.Read, "2", false)]
+        public void IsEqualEnum(FileAccess? enumVal, string literal, bool canEmit)
+        {
+            var code = $"sql v1{{#isEqual<A, {literal}, 'Yes'>}}";
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("v1", new { A = enumVal });
+            var expected = canEmit ? "Yes" : "";
+            Assert.Equal(expected, result);
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using System.IO;
 
 namespace sdmap.unittest.MacroImplTest
 {
@@ -31,6 +32,22 @@ namespace sdmap.unittest.MacroImplTest
         public void DoubleEqualDouble()
         {
             var val = CallIsEqual(new { A = 3.0 }, "A", 3.0, "Ok");
+            Assert.True(val.IsSuccess);
+            Assert.Equal("Ok", val.Value);
+        }
+
+        [Fact]
+        public void EnumShouldEqualToNumber()
+        {
+            var val = CallIsEqual(new { A = FileAccess.Read }, "A", 1.0, "Ok");
+            Assert.True(val.IsSuccess);
+            Assert.Equal("Ok", val.Value);
+        }
+
+        [Fact]
+        public void EnumShouldEqualToString()
+        {
+            var val = CallIsEqual(new { A = FileAccess.Read }, "A", "Read", "Ok");
             Assert.True(val.IsSuccess);
             Assert.Equal("Ok", val.Value);
         }
