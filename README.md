@@ -21,7 +21,7 @@ You can just only install `sdmap.ext.Dapper` since it will automatically install
 
 2. Create a empty text file, and renames it into .sdmap
 3. Set the file "Build operation" from "None" to "Embedded Resource" in item Property Window.
-4. Write some SQL statements into sdmap file, a minumin sdmap file may looks as following:
+4. Write some SQL statements into sdmap file, a minimum sdmap file may looks as following:
 
 ```
 sql GetUserById
