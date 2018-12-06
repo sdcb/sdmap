@@ -1,9 +1,7 @@
 ﻿using sdmap.Compiler;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Threading;
+using System.IO.Abstractions;
 using System.Threading.Tasks;
 
 namespace sdmap.ext
@@ -24,13 +22,14 @@ namespace sdmap.ext
 
         private static SdmapCompiler CreateCompilerFromSqlDirectory(
             string sqlDirectory,
+            IFileSystem fileSystem,
             bool ensureCompiled)
         {
             var compiler = new SdmapCompiler();
 
-            foreach (var file in Directory.EnumerateFiles(sqlDirectory, "*.sdmap", SearchOption.AllDirectories))
+            foreach (var file in fileSystem.Directory.EnumerateFiles(sqlDirectory, "*.sdmap", SearchOption.AllDirectories))
             {
-                var code = File.ReadAllText(file);
+                var code = fileSystem.File.ReadAllText(file);
                 compiler.AddSourceCode(code);
             }
 
@@ -48,31 +47,45 @@ namespace sdmap.ext
 
         public static FileSystemSqlEmiter FromSqlDirectory(
             string sqlDirectory,
+            bool ensureCompiled = false) => FromSqlDirectory(sqlDirectory, new FileSystem(), ensureCompiled);
+
+        public static FileSystemSqlEmiter FromSqlDirectory(
+            string sqlDirectory,
+            IFileSystem fileSystem,
             bool ensureCompiled = false)
         {
             return new FileSystemSqlEmiter(CreateCompilerFromSqlDirectory(
-                sqlDirectory, 
+                sqlDirectory,
+                fileSystem,
                 ensureCompiled));
         }
 
         public static FileSystemSqlEmiter FromSqlDirectoryAndWatch(
             string sqlDirectory,
+            bool ensureCompiled = false) => FromSqlDirectoryAndWatch(sqlDirectory, new FileSystem(), ensureCompiled);
+
+        public static FileSystemSqlEmiter FromSqlDirectoryAndWatch(
+            string sqlDirectory,
+            IFileSystem fileSystem,
             bool ensureCompiled = false)
         {
             var compiler = CreateCompilerFromSqlDirectory(
-                sqlDirectory, 
+                sqlDirectory,
+                fileSystem,
                 ensureCompiled);
 
             var result = new FileSystemSqlEmiter(compiler);
 
-            var watcher = new FileSystemWatcher(sqlDirectory);
+            var watcher = fileSystem.FileSystemWatcher.FromPath(sqlDirectory);
+            watcher.Path = sqlDirectory;
             watcher.EnableRaisingEvents = true;
             watcher.NotifyFilter = NotifyFilters.LastWrite;
             watcher.Changed += async (o, e) =>
-            {                
+            {
                 await Task.Delay(1);
                 result._compiler = CreateCompilerFromSqlDirectory(
                     sqlDirectory,
+                    fileSystem,
                     ensureCompiled);
                 GC.KeepAlive(watcher);
             };

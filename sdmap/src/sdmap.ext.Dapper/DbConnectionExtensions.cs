@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -19,9 +20,19 @@ namespace sdmap.ext.Dapper
             SetSqlEmiter(FileSystemSqlEmiter.FromSqlDirectory(sqlDirectory));
         }
 
+        public static void SetSqlDirectory(string sqlDirectory, IFileSystem fileSystem)
+        {
+            SetSqlEmiter(FileSystemSqlEmiter.FromSqlDirectory(sqlDirectory, fileSystem));
+        }
+
         public static void SetSqlDirectoryAndWatch(string sqlDirectory)
         {
             SetSqlEmiter(FileSystemSqlEmiter.FromSqlDirectoryAndWatch(sqlDirectory));
+        }
+
+        public static void SetSqlDirectoryAndWatch(string sqlDirectory, IFileSystem fileSystem)
+        {
+            SetSqlEmiter(FileSystemSqlEmiter.FromSqlDirectoryAndWatch(sqlDirectory, fileSystem));
         }
 
         public static void SetEmbeddedSqlAssembly(Assembly assembly)

@@ -30,6 +30,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="System.IO.Abstractions" Version="2.2.18-beta" />
   </ItemGroup>
 
   <ItemGroup>

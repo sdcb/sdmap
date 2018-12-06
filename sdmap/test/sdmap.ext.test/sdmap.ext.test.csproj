@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="2.2.18-beta" />
+    <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="2.2.18-beta" />
     <PackageReference Include="xunit" Version="2.2.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
   </ItemGroup>
