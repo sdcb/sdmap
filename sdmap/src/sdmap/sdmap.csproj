@@ -35,9 +35,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Antlr4.Runtime" Version="4.6.4" />
-    <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.4">
+    <PackageReference Include="Antlr4.Runtime" Version="4.6.5" />
+    <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.5">
       <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 </Project>
