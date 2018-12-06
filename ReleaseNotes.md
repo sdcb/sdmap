@@ -1,3 +1,7 @@
+## 0.15.0
+- [all] Enable source code debugging experience.
+- [ext] Better file system test.
+
 ## 0.14.0
 - [core] support #def in included sql
 - [core-internal] switch string append to array combine.
