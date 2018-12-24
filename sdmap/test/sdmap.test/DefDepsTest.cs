@@ -85,5 +85,16 @@ namespace sdmap.test
             string result = rt.Emit("v1", null);
             Assert.Equal("123", result);
         }
+
+        [Fact]
+        public void IndirectIncludeCannotBeProcessed()
+        {
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode(@"
+sql v1 { #isEqual<A, true, sql{#include<v2>}> }
+sql v2 { #def<K, 'Test'> #deps<K> }");
+            string result = rt.Emit("v1", new { A = true });
+            Assert.NotEqual("Test", result);
+        }
     }
 }
