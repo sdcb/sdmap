@@ -96,5 +96,16 @@ sql v2 { #def<K, 'Test'> #deps<K> }");
             string result = rt.Emit("v1", new { A = true });
             Assert.NotEqual("Test", result);
         }
+
+        [Fact]
+        public void DirectIncludeCanBeProcessed()
+        {
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode(@"
+sql v1 {#include<v2>}
+sql v2 {#def<K, 'Test'>#deps<K>}");
+            string result = rt.Emit("v1", new { A = true });
+            Assert.Equal("Test", result);
+        }
     }
 }
