@@ -2,6 +2,7 @@
 - [all] Enable source code debugging experience.
 - [ext] Better file system test.
 - [all] Upgrade dependencies to latest.
+- [vstool-0.12.0.6] Upgrade to support Visual Studio 2019.
 
 ## 0.14.0
 - [core] support #def in included sql
