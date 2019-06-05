@@ -1,4 +1,4 @@
-# sdmap [![NuGet](https://img.shields.io/badge/nuget-0.15.0-blue.svg)](https://www.nuget.org/packages/sdmap)
+# sdmap [![NuGet](https://img.shields.io/badge/nuget-0.16.0-blue.svg)](https://www.nuget.org/packages/sdmap)
 A template engine for writing dynamic sql.
 
 sdmap has it's own benifics over other dynamic SQL package/framework (like iBatis.NET):
