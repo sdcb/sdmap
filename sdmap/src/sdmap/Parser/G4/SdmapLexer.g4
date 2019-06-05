@@ -101,6 +101,8 @@ Equal:
 NotEqual: 
 	'!=';
 
+HashDefault: '#';
+
 
 
 

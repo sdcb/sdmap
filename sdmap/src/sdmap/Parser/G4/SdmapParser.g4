@@ -44,7 +44,7 @@ boolExpression:
 	boolExpression OpOr  boolExpression                      #BoolOpOr;
 
 macro:
-	Hash SYNTAX OpenAngleBracket
+	(Hash | HashDefault) SYNTAX OpenAngleBracket
 		macroParameter? (Comma macroParameter)*
 	CloseAngleBracket;
 
@@ -52,9 +52,10 @@ nsSyntax:
 	SYNTAX (Dot SYNTAX)*;
 
 macroParameter:
-	Bool |
-	nsSyntax |
-	STRING |
-	NUMBER |
-	DATE |
+	macro      |
+	Bool       |
+	nsSyntax   |
+	STRING     |
+	NUMBER     |
+	DATE       |
 	unnamedSql;

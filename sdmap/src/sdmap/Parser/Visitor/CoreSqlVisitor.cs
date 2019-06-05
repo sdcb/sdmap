@@ -24,7 +24,7 @@ namespace sdmap.Parser.Visitor
 
         public EmitFunction Function { get; protected set; }
 
-        private static MethodInfo _appendCall = typeof(List<object>)
+        private static MethodInfo _addCall = typeof(List<object>)
                 .GetMethod(nameof(List<object>.Add), new[] { typeof(object) });
 
         public CoreSqlVisitor(
@@ -101,7 +101,21 @@ namespace sdmap.Parser.Visitor
 
         public override Result VisitMacro([NotNull] MacroContext context)
         {
-            var macroName = context.GetToken(SYNTAX, 0).GetText();
+            var result = EmitMacroResult(context);                          // str
+            if (!result.IsSuccess) return result;
+
+            var strValue = _il.DeclareLocal(typeof(string));
+            _il.Emit(OpCodes.Stloc, strValue);                              // [empty]
+            _il.Emit(OpCodes.Ldloc_0);                                      // list
+            _il.Emit(OpCodes.Ldloc, strValue);                              // list str
+            _il.Emit(OpCodes.Call, _addCall);                               // [empty]
+
+            return Result.Ok();
+        }
+
+        private Result EmitMacroResult(MacroContext context)
+        {
+            string macroName = context.GetToken(SYNTAX, 0).GetText();
 
             _il.Emit(OpCodes.Ldarg_0);                                      // ctx
             _il.Emit(OpCodes.Ldstr, macroName);                             // ctx name
@@ -114,99 +128,15 @@ namespace sdmap.Parser.Visitor
             _il.Emit(OpCodes.Newarr, typeof(object));                       // ctx name ns self args
             for (var i = 0; i < contexts.Length; ++i)
             {
-                var arg = contexts[i];
+                MacroParameterContext arg = contexts[i];
 
                 _il.Emit(OpCodes.Dup);                                      // .. -> args
                 _il.Emit(OpCodes.Ldc_I4, i);                                // .. -> args idx
 
-                if (arg.nsSyntax() != null)
-                {
-                    _il.Emit(OpCodes.Ldstr, arg.nsSyntax().GetText());      // .. -> args idx ele
-                }
-                else if (arg.STRING() != null)
-                {
-                    var result = StringUtil.Parse(arg.STRING().GetText());  // .. -> args idx ele
-                    if (result.IsSuccess)
-                    {
-                        _il.Emit(OpCodes.Ldstr, result.Value);              // .. -> args idx ele
-                    }
-                    else
-                    {
-                        return result;
-                    }
-                }
-                else if (arg.NUMBER() != null)
-                {
-                    var result = NumberUtil.Parse(arg.NUMBER().GetText());
-                    if (result.IsSuccess)
-                    {
-                        _il.Emit(OpCodes.Ldc_R8, result.Value);             // .. -> args idx vele
-                        _il.Emit(OpCodes.Box, typeof(double));              // .. -> args idx rele
-                    }
-                    else
-                    {
-                        return result;
-                    }
-                }
-                else if (arg.DATE() != null)
-                {
-                    var result = DateUtil.Parse(arg.DATE().GetText());
-                    if (result.IsSuccess)
-                    {
-                        _il.Emit(OpCodes.Ldc_I8, result.Value.ToBinary());  // .. -> args idx int64
-                        var ctor = typeof(DateTime).GetConstructor(new[] { typeof(long) });
-                        _il.Emit(OpCodes.Newobj, ctor);                     // .. -> args idx date
-                        _il.Emit(OpCodes.Box, typeof(DateTime));            // .. -> args idx rele
-                    }
-                    else
-                    {
-                        return result;
-                    }
-                }
-                else if (arg.Bool() != null)
-                {
-                    _il.Emit(bool.Parse(arg.Bool().GetText()) ?
-                        OpCodes.Ldc_I4_1 :
-                        OpCodes.Ldc_I4_0);                                  // .. -> args idx bool
-                    _il.Emit(OpCodes.Box, typeof(bool));                    // .. -> args idx rele
-                }
-                else if (arg.unnamedSql() != null)
-                {
-                    var parseTree = arg.unnamedSql();
-                    var id = NameUtil.GetFunctionName(parseTree);
-                    var result = _context.TryGetEmiter(id, _context.CurrentNs);
+                var result = EmitGetMacroParameter(arg);                    // .. -> args idx val
+                if (!result.IsSuccess) return result;
 
-                    SqlEmiter emiter;
-                    if (result.IsSuccess)
-                    {
-                        emiter = result.Value;
-                    }
-                    else
-                    {
-                        emiter = SqlEmiterUtil.CreateUnnamed(parseTree, _context.CurrentNs);
-                        var ok = _context.TryAdd(id, emiter);
-                        if (ok.IsFailure) return ok;
-                    }
-
-                    var compileResult = emiter.EnsureCompiled(_context);
-                    if (compileResult.IsFailure)
-                    {
-                        return compileResult;
-                    }
-
-                    _il.Emit(OpCodes.Ldarg_0);                              // .. -> args idx ctx
-                    _il.Emit(OpCodes.Call, OneCallContext.GetCompiler);// .. -> args ids compiler
-                    _il.Emit(OpCodes.Ldstr, id);                            // .. -> args idx compiler id
-                    _il.Emit(OpCodes.Ldstr, _context.CurrentNs);            // .. -> args idx compiler id ns
-                    _il.Emit(OpCodes.Call, typeof(SqlEmiterUtil)
-                        .GetMethod(nameof(SqlEmiterUtil.EmiterFromId)));    // .. -> args idx emiter
-                }
-                else
-                {
-                    throw new InvalidOperationException();
-                }
-
-                _il.Emit(OpCodes.Stelem_Ref);                               // -> ctx name ns self args
+                _il.Emit(OpCodes.Stelem_Ref);                               // ctx name ns self args
             }
 
             _il.Emit(OpCodes.Call, typeof(MacroManager)
@@ -222,11 +152,103 @@ namespace sdmap.Parser.Visitor
             _il.MarkLabel(ifIsSuccess);                                     // ifIsSuccess:
             _il.Emit(OpCodes.Call, typeof(Result<string>)
                 .GetMethod("get_" + nameof(Result<string>.Value)));         // str
-            var strValue = _il.DeclareLocal(typeof(string));
-            _il.Emit(OpCodes.Stloc, strValue);                              // [empty]
-            _il.Emit(OpCodes.Ldloc_0);                                      // sb
-            _il.Emit(OpCodes.Ldloc, strValue);                              // sb str
-            _il.Emit(OpCodes.Call, _appendCall);                            // [empty]
+
+            return Result.Ok();
+        }
+
+        private Result EmitGetMacroParameter(MacroParameterContext arg)
+        {
+            if (arg.nsSyntax() != null)
+            {
+                _il.Emit(OpCodes.Ldstr, arg.nsSyntax().GetText());      // val
+            }
+            else if (arg.STRING() != null)
+            {
+                var result = StringUtil.Parse(arg.STRING().GetText());  
+                if (result.IsSuccess)
+                {
+                    _il.Emit(OpCodes.Ldstr, result.Value);              // val
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            else if (arg.NUMBER() != null)
+            {
+                var result = NumberUtil.Parse(arg.NUMBER().GetText());
+                if (result.IsSuccess)
+                {
+                    _il.Emit(OpCodes.Ldc_R8, result.Value);             // num
+                    _il.Emit(OpCodes.Box, typeof(double));              // box<num>
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            else if (arg.DATE() != null)
+            {
+                var result = DateUtil.Parse(arg.DATE().GetText());
+                if (result.IsSuccess)
+                {
+                    _il.Emit(OpCodes.Ldc_I8, result.Value.ToBinary());  // num
+                    var ctor = typeof(DateTime).GetConstructor(new[] { typeof(long) });
+                    _il.Emit(OpCodes.Newobj, ctor);                     // date
+                    _il.Emit(OpCodes.Box, typeof(DateTime));            // box<date>
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            else if (arg.Bool() != null)
+            {
+                _il.Emit(bool.Parse(arg.Bool().GetText()) ?
+                    OpCodes.Ldc_I4_1 :
+                    OpCodes.Ldc_I4_0);                                  // bool
+                _il.Emit(OpCodes.Box, typeof(bool));                    // box<bool>
+            }
+            else if (arg.unnamedSql() != null)
+            {
+                var parseTree = arg.unnamedSql();
+                var id = NameUtil.GetFunctionName(parseTree);
+                var result = _context.TryGetEmiter(id, _context.CurrentNs);
+
+                SqlEmiter emiter;
+                if (result.IsSuccess)
+                {
+                    emiter = result.Value;
+                }
+                else
+                {
+                    emiter = SqlEmiterUtil.CreateUnnamed(parseTree, _context.CurrentNs);
+                    var ok = _context.TryAdd(id, emiter);
+                    if (ok.IsFailure) return ok;
+                }
+
+                var compileResult = emiter.EnsureCompiled(_context);
+                if (compileResult.IsFailure)
+                {
+                    return compileResult;
+                }
+
+                _il.Emit(OpCodes.Ldarg_0);                              // ctx
+                _il.Emit(OpCodes.Call, OneCallContext.GetCompiler);     // compiler
+                _il.Emit(OpCodes.Ldstr, id);                            // compiler id
+                _il.Emit(OpCodes.Ldstr, _context.CurrentNs);            // compiler id ns
+                _il.Emit(OpCodes.Call, typeof(SqlEmiterUtil)
+                    .GetMethod(nameof(SqlEmiterUtil.EmiterFromId)));    // emiter
+            }
+            else if (arg.macro() != null)
+            {
+                var result = EmitMacroResult(arg.macro());
+                if (!result.IsSuccess) return result;
+            }
+            else
+            {
+                return Result.Fail($"Unknown macro.");
+            }
 
             return Result.Ok();
         }
@@ -237,7 +259,7 @@ namespace sdmap.Parser.Visitor
 
             _il.Emit(OpCodes.Ldloc_0);                                             // sb
             _il.Emit(OpCodes.Ldstr, text);                                         // sb str
-            _il.Emit(OpCodes.Call, _appendCall);                                   // [empty]
+            _il.Emit(OpCodes.Call, _addCall);                                   // [empty]
             return Result.Ok();
         }
 
@@ -300,7 +322,7 @@ namespace sdmap.Parser.Visitor
                     _il.Emit(OpCodes.Stloc, strLocal);
                     _il.Emit(OpCodes.Ldloc_0);
                     _il.Emit(OpCodes.Ldloc, strLocal);
-                    _il.Emit(OpCodes.Call, _appendCall);                       // [empty]
+                    _il.Emit(OpCodes.Call, _addCall);                       // [empty]
                     _il.MarkLabel(ifSkip);
                     return Result.Ok();
                 });
