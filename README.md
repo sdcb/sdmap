@@ -54,7 +54,7 @@ string finalSqlToExecute = DbConnectionExtensions.EmitSql(sqlMapId, parameterObj
 ```
 
 
-## Visual Studio 2015/2017 extension:
+## Visual Studio 2019 extension:
 https://marketplace.visualstudio.com/items?itemName=sdmapvstool.sdmapvstool
 
 ## How to Compile
