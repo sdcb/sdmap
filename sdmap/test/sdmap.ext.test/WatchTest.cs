@@ -46,12 +46,12 @@ namespace sdmap.ext.test
         {
             public MockFsWatcher TheOnlyWatcher { get; } = new MockFsWatcher();
 
-            public FileSystemWatcherBase CreateNew()
+            IFileSystemWatcher IFileSystemWatcherFactory.CreateNew()
             {
                 throw new NotImplementedException();
             }
 
-            public FileSystemWatcherBase FromPath(string path) => TheOnlyWatcher;
+            IFileSystemWatcher IFileSystemWatcherFactory.FromPath(string path) => TheOnlyWatcher;
         }
 
         private class MockFsWatcher : FileSystemWatcherBase

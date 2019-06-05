@@ -23,12 +23,12 @@ https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="1.50.5" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02">
+    <PackageReference Include="Dapper" Version="1.60.6" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19270-01">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.IO.Abstractions" Version="2.2.18-beta" />
+    <PackageReference Include="System.IO.Abstractions" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -35,10 +35,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Reflection.Emit.ILGeneration" Version="4.3.0" Condition="'$(TargetFramework)' == 'netstandard20'"/>
-    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" Condition="'$(TargetFramework)' == 'netstandard20'"/>
-    <PackageReference Include="Antlr4.Runtime" Version="4.6.5" />
-    <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.5">
+    <PackageReference Include="System.Reflection.Emit.ILGeneration" Version="4.3.0" Condition="'$(TargetFramework)' == 'netstandard20'" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" Condition="'$(TargetFramework)' == 'netstandard20'" />
+    <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
+    <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.6">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02">
