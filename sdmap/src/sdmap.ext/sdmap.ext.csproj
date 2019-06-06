@@ -1,37 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0;net451</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0;net451;netstandard20</TargetFrameworks>
     <AssemblyName>sdmap.ext</AssemblyName>
     <PackageId>sdmap.ext</PackageId>
     <PackageTags>dynamic sql;sdmap</PackageTags>
     <PackageReleaseNotes>For more information, please view:
 https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md</PackageReleaseNotes>
-    <PackageLicenseUrl>https://github.com/sdcb/sdmap/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/sdcb/sdmap</RepositoryUrl>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>0.15.0</Version>
+    <Version>0.16.1</Version>
     <Description>Useful extensions for sdmap/Dapper.</Description>
     <PackageProjectUrl>https://github.com/sdcb/sdmap</PackageProjectUrl>
     <Authors>sdcb</Authors>
     <Copyright>MIT</Copyright>
-    <AssemblyVersion>0.15.0</AssemblyVersion>
-    <FileVersion>0.15.0</FileVersion>
+    <AssemblyVersion>0.16.1</AssemblyVersion>
+    <FileVersion>0.16.1</FileVersion>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19270-01">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.IO.Abstractions" Version="2.2.18-beta" />
+    <PackageReference Include="System.IO.Abstractions" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\sdmap\sdmap.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

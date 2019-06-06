@@ -1,4 +1,4 @@
-# sdmap [![NuGet](https://img.shields.io/badge/nuget-0.15.0-blue.svg)](https://www.nuget.org/packages/sdmap)
+# sdmap [![NuGet](https://img.shields.io/badge/nuget-0.16.0-blue.svg)](https://www.nuget.org/packages/sdmap)
 A template engine for writing dynamic sql.
 
 sdmap has it's own benifics over other dynamic SQL package/framework (like iBatis.NET):
@@ -54,7 +54,7 @@ string finalSqlToExecute = DbConnectionExtensions.EmitSql(sqlMapId, parameterObj
 ```
 
 
-## Visual Studio 2015/2017 extension:
+## Visual Studio 2019 extension:
 https://marketplace.visualstudio.com/items?itemName=sdmapvstool.sdmapvstool
 
 ## How to Compile

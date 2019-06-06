@@ -1,3 +1,7 @@
+## 0.16.0
+- [all] Support .NET Standard 2.0
+- [all] Update all dependencies to latest.
+
 ## 0.15.0
 - [all] Enable source code debugging experience.
 - [ext] Better file system test.
