@@ -4,9 +4,7 @@ using sdmap.Parser.G4;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Antlr4.Runtime.Misc;
-using Antlr4.Runtime.Tree;
 using sdmap.Utils;
 using static sdmap.Parser.G4.SdmapParser;
 

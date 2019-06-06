@@ -1,10 +1,6 @@
-﻿using sdmap.Macros;
-using sdmap.Macros.Implements;
+﻿using sdmap.Macros.Implements;
 using sdmap.unittest.MacroTest.FilterMethodsImpl;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace sdmap.unittest.MacroTest

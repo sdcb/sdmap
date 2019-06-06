@@ -1,12 +1,9 @@
 ﻿using sdmap.Functional;
-using sdmap.Macros.Attributes;
 using sdmap.Macros.Implements;
 using sdmap.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using static sdmap.Macros.Implements.MacroUtil;
 
 namespace sdmap.Macros

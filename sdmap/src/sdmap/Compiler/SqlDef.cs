@@ -1,9 +1,5 @@
 ﻿using sdmap.Functional;
 using sdmap.Macros.Implements;
-using sdmap.Parser.Visitor;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace sdmap.Compiler
 {

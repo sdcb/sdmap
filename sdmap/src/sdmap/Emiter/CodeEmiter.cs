@@ -1,9 +1,6 @@
 ﻿using sdmap.Emiter.Implements.Common;
 using sdmap.Functional;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace sdmap.Emiter
 {

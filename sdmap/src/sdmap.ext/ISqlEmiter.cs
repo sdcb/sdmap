@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace sdmap.ext
+﻿namespace sdmap.ext
 {
     public interface ISdmapEmiter
     {

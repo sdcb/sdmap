@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace sdmap.Emiter.Implements.Common
+﻿namespace sdmap.Emiter.Implements.Common
 {
     public class CodeEmiterConfig
     {

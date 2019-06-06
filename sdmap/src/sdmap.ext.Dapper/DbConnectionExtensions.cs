@@ -2,12 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.IO.Abstractions;
-using System.Linq;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace sdmap.ext.Dapper
 {

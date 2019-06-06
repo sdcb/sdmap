@@ -1,9 +1,4 @@
-﻿using sdmap.Parser.Visitor;
-using sdmap.Compiler;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using sdmap.Compiler;
 using Xunit;
 
 namespace sdmap.unittest.VisitorTest

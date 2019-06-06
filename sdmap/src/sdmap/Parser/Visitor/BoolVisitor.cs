@@ -1,17 +1,10 @@
-﻿using Antlr4.Runtime;
-using Antlr4.Runtime.Misc;
+﻿using Antlr4.Runtime.Misc;
 using sdmap.Functional;
-using sdmap.Macros;
 using sdmap.Parser.G4;
 using sdmap.Utils;
 using sdmap.Compiler;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using static sdmap.Parser.G4.SdmapParser;
 using sdmap.Macros.Implements;
 

@@ -10,8 +10,6 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using static sdmap.Parser.G4.SdmapParser;
-using System.IO;
-using System.Runtime.CompilerServices;
 
 namespace sdmap.Parser.Visitor
 {

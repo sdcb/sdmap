@@ -1,11 +1,5 @@
 ﻿using sdmap.Functional;
-using sdmap.Macros;
-using sdmap.Parser.Visitor;
 using sdmap.Compiler;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace sdmap.IntegratedTest

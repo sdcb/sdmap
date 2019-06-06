@@ -1,10 +1,6 @@
 ﻿using sdmap.Functional;
 using sdmap.Macros.Attributes;
 using sdmap.Compiler;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace sdmap.unittest.MacroTest.ToMacroImpl
 {

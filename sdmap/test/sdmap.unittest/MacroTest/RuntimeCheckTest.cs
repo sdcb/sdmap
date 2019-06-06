@@ -1,8 +1,5 @@
 ﻿using sdmap.Macros;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 using static sdmap.Macros.Implements.MacroUtil;
 

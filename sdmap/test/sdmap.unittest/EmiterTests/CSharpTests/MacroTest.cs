@@ -1,7 +1,4 @@
 ﻿using sdmap.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace sdmap.unittest.EmiterTests.CSharpTests

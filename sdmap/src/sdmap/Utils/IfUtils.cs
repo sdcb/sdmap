@@ -1,11 +1,6 @@
 ﻿using sdmap.Compiler;
 using sdmap.Functional;
 using sdmap.Macros.Implements;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 
 namespace sdmap.Utils
 {

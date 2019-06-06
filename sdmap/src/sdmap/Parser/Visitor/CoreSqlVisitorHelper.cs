@@ -1,9 +1,5 @@
 ﻿using sdmap.Compiler;
 using sdmap.Functional;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace sdmap.Parser.Visitor
 {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace sdmap.Macros
+﻿namespace sdmap.Macros
 {
     public enum SdmapTypes
     {

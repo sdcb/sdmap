@@ -1,11 +1,4 @@
-﻿using sdmap.Emiter.Implements.Common;
-using sdmap.Emiter.Implements.CSharp;
-using sdmap.Functional;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Xunit;
+﻿using Xunit;
 
 namespace sdmap.test.EmiterTests.CSharpTests
 {

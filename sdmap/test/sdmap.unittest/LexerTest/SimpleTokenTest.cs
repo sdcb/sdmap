@@ -1,9 +1,4 @@
-﻿using Antlr4.Runtime;
-using sdmap.Parser.G4;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Xunit;
 
 using static sdmap.Parser.G4.SdmapLexer;

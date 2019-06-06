@@ -2,10 +2,6 @@
 using sdmap.Functional;
 using sdmap.Macros.Implements;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace sdmap.unittest.MacroImplTest

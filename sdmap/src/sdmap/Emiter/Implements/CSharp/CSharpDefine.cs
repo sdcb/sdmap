@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace sdmap.Emiter.Implements.CSharp
+﻿namespace sdmap.Emiter.Implements.CSharp
 {
     public class CSharpDefine
     {

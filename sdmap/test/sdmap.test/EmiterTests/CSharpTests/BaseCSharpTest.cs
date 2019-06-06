@@ -1,11 +1,6 @@
-﻿using Antlr4.Runtime;
-using Antlr4.Runtime.Tree;
-using sdmap.Emiter.Implements.Common;
+﻿using sdmap.Emiter.Implements.Common;
 using sdmap.Emiter.Implements.CSharp;
 using sdmap.Functional;
-using sdmap.Parser.G4;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
