@@ -51,14 +51,14 @@ namespace sdmap.unittest.MacroTest
         public void CanDetectEmptyArray()
         {
             var arr = Enumerable.Range(1, 0);
-            Assert.True(RuntimeMacros.ArrayEmpty(arr));
+            Assert.True(DynamicRuntimeMacros.ArrayEmpty(arr));
         }
 
         [Fact]
         public void CanDetectNotEmptyArray()
         {
             var arr = Enumerable.Range(1, 10);
-            Assert.False(RuntimeMacros.ArrayEmpty(arr));
+            Assert.False(DynamicRuntimeMacros.ArrayEmpty(arr));
         }
 
         [Fact]

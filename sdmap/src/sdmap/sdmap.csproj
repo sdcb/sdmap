@@ -37,7 +37,6 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <None Include="Emiter\Implements\Common\CodeEmiterConfig.cs" />
   </ItemGroup>
 
   <ItemGroup>

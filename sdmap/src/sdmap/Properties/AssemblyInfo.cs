@@ -20,4 +20,5 @@ using System.Runtime.InteropServices;
 [assembly: Guid("d68942d4-80c5-459e-84bc-12a517495544")]
 [assembly: CLSCompliant(false)]
 [assembly: InternalsVisibleTo("sdmap.unittest")]
+[assembly: InternalsVisibleTo("sdmap.test")]
 [assembly: InternalsVisibleTo("Anonymously Hosted DynamicMethods Assembly")]

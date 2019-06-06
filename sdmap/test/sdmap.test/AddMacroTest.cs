@@ -37,7 +37,7 @@ namespace sdmap.IntegratedTest
                 var prop = self.GetType().GetProperty((string)arguments[0]);
                 if (prop == null) return Result.Fail<string>($"Query requires property '{prop}' in macro '{id}'.");
 
-                if (!RuntimeMacros.IsEmpty(RuntimeMacros.GetPropValue(self, (string)arguments[0])))
+                if (!DynamicRuntimeMacros.IsEmpty(DynamicRuntimeMacros.GetPropValue(self, (string)arguments[0])))
                 {
                     foreach (var dep in arguments.Skip(2).OfType<string>())
                     {

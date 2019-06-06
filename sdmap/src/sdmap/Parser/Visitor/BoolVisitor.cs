@@ -167,13 +167,13 @@ namespace sdmap.Parser.Visitor
             {
                 case "isEmpty":
                     if (exps.Length != 1) break;
-                    _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo()
-                        .GetMethod(nameof(IfUtils.IsEmpty)));
+                    _il.Emit(OpCodes.Call, typeof(DynamicRuntimeMacros).GetTypeInfo()
+                        .GetMethod(nameof(DynamicRuntimeMacros.IsEmpty), new[] { typeof(object) }));
                     return Result.Ok();
                 case "isNotEmpty":
                     if (exps.Length != 1) break;
-                    _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo()
-                        .GetMethod(nameof(IfUtils.IsEmpty)));
+                    _il.Emit(OpCodes.Call, typeof(DynamicRuntimeMacros).GetTypeInfo()
+                        .GetMethod(nameof(DynamicRuntimeMacros.IsEmpty), new[] { typeof(object) }));
                     _il.Emit(OpCodes.Ldc_I4_0);
                     _il.Emit(OpCodes.Ceq);
                     return Result.Ok();

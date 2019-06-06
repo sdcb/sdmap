@@ -20,8 +20,5 @@ namespace sdmap.Utils
 
         public static Result<string> ExecuteEmiter(EmitFunction ef, OneCallContext ctx)
             => ef(ctx.Dig(ctx.Obj));
-
-        public static bool IsEmpty(object obj)
-            => RuntimeMacros.IsEmpty(obj);
     }
 }
