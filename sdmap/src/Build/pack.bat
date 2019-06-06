@@ -1,5 +1,5 @@
 @echo off
-set OPTIONS=--configuration Release --output ../Build --include-source
+set OPTIONS=--configuration Release --output ../Build --include-symbols
 set COMMAND=dotnet pack
 
 cd ../sdmap
