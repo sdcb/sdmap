@@ -92,6 +92,7 @@ namespace sdmap.Vstool.Tagger
                 case SQLText:
                     return svr.StringLiteral;
                 case Hash:
+                case HashDefault:
                     return svr.PreprocessorKeyword;
                 case Bool:
                     return svr.Keyword;

@@ -5,12 +5,13 @@ namespace Client
 		SELECT * FROM client_Profile
 		WHERE 1 = 1 
 
-		#if (isEmpty(State))    { AND `State`  = @State}
+		#if (isEmpty(State))    { AND `State`   = @State}
 		#isNotEmpty<City,    sql{ AND `City`    = @City }>
 		#isNotEmpty<Zipcode, sql{ AND `Zipcode` = @Zipcode }>
 
 		#isNotEqual<State,   "NY", sql{ AND `State` = @State }>
 		#isEqual<IsReactive, 1   , sql{ AND `WONum` LIKE CONCAT('B%', @WONum) }>
+		#isEqual<A, #prop<A>, #prop<B>>
 
 		#include<CommonOrderBy>
 	}
@@ -23,4 +24,8 @@ sql CommonOrderBy
 	}, sql{
 		ORDER BY Id DESC
 	}>
+}
+
+sql Other {
+	Just another SQL.
 }
