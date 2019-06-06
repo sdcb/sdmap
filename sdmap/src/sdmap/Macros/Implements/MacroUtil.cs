@@ -82,7 +82,7 @@ namespace sdmap.Macros.Implements
                             return TypeCheckFail(macro, i, arg, mac);
                         break;
                     case SdmapTypes.StringOrSql:
-                        if (!(arg is string) && !(arg is EmitFunction))
+                        if (!(arg is string) && !(arg is EmitFunction) && !(arg is Result<string>))
                             return TypeCheckFail(macro, i, arg, mac);
                         break;
                     case SdmapTypes.Bool:
@@ -108,10 +108,12 @@ namespace sdmap.Macros.Implements
 
         public static Result<string> EvalToString(object value, OneCallContext context, object self)
         {
-            if (value is string)
-                return Result.Ok((string)value);
-            if (value is EmitFunction)
-                return ((EmitFunction)value)(context.DigNewFragments(self));
+            if (value is string str)
+                return Result.Ok(str);
+            if (value is EmitFunction func)
+                return func(context.DigNewFragments(self));
+            else if (value is Result<string> res)
+                return res;
             throw new ArgumentOutOfRangeException(nameof(value));
         }
     }

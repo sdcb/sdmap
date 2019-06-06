@@ -1,5 +1,4 @@
-﻿using Antlr4.Runtime;
-using Antlr4.Runtime.Misc;
+﻿using Antlr4.Runtime.Misc;
 using sdmap.Functional;
 using sdmap.Macros;
 using sdmap.Parser.G4;
@@ -10,9 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using static sdmap.Parser.G4.SdmapParser;
+using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace sdmap.Parser.Visitor
 {
@@ -96,12 +95,13 @@ namespace sdmap.Parser.Visitor
                 .OnSuccess(() =>                                                      // [must be empty]
                 {
                     returnBlock();
+                    Console.WriteLine(method);
                 });
         }
 
         public override Result VisitMacro([NotNull] MacroContext context)
         {
-            var result = EmitMacroResult(context);                          // str
+            var result = EmitMacroResult(context, topLevel: true);          // str
             if (!result.IsSuccess) return result;
 
             var strValue = _il.DeclareLocal(typeof(string));
@@ -113,7 +113,7 @@ namespace sdmap.Parser.Visitor
             return Result.Ok();
         }
 
-        private Result EmitMacroResult(MacroContext context)
+        private Result EmitMacroResult(MacroContext context, bool topLevel)
         {
             string macroName = context.GetToken(SYNTAX, 0).GetText();
 
@@ -125,7 +125,7 @@ namespace sdmap.Parser.Visitor
 
             var contexts = context.GetRuleContexts<MacroParameterContext>();
             _il.Emit(OpCodes.Ldc_I4, contexts.Length);                      // ctx name ns self
-            _il.Emit(OpCodes.Newarr, typeof(object));                       // ctx name ns self args
+            _il.Emit(OpCodes.Newarr, typeof(object));                       // ctx name ns self args            
             for (var i = 0; i < contexts.Length; ++i)
             {
                 MacroParameterContext arg = contexts[i];
@@ -138,7 +138,7 @@ namespace sdmap.Parser.Visitor
 
                 _il.Emit(OpCodes.Stelem_Ref);                               // ctx name ns self args
             }
-
+            
             _il.Emit(OpCodes.Call, typeof(MacroManager)
                 .GetMethod(nameof(MacroManager.Execute)));                  // result<str>
             _il.Emit(OpCodes.Dup);                                          // result<str> x 2
@@ -147,12 +147,23 @@ namespace sdmap.Parser.Visitor
             _il.Emit(OpCodes.Ldc_I4_1);                                     // result<str> bool true
             var ifIsSuccess = _il.DefineLabel();
             _il.Emit(OpCodes.Beq, ifIsSuccess);                             // result<str> (jmp if equal)
-            _il.Emit(OpCodes.Ret);                                          // [exit-returned]
-
-            _il.MarkLabel(ifIsSuccess);                                     // ifIsSuccess:
-            _il.Emit(OpCodes.Call, typeof(Result<string>)
-                .GetMethod("get_" + nameof(Result<string>.Value)));         // str
-
+            if (topLevel)
+            {
+                _il.Emit(OpCodes.Ret);                                      // [exit-returned]
+                _il.MarkLabel(ifIsSuccess);                                 // ifIsSuccess:
+                _il.Emit(OpCodes.Call, typeof(Result<string>)
+                    .GetMethod("get_" + nameof(Result<string>.Value)));     // str
+            }
+            else
+            {
+                var exit = _il.DefineLabel();
+                _il.Emit(OpCodes.Br_S, exit);
+                _il.MarkLabel(ifIsSuccess);                                 // ifIsSuccess:
+                _il.Emit(OpCodes.Call, typeof(Result<string>)
+                    .GetMethod("get_" + nameof(Result<string>.Value)));     // str
+                _il.MarkLabel(exit);
+            }
+            
             return Result.Ok();
         }
 
@@ -242,7 +253,7 @@ namespace sdmap.Parser.Visitor
             }
             else if (arg.macro() != null)
             {
-                var result = EmitMacroResult(arg.macro());
+                var result = EmitMacroResult(arg.macro(), topLevel: false);
                 if (!result.IsSuccess) return result;
             }
             else

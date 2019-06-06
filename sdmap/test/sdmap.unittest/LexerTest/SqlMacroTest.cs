@@ -81,5 +81,23 @@ namespace sdmap.unittest.LexerTest
                 CloseSql
             }, tokens.Select(x => x.Type));
         }
+
+        [Fact]
+        public void DirectMacroTest()
+        {
+            var tokens = GetAllTokens("sql v1{#isEqual<A, true, #prop<B>>}");
+            Assert.Equal(new[]
+            {
+                KSql, SYNTAX, OpenCurlyBrace,
+                    Hash, SYNTAX, OpenAngleBracket,
+                        SYNTAX, Comma,
+                        Bool, Comma,
+                        HashDefault, SYNTAX, OpenAngleBracket,
+                            SYNTAX, 
+                        CloseAngleBracket, 
+                    CloseAngleBracket,
+                CloseSql
+            }, tokens.Select(x => x.Type));
+        }
     }
 }

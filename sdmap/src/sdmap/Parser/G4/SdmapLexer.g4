@@ -101,7 +101,8 @@ Equal:
 NotEqual: 
 	'!=';
 
-HashDefault: '#';
+HashDefault: 
+	'#' -> pushMode(DEFAULT_MODE);
 
 
 
