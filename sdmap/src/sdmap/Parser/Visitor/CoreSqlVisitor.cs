@@ -93,7 +93,6 @@ namespace sdmap.Parser.Visitor
                 .OnSuccess(() =>                                                      // [must be empty]
                 {
                     returnBlock();
-                    Console.WriteLine(method);
                 });
         }
 

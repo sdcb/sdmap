@@ -2,6 +2,7 @@
 - [all] Support .NET Standard 2.0
 - [all-0.16.1] Update all dependencies to latest.
 - [core-0.16.1] (#1) Support call macro directly in macro: `sql v1{#isEqual<A, true, #prop<B>>}`
+- [core-0.16.2] drop useless Console.WriteLine.
 
 ## 0.15.0
 - [all] Enable source code debugging experience.
