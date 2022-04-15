@@ -40,7 +40,7 @@ namespace sdmap.Vstool.NavigateTo
         public void StartSearch(INavigateToCallback callback, string searchValue)
         {
             _cancellationTokenSource = new CancellationTokenSource();
-            System.Threading.Tasks.Task.Run(() =>
+            _ = Task.Run(() =>
             {
                 Search(callback, searchValue);
             });
