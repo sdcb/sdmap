@@ -20,15 +20,13 @@
     <Copyright>MIT</Copyright>
     <PackageProjectUrl>https://github.com/sdcb/sdmap</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
 
 
   <ItemGroup>

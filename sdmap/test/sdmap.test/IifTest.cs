@@ -58,11 +58,12 @@ namespace sdmap.IntegratedTest
             Assert.False(result.IsSuccess);
         }
 
-        [InlineData(true, "Yes#")]
+        [Theory]
+        [InlineData(true, "Yes")]
         [InlineData(false, "No!<>")]
         public void CanNestUnnamedSql(bool input, string expected)
         {
-            var code = "sql v1{#iif<A, sql{Yes#}, sql{No!<>}";
+            var code = "sql v1{#iif<A, sql{Yes}, sql{No!<>}";
             var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.TryEmit("v1", new { A = input });

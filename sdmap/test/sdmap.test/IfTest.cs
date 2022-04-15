@@ -87,6 +87,7 @@ namespace sdmap.IntegratedTest
             Assert.Equal("ATrue", result);
         }
         
+        [Theory]
         [InlineData(true)]
         [InlineData(false)]
         public void EqualBooleanTest(bool flag)
