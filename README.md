@@ -35,7 +35,7 @@ Note: the `namespace NS { ... }` is not required.
 
 5. Initialize sdmap by this code(the `Program` means the assembly where sdmap be located): 
 ```
-DBConnectionExtensions.SetEmbeddedSqlAssembly(typeof(Program).Assembly);
+DbConnectionExtensions.SetEmbeddedSqlAssembly(typeof(Program).Assembly);
 ```
 
 Note:

@@ -23,7 +23,7 @@
 - [core-0.13.1.1] fix the issue not emit the property name when isEmpty/isNotEmpty fail.
 
 ## 0.12.0
-- [core-Breaking Change] hash literal now using "\#" instead of "##"
+- [core-Breaking Change] hash literal now using `\#` instead of `##`
 - [all] upgrade project to netcoreapp2.0
 - [core] if statement now support equals to boolean literal(== true/false)
 - [core] sdmap can now live with error close curly brace } harmony.
