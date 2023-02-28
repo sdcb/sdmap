@@ -488,6 +488,9 @@ namespace sdmap.Macros.Implements
             if (v1 is int integer)
                 return integer.Equals(Convert.ToInt32(v2));
 
+            if (v1 is long longValue)
+                return longValue.Equals(Convert.ToInt64(v2));
+
             if (v1 is double db)
                 return db.Equals(Convert.ToDouble(v2));
 
