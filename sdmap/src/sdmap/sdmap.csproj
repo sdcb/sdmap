@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Description>A template engine for writing dynamic sql.</Description>
     <TargetFrameworks>net6;netstandard20</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <AssemblyName>sdmap</AssemblyName>
     <PackageId>sdmap</PackageId>
     <PackageTags>dynamic sql;ibatis</PackageTags>
