@@ -5,13 +5,12 @@ using System.Reflection;
 
 namespace sdmap.Macros.Implements;
 
-[Flags]
 public enum ComparisonResult : byte
 {
-    Incomparable  = 1,
-    AreEqual      = 2,
-    LeftIsGreater = 4,
-    LeftIsLess    = 8
+    Incomparable = 1,
+    AreEqual,
+    LeftIsGreater,
+    LeftIsLess
 }
 
 internal static class ValueComparer

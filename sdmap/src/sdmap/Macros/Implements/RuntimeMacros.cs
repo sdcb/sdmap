@@ -214,9 +214,10 @@ namespace sdmap.Macros.Implements
             if (prop == null) return RequirePropNotNull(arguments[0]);
 
             string syntax = (string)arguments[0];
-            var val = GetPropValue(self, syntax);
-            var compare = Convert.ToDouble(arguments[1]);
-            if (Convert.ToDouble(val) < compare)
+            var left = GetPropValue(self, syntax);
+            var right = arguments[1];
+
+            if (ValueComparer.Compare(left, right) is ComparisonResult.LeftIsLess)
                 return MacroUtil.EvalToString(arguments[2], context, self);
 
             return Empty;
@@ -233,9 +234,10 @@ namespace sdmap.Macros.Implements
             if (prop == null) return RequirePropNotNull(arguments[0]);
 
             string syntax = (string)arguments[0];
-            var val = GetPropValue(self, syntax);
-            var compare = Convert.ToDouble(arguments[1]);
-            if (Convert.ToDouble(val) > compare)
+            var left = GetPropValue(self, syntax);
+            var right = arguments[1];
+
+            if (ValueComparer.Compare(left, right) is ComparisonResult.LeftIsGreater)
                 return MacroUtil.EvalToString(arguments[2], context, self);
 
             return Empty;
@@ -252,9 +254,10 @@ namespace sdmap.Macros.Implements
             if (prop == null) return RequirePropNotNull(arguments[0]);
 
             string syntax = (string)arguments[0];
-            var val = GetPropValue(self, syntax);
-            var compare = Convert.ToDouble(arguments[1]);
-            if (Convert.ToDouble(val) <= compare)
+            var left = GetPropValue(self, syntax);
+            var right = arguments[1];
+
+            if (ValueComparer.Compare(left, right) is ComparisonResult.LeftIsLess or ComparisonResult.AreEqual)
                 return MacroUtil.EvalToString(arguments[2], context, self);
 
             return Empty;
@@ -271,9 +274,10 @@ namespace sdmap.Macros.Implements
             if (prop == null) return RequirePropNotNull(arguments[0]);
 
             string syntax = (string)arguments[0];
-            var val = GetPropValue(self, syntax);
-            var compare = Convert.ToDouble(arguments[1]);
-            if (Convert.ToDouble(val) >= compare)
+            var left = GetPropValue(self, syntax);
+            var right = arguments[1];
+
+            if (ValueComparer.Compare(left, right) is ComparisonResult.LeftIsGreater or ComparisonResult.AreEqual)
                 return MacroUtil.EvalToString(arguments[2], context, self);
 
             return Empty;
