@@ -178,7 +178,7 @@ namespace sdmap.Macros.Implements
             string syntax = (string)arguments[0];
             var val = GetPropValue(self, syntax);
             var compare = arguments[1];
-            if (ValueComparer.IsEqual(val, compare))
+            if (ValueComparer.Compare(val, compare) is ComparisonResult.AreEqual)
                 return MacroUtil.EvalToString(arguments[2], context, self);
             
             return Empty;
@@ -197,7 +197,7 @@ namespace sdmap.Macros.Implements
             string syntax = (string)arguments[0];
             var val = GetPropValue(self, syntax);
             var compare = arguments[1];
-            if (!ValueComparer.IsEqual(val, compare))
+            if (ValueComparer.Compare(val, compare) is not ComparisonResult.AreEqual)
                 return MacroUtil.EvalToString(arguments[2], context, self);
 
             return Empty;

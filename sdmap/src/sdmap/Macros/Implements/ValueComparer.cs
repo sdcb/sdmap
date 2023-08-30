@@ -1,71 +1,117 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+// ReSharper disable SuggestBaseTypeForParameter
 
 namespace sdmap.Macros.Implements;
 
-internal class ValueComparer : IComparer<object>
+[Flags]
+public enum ComparisonResult : byte
 {
-    private ValueComparer()
-    {
-    }
-    
-    public static IComparer<object> Instance { get; } = new ValueComparer();
+    Incomparable  = 1,
+    AreEqual      = 2,
+    LeftIsGreater = 4,
+    LeftIsLess    = 8
+}
 
-    public int Compare(object x, object y)
-    {
-        throw new NotImplementedException();
-    }
-    
-    public static bool IsEqual(object v1, object v2)
-        => v1 switch
+internal static class ValueComparer
+{
+    public static ComparisonResult Compare(object left, object right)
+        => CompareImpl(left, right) switch
         {
-            null                     => v2 is null,
-            not null when v2 is null => false,
-
-            byte    byteValue    => byteValue.Equals(Convert.ToByte(v2)),
-            sbyte   sByteValue   => sByteValue.Equals(Convert.ToSByte(v2)),
-            short   shortValue   => shortValue.Equals(Convert.ToInt16(v2)),
-            ushort  ushortValue  => ushortValue.Equals(Convert.ToUInt16(v2)),
-
-            int     intValue     => intValue.Equals(Convert.ToInt32(v2)),
-            uint    uIntValue    => uIntValue.Equals(Convert.ToUInt32(v2)),
-            long    longValue    => longValue.Equals(Convert.ToInt64(v2)),
-            ulong   uLongValue   => uLongValue.Equals(Convert.ToUInt64(v2)),
-
-            float   floatValue   => floatValue.Equals(Convert.ToSingle(v2)),
-            double  doubleValue  => doubleValue.Equals(Convert.ToDouble(v2)),
-            decimal decimalValue => decimalValue.Equals(Convert.ToDecimal(v2)),
-
-            Enum enumValue
-                => v2 is Enum other
-                    ? enumValue.Equals(other)
-                    : EnumParser.TryParse(enumValue.GetType(), v2.ToString(), out var parsed)
-                      && enumValue.Equals(parsed),
-
-            Guid guid
-                => v2 is Guid other
-                    ? guid.Equals(other)
-                    : Guid.TryParse(v2.ToString(), out var parsed) && guid.Equals(parsed),
-
-            TimeSpan timeSpan
-                => v2 is TimeSpan other
-                    ? timeSpan.Equals(other)
-                    : TimeSpan.TryParse(v2.ToString(), out var parsed) && timeSpan.Equals(parsed),
-
-            DateTime dateTime
-                => v2 is DateTime other
-                    ? dateTime.Equals(other)
-                    : DateTime.TryParse(v2.ToString(), out var parsed) && dateTime.Equals(parsed),
-
-            DateTimeOffset dateTimeOffset
-                => v2 is DateTimeOffset other
-                    ? dateTimeOffset.Equals(other)
-                    : DateTimeOffset.TryParse(v2.ToString(), out var parsed) && dateTimeOffset.Equals(parsed),
-
-            _ => v1.Equals(v2)
+            null => ComparisonResult.Incomparable,
+            0    => ComparisonResult.AreEqual,
+            > 0  => ComparisonResult.LeftIsGreater,
+            < 0  => ComparisonResult.LeftIsLess
         };
+    
+    private static int? CompareImpl(object left, object right)
+        => left switch
+        {
+            null => right is null ? 0 : null,
+            not null when right is null => null,
+
+            byte        byteValue    => byteValue.CompareTo(Convert.ToByte(right)),
+            sbyte       sByteValue   => sByteValue.CompareTo(Convert.ToSByte(right)),
+            short       shortValue   => shortValue.CompareTo(Convert.ToInt16(right)),
+            ushort      ushortValue  => ushortValue.CompareTo(Convert.ToUInt16(right)),
+
+            int         intValue     => intValue.CompareTo(Convert.ToInt32(right)),
+            uint        uIntValue    => uIntValue.CompareTo(Convert.ToUInt32(right)),
+            long        longValue    => longValue.CompareTo(Convert.ToInt64(right)),
+            ulong       uLongValue   => uLongValue.CompareTo(Convert.ToUInt64(right)),
+
+            float       floatValue   => floatValue.CompareTo(Convert.ToSingle(right)),
+            double      doubleValue  => doubleValue.CompareTo(Convert.ToDouble(right)),
+            decimal     decimalValue => decimalValue.CompareTo(Convert.ToDecimal(right)),
+
+            Enum        enumValue    => Compare(enumValue, right),
+            IComparable comparable   => Compare(comparable, right),
+
+            _ => null
+        };
+
+    private static int? Compare(Enum leftEnum, object right)
+    {
+        if (right is Enum rightEnum)
+        {
+            return leftEnum.GetType() == rightEnum.GetType()
+                ? leftEnum.CompareTo(rightEnum)
+                : null;
+        }
+
+        return EnumParser.TryParse(leftEnum.GetType(), right.ToString(), out var parsed)
+            ? leftEnum.CompareTo(parsed)
+            : null;
+    }
+
+    private static int? Compare(IComparable comparable, object right)
+    {
+        var leftType = comparable.GetType();
+
+        if (leftType == right.GetType())
+        {
+            return comparable.CompareTo(right);
+        }
+
+        return TryParse(leftType, right.ToString(), out var parsed)
+            ? comparable.CompareTo(parsed)
+            : null;
+
+        static bool TryParse(Type targetType, string input, out object parsed)
+        {
+            if (targetType == typeof(Guid))
+            {
+                var result = Guid.TryParse(input, out var parsedValue);
+                parsed = parsedValue;
+                return result;
+            }
+
+            if (targetType == typeof(TimeSpan))
+            {
+                var result = TimeSpan.TryParse(input, out var parsedValue);
+                parsed = parsedValue;
+                return result;
+            }
+
+            if (targetType == typeof(DateTime))
+            {
+                var result = DateTime.TryParse(input, out var parsedValue);
+                parsed = parsedValue;
+                return result;
+            }
+
+            if (targetType == typeof(DateTimeOffset))
+            {
+                var result = DateTimeOffset.TryParse(input, out var parsedValue);
+                parsed = parsedValue;
+                return result;
+            }
+
+            parsed = null;
+            return false;
+        }
+    }
 
     private static class EnumParser
     {
