@@ -5,6 +5,7 @@
     <AssemblyName>sdmap.ext</AssemblyName>
     <PackageId>sdmap.ext</PackageId>
     <PackageTags>dynamic sql;sdmap</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes>For more information, please view:
 https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md</PackageReleaseNotes>
     <PackageLicenseUrl></PackageLicenseUrl>

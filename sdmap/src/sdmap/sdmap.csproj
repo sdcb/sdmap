@@ -7,6 +7,7 @@
     <AssemblyName>sdmap</AssemblyName>
     <PackageId>sdmap</PackageId>
     <PackageTags>dynamic sql;ibatis</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes>https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md</PackageReleaseNotes>
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
