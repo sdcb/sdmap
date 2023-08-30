@@ -204,7 +204,7 @@ namespace sdmap.Macros.Implements
         }
 
         [Macro("isLessThan")]
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Number, SdmapTypes.StringOrSql)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Any, SdmapTypes.StringOrSql)]
         public static Result<string> IsLessThan(OneCallContext context,
             string ns, object self, object[] arguments)
         {
@@ -224,7 +224,7 @@ namespace sdmap.Macros.Implements
         }
 
         [Macro("isGreaterThan")]
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Number, SdmapTypes.StringOrSql)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Any, SdmapTypes.StringOrSql)]
         public static Result<string> IsGreaterThan(OneCallContext context,
             string ns, object self, object[] arguments)
         {
@@ -244,7 +244,7 @@ namespace sdmap.Macros.Implements
         }
 
         [Macro("isLessEqual")]
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Number, SdmapTypes.StringOrSql)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Any, SdmapTypes.StringOrSql)]
         public static Result<string> IsLessEqual(OneCallContext context,
             string ns, object self, object[] arguments)
         {
@@ -264,7 +264,7 @@ namespace sdmap.Macros.Implements
         }
 
         [Macro("isGreaterEqual")]
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Number, SdmapTypes.StringOrSql)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Any, SdmapTypes.StringOrSql)]
         public static Result<string> IsGreaterEqual(OneCallContext context,
             string ns, object self, object[] arguments)
         {
