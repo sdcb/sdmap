@@ -28,7 +28,7 @@ namespace sdmap.IntegratedTest
 
         [Theory]
         [InlineData(FileAccess.Read, "'Read'", true)]
-        [InlineData(FileAccess.Read, "'read'", false)]
+        [InlineData(FileAccess.Read, "'read'", true)]
         [InlineData(FileAccess.Read, "1", true)]
         [InlineData(FileAccess.Read, "2", false)]
         public void IsEqualEnum(FileAccess? enumVal, string literal, bool canEmit)

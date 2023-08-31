@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using static sdmap.Parser.G4.SdmapParser;
 using sdmap.Macros.Implements;
+using System;
 
 namespace sdmap.Parser.Visitor
 {
@@ -51,7 +52,8 @@ namespace sdmap.Parser.Visitor
             _il.Emit(OpCodes.Ldstr, context.children[0].GetText()); // self propName
             _il.Emit(OpCodes.Call, typeof(IfUtils).GetTypeInfo().GetMethod(
                 nameof(IfUtils.LoadProp)));                         // obj
-
+            _il.Emit(OpCodes.Unbox, typeof(bool));
+            _il.Emit(OpCodes.Ldind_I4);
             var boolVal = bool.Parse(context.Bool().GetText());
             var boolOpcode = boolVal ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0;
             switch (op)

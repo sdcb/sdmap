@@ -88,18 +88,37 @@ namespace sdmap.IntegratedTest
         }
         
         [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void EqualBooleanTest(bool flag)
+        [InlineData(true, true, true)]
+        [InlineData(false, false, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, false)]
+        public void EqualBooleanTest(bool a, bool b, bool expected)
         {
-            var code = @"sql v1{#if(A == " + flag.ToString().ToLowerInvariant() + "){A}}";
+            var code = @"sql v1{#if(A == " + a.ToString().ToLowerInvariant() + "){A}}";
             var rt = new SdmapCompiler();
             rt.AddSourceCode(code);
             var result = rt.Emit("v1", new
             {
-                A = flag
+                A = b
             });
-            Assert.Equal("A", result);
+            Assert.Equal(expected ? "A" : "", result);
+        }
+
+        [Theory]
+        [InlineData(true, true, false)]
+        [InlineData(false, false, false)]
+        [InlineData(true, false, true)]
+        [InlineData(false, true, true)]
+        public void NotEqualBooleanTest(bool a, bool b, bool expected)
+        {
+            var code = @"sql v1{#if(A != " + a.ToString().ToLowerInvariant() + "){A}}";
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode(code);
+            var result = rt.Emit("v1", new
+            {
+                A = b
+            });
+            Assert.Equal(expected ? "A" : "", result);
         }
 
         [Theory]

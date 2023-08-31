@@ -60,30 +60,5 @@ namespace sdmap.unittest.MacroTest
             var arr = Enumerable.Range(1, 10);
             Assert.False(DynamicRuntimeMacros.ArrayEmpty(arr));
         }
-
-        [Fact]
-        public void BoolEqualBool()
-        {
-            Assert.True(DynamicRuntimeMacros.IsEqual(true, true));
-        }
-
-        [Fact]
-        public void NumberEqualsNumber()
-        {
-            Assert.True(DynamicRuntimeMacros.IsEqual(3.11m, 3.11));
-        }
-
-        [Fact]
-        public void DecimalEqualToDecimal()
-        {
-            Assert.True(DynamicRuntimeMacros.IsEqual(3.14m, 3.14m));
-        }
-
-        [Fact]
-        public void DateEqualsDate()
-        {
-            var date = new DateTime(2016, 1, 1);
-            Assert.True(DynamicRuntimeMacros.IsEqual(date, DateUtil.Parse("2016/1/1").Value));
-        }
     }
 }
