@@ -1,4 +1,4 @@
-# sdmap [![NuGet](https://img.shields.io/badge/nuget-0.16.2-blue.svg)](https://www.nuget.org/packages/sdmap)
+# sdmap [![NuGet](https://img.shields.io/nuget/v/sdmap.svg)](https://nuget.org/packages/sdmap.mkl)
 A template engine for writing dynamic sql:
 ![vstool](./sdmap/src/sdmap.vstool/vstool.png)
 
