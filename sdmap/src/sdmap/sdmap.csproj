@@ -53,10 +53,6 @@
     <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.6">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
   </ItemGroup>
 </Project>

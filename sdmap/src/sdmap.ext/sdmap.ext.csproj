@@ -30,10 +30,6 @@ https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md</PackageReleaseNotes>
 
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="System.IO.Abstractions" Version="5.0.1" />
   </ItemGroup>
 
