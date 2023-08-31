@@ -178,7 +178,7 @@ namespace sdmap.Macros.Implements
             string syntax = (string)arguments[0];
             var val = GetPropValue(self, syntax);
             var compare = arguments[1];
-            if (IsEqual(val, compare))
+            if (ValueComparer.Compare(val, compare) is ComparisonResult.AreEqual)
                 return MacroUtil.EvalToString(arguments[2], context, self);
             
             return Empty;
@@ -197,14 +197,14 @@ namespace sdmap.Macros.Implements
             string syntax = (string)arguments[0];
             var val = GetPropValue(self, syntax);
             var compare = arguments[1];
-            if (!IsEqual(val, compare))
+            if (ValueComparer.Compare(val, compare) is not ComparisonResult.AreEqual)
                 return MacroUtil.EvalToString(arguments[2], context, self);
 
             return Empty;
         }
 
         [Macro("isLessThan")]
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Number, SdmapTypes.StringOrSql)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Any, SdmapTypes.StringOrSql)]
         public static Result<string> IsLessThan(OneCallContext context,
             string ns, object self, object[] arguments)
         {
@@ -214,16 +214,17 @@ namespace sdmap.Macros.Implements
             if (prop == null) return RequirePropNotNull(arguments[0]);
 
             string syntax = (string)arguments[0];
-            var val = GetPropValue(self, syntax);
-            var compare = Convert.ToDouble(arguments[1]);
-            if (Convert.ToDouble(val) < compare)
+            var left = GetPropValue(self, syntax);
+            var right = arguments[1];
+
+            if (ValueComparer.Compare(left, right) is ComparisonResult.LeftIsLess)
                 return MacroUtil.EvalToString(arguments[2], context, self);
 
             return Empty;
         }
 
         [Macro("isGreaterThan")]
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Number, SdmapTypes.StringOrSql)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Any, SdmapTypes.StringOrSql)]
         public static Result<string> IsGreaterThan(OneCallContext context,
             string ns, object self, object[] arguments)
         {
@@ -233,16 +234,17 @@ namespace sdmap.Macros.Implements
             if (prop == null) return RequirePropNotNull(arguments[0]);
 
             string syntax = (string)arguments[0];
-            var val = GetPropValue(self, syntax);
-            var compare = Convert.ToDouble(arguments[1]);
-            if (Convert.ToDouble(val) > compare)
+            var left = GetPropValue(self, syntax);
+            var right = arguments[1];
+
+            if (ValueComparer.Compare(left, right) is ComparisonResult.LeftIsGreater)
                 return MacroUtil.EvalToString(arguments[2], context, self);
 
             return Empty;
         }
 
         [Macro("isLessEqual")]
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Number, SdmapTypes.StringOrSql)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Any, SdmapTypes.StringOrSql)]
         public static Result<string> IsLessEqual(OneCallContext context,
             string ns, object self, object[] arguments)
         {
@@ -252,16 +254,17 @@ namespace sdmap.Macros.Implements
             if (prop == null) return RequirePropNotNull(arguments[0]);
 
             string syntax = (string)arguments[0];
-            var val = GetPropValue(self, syntax);
-            var compare = Convert.ToDouble(arguments[1]);
-            if (Convert.ToDouble(val) <= compare)
+            var left = GetPropValue(self, syntax);
+            var right = arguments[1];
+
+            if (ValueComparer.Compare(left, right) is ComparisonResult.LeftIsLess or ComparisonResult.AreEqual)
                 return MacroUtil.EvalToString(arguments[2], context, self);
 
             return Empty;
         }
 
         [Macro("isGreaterEqual")]
-        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Number, SdmapTypes.StringOrSql)]
+        [MacroArguments(SdmapTypes.Syntax, SdmapTypes.Any, SdmapTypes.StringOrSql)]
         public static Result<string> IsGreaterEqual(OneCallContext context,
             string ns, object self, object[] arguments)
         {
@@ -271,9 +274,10 @@ namespace sdmap.Macros.Implements
             if (prop == null) return RequirePropNotNull(arguments[0]);
 
             string syntax = (string)arguments[0];
-            var val = GetPropValue(self, syntax);
-            var compare = Convert.ToDouble(arguments[1]);
-            if (Convert.ToDouble(val) >= compare)
+            var left = GetPropValue(self, syntax);
+            var right = arguments[1];
+
+            if (ValueComparer.Compare(left, right) is ComparisonResult.LeftIsGreater or ComparisonResult.AreEqual)
                 return MacroUtil.EvalToString(arguments[2], context, self);
 
             return Empty;
@@ -475,40 +479,6 @@ namespace sdmap.Macros.Implements
                 return props.Aggregate(self, (s, p) =>
                     s?.GetType().GetTypeInfo().GetProperty(p)?.GetValue(s));
             }
-        }
-
-        public static bool IsEqual(object v1, object v2)
-        {
-            if (v1 is string str)
-                return str.Equals((string)v2);
-
-            if (v1 is bool b)
-                return b.Equals((bool)v2);
-
-            if (v1 is int integer)
-                return integer.Equals(Convert.ToInt32(v2));
-
-            if (v1 is long longValue)
-                return longValue.Equals(Convert.ToInt64(v2));
-
-            if (v1 is double db)
-                return db.Equals(Convert.ToDouble(v2));
-
-            if (v1 is decimal dm)
-                return dm.Equals(Convert.ToDecimal(v2));
-
-            if (v1 is DateTime date)
-                return date.Equals((DateTime)v2);
-
-            if (v1 is Enum @enum)
-            {
-                if (v2 is string v2s)
-                    return @enum.ToString() == v2s;
-                if (v2 is double v2d)
-                    return Convert.ToInt64(@enum) == v2d;
-            }
-
-            return v1 == v2;
         }
 
         public static bool IsEmpty(object v)
