@@ -79,7 +79,7 @@ namespace sdmap.Compiler
             return new OneCallContext(SdmapCompilerContext.CreateEmpty(), obj);
         }
 
-        private static Type ThisType = typeof(OneCallContext);
+        private static readonly Type ThisType = typeof(OneCallContext);
         internal static MethodInfo GetIsRoot = ThisType.GetMethod("get_" + nameof(IsRoot));
         internal static MethodInfo GetIsChild = ThisType.GetMethod("get_" + nameof(IsChild));
         internal static MethodInfo GetTempStore = ThisType.GetMethod("get_" + nameof(Fragments));

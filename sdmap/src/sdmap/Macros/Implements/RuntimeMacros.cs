@@ -9,6 +9,8 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Text;
 
+#pragma warning disable IDE0060 // 删除未使用的参数
+
 namespace sdmap.Macros.Implements
 {
     internal class DynamicRuntimeMacros
@@ -327,7 +329,7 @@ namespace sdmap.Macros.Implements
             string ns, object self, object[] arguments)
         {
             if (self == null) return RequireNotNull();
-            if (!(self is IEnumerable)) return RequireType(self.GetType(), "IEnumerable");
+            if (self is not IEnumerable) return RequireType(self.GetType(), "IEnumerable");
 
             var result = new StringBuilder();
             foreach (var newSelf in self as IEnumerable)
@@ -355,7 +357,7 @@ namespace sdmap.Macros.Implements
             {
                 return Empty;
             }
-            else if (!(val is IEnumerable))
+            else if (val is not IEnumerable)
             {
                 return RequirePropType(prop, "IEnumerable");
             }

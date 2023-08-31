@@ -21,7 +21,7 @@ namespace sdmap.Parser.Visitor
 
         public EmitFunction Function { get; protected set; }
 
-        private static MethodInfo _addCall = typeof(List<object>)
+        private static readonly MethodInfo _addCall = typeof(List<object>)
                 .GetMethod(nameof(List<object>.Add), new[] { typeof(object) });
 
         public CoreSqlVisitor(

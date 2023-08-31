@@ -9,7 +9,7 @@ namespace sdmap.Utils
         public static bool PropertyExistsAndEvalToTrue(object obj, string propName)
         {
             var val = DynamicRuntimeMacros.GetPropValue(obj, propName);
-            if (val is bool) return (bool)val;
+            if (val is bool v) return v;
             if (val is bool?) return ((bool?)val).GetValueOrDefault();
 
             return false;
