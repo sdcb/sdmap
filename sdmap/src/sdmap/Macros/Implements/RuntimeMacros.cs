@@ -471,15 +471,47 @@ namespace sdmap.Macros.Implements
 
         public static object GetPropValue(object self, string prop)
         {
-            if (self is IDictionary dicSelf)
+            if (string.IsNullOrWhiteSpace(prop))
             {
-                return dicSelf[prop];
+                return default;
             }
-            else
+
+            return prop
+                .Split('.')
+                .Aggregate(self, GetByKey);
+
+            static object GetByKey(object target, string key)
+                => target switch
+                {
+                    _ when string.IsNullOrWhiteSpace(key)
+                        => default,
+
+                    IDictionary dictionary
+                        => dictionary.Contains(key)
+                            ? dictionary[key]
+                            : default,
+
+                    not null
+                        => GetByMemberInfo(target, key),
+
+                    _ => default
+                };
+
+            static object GetByMemberInfo(object target, string memberName)
             {
-                var props = prop.Split('.');
-                return props.Aggregate(self, (s, p) =>
-                    s?.GetType().GetTypeInfo().GetProperty(p)?.GetValue(s));
+                var type = target.GetType();
+
+                if (type.GetProperty(memberName) is { } property)
+                {
+                    return property.GetValue(target);
+                }
+
+                if (type.GetField(memberName) is { } field)
+                {
+                    return field.GetValue(field);
+                }
+
+                return default;
             }
         }
 
