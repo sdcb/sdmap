@@ -440,48 +440,31 @@ namespace sdmap.Macros.Implements
 
         public static QueryPropertyInfo GetProp(object self, object syntax)
         {
-            var props = (syntax as string).Split('.');
-            var fronts = props.Take(props.Length - 1);
-
-            if (self is IDictionary dicSelf)
+            if (syntax is not string propertyAccess)
             {
-                if (!dicSelf.Contains(syntax))
-                    return null;
-
-                var val = dicSelf[syntax];
-                if (val == null)
-                    return new QueryPropertyInfo(props[0], typeof(object));
-
-                return new QueryPropertyInfo(props[0], val.GetType());
+                throw new ArgumentException("Variable is expected to be of type string.", nameof(syntax));
             }
-            else
-            {
-                var frontValue = fronts.Aggregate(self, (s, p) =>
-                    s?.GetType().GetTypeInfo().GetProperty(p)?.GetValue(s));
 
-                var pi = frontValue
-                    ?.GetType()
-                    .GetTypeInfo()
-                    .GetProperty(props.Last());
-                if (pi == null) return null;
-
-                return new QueryPropertyInfo(pi.Name, pi.PropertyType);
-            }
+            var (name, _, type) = GetPropertyMetadata(self, propertyAccess);
+            return new(name, type);
         }
 
-        public static object GetPropValue(object self, string prop)
+        public static object GetPropValue(object self, string prop) => GetPropertyMetadata(self, prop).Value;
+
+        private static (string Name, object Value, Type Type) GetPropertyMetadata(object target, string propertyAccess)
         {
-            if (string.IsNullOrWhiteSpace(prop))
+            if (string.IsNullOrWhiteSpace(propertyAccess))
             {
-                return default;
+                return (Name: propertyAccess, Value: default, Type: typeof(object));
             }
 
-            return prop
-                .Split('.')
-                .Aggregate(self, GetByKey);
+            var properties = propertyAccess.Split('.');
+            var value = properties.Aggregate(target, GetValueByKey);
+            return (Name: properties.LastOrDefault(), Value: value, Type: value?.GetType() ?? typeof(object));
 
-            static object GetByKey(object target, string key)
-                => target switch
+            static object GetValueByKey(object target, string key)
+            {
+                return target switch
                 {
                     _ when string.IsNullOrWhiteSpace(key)
                         => default,
@@ -492,12 +475,13 @@ namespace sdmap.Macros.Implements
                             : default,
 
                     not null
-                        => GetByMemberInfo(target, key),
+                        => GetValueOfMemberInfo(target, key),
 
                     _ => default
                 };
+            }
 
-            static object GetByMemberInfo(object target, string memberName)
+            static object GetValueOfMemberInfo(object target, string memberName)
             {
                 var type = target.GetType();
 
