@@ -445,59 +445,11 @@ namespace sdmap.Macros.Implements
                 throw new ArgumentException("Variable is expected to be of type string.", nameof(syntax));
             }
 
-            var (name, _, type) = GetPropertyMetadata(self, propertyAccess);
+            var (name, _, type) = PropertyMetadataRetriever.Get(self, propertyAccess);
             return new(name, type);
         }
 
-        public static object GetPropValue(object self, string prop) => GetPropertyMetadata(self, prop).Value;
-
-        private static (string Name, object Value, Type Type) GetPropertyMetadata(object target, string propertyAccess)
-        {
-            if (string.IsNullOrWhiteSpace(propertyAccess))
-            {
-                return (Name: propertyAccess, Value: default, Type: typeof(object));
-            }
-
-            var properties = propertyAccess.Split('.');
-            var value = properties.Aggregate(target, GetValueByKey);
-            return (Name: properties.LastOrDefault(), Value: value, Type: value?.GetType() ?? typeof(object));
-
-            static object GetValueByKey(object target, string key)
-            {
-                return target switch
-                {
-                    _ when string.IsNullOrWhiteSpace(key)
-                        => default,
-
-                    IDictionary dictionary
-                        => dictionary.Contains(key)
-                            ? dictionary[key]
-                            : default,
-
-                    not null
-                        => GetValueOfMemberInfo(target, key),
-
-                    _ => default
-                };
-            }
-
-            static object GetValueOfMemberInfo(object target, string memberName)
-            {
-                var type = target.GetType();
-
-                if (type.GetProperty(memberName) is { } property)
-                {
-                    return property.GetValue(target);
-                }
-
-                if (type.GetField(memberName) is { } field)
-                {
-                    return field.GetValue(field);
-                }
-
-                return default;
-            }
-        }
+        public static object GetPropValue(object self, string prop) => PropertyMetadataRetriever.Get(self, prop).Value;
 
         public static bool IsEmpty(object v)
         {
