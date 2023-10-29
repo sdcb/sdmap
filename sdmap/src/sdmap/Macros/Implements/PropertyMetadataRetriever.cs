@@ -57,7 +57,7 @@ internal static class PropertyMetadataRetriever
 
         if (type.GetField(memberName) is { } field)
         {
-            return  new(memberName, field.GetValue(field));
+            return  new(memberName, field.GetValue(target));
         }
 
         return DoesNotExist;
