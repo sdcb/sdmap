@@ -4,9 +4,15 @@ using System.Linq;
 
 namespace sdmap.Macros.Implements;
 
-internal readonly record struct PropertyMetadata(string Name, object Value, Type Type)
+using static PropertyMetadata;
+
+internal readonly record struct PropertyMetadata(string Name, object Value, bool Exists = true)
 {
-    public static PropertyMetadata Empty => new(string.Empty, default, typeof(object));
+    public Type Type => Value?.GetType() ?? typeof(object);
+
+    public static PropertyMetadata DoesNotExist => new(string.Empty, default, false);
+
+    public static PropertyMetadata Root(object value) => new(string.Empty, value);
 }
 
 internal static class PropertyMetadataRetriever
@@ -15,45 +21,45 @@ internal static class PropertyMetadataRetriever
     {
         if (string.IsNullOrWhiteSpace(propertyAccess))
         {
-            return PropertyMetadata.Empty;
+            return DoesNotExist;
         }
 
-        var properties = propertyAccess.Split('.');
-        var value      = properties.Aggregate(target, GetValueByKey);
-        return new(Name: properties.Last(), Value: value, Type: value?.GetType() ?? typeof(object));
+        return propertyAccess
+            .Split('.')
+            .Aggregate(Root(target), (metadata, next) => GetByKey(metadata.Value, next));
     }
-    
-    private static object GetValueByKey(object target, string key)
+
+    private static PropertyMetadata GetByKey(object target, string key)
         => target switch
         {
             _ when string.IsNullOrWhiteSpace(key)
-                => default,
+                => DoesNotExist,
 
             IDictionary dictionary
                 => dictionary.Contains(key)
-                    ? dictionary[key]
-                    : default,
+                    ? new(key, dictionary[key])
+                    : DoesNotExist,
 
             not null
-                => GetValueOfMemberInfo(target, key),
+                => GetByMemberName(target, key),
 
-            _ => default
+            _ => DoesNotExist
         };
 
-    private static object GetValueOfMemberInfo(object target, string memberName)
+    private static PropertyMetadata GetByMemberName(object target, string memberName)
     {
         var type = target.GetType();
 
         if (type.GetProperty(memberName) is { } property)
         {
-            return property.GetValue(target);
+            return new(memberName, property.GetValue(target));
         }
 
         if (type.GetField(memberName) is { } field)
         {
-            return field.GetValue(field);
+            return  new(memberName, field.GetValue(field));
         }
 
-        return default;
+        return DoesNotExist;
     }
 }

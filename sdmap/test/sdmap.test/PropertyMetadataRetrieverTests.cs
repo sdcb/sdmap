@@ -12,11 +12,9 @@ public class PropertyMetadataRetrieverTests
     [Fact]
     public void NullObject_ReturnsNull()
     {
-        var (name, value, type) = PropertyMetadataRetriever.Get(target: null, "Prop");
+        var metadata = PropertyMetadataRetriever.Get(target: null, "Prop");
 
-        name.Should().BeEmpty();
-        value.Should().Be(null);
-        type.Should().Be(typeof(object));
+        ShouldBeEmpty(metadata);
     }
 
     [Theory]
@@ -27,11 +25,9 @@ public class PropertyMetadataRetrieverTests
     {
         var target = new ComplexObject { Prop = "Test" };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, propertyAccess);
+        var metadata = PropertyMetadataRetriever.Get(target, propertyAccess);
 
-        name.Should().BeEmpty();
-        value.Should().Be(null);
-        type.Should().Be(typeof(object));
+        ShouldBeEmpty(metadata);
     }
 
     [Fact]
@@ -39,11 +35,9 @@ public class PropertyMetadataRetrieverTests
     {
         var target = new ComplexObject { Prop = "Test" };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, "NonExistent");
+        var metadata = PropertyMetadataRetriever.Get(target, "NonExistent");
 
-        name.Should().BeEmpty();
-        value.Should().Be(null);
-        type.Should().Be(typeof(object));
+        ShouldBeEmpty(metadata);
     }
 
     [Fact]
@@ -51,11 +45,11 @@ public class PropertyMetadataRetrieverTests
     {
         var target = new ComplexObject { Prop = "Test" };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, "Prop");
+        var metadata = PropertyMetadataRetriever.Get(target, "Prop");
 
-        name.Should().Be("Prop");
-        value.Should().Be("Test");
-        type.Should().Be(typeof(string));
+        metadata.Name.Should().Be("Prop");
+        metadata.Value.Should().Be("Test");
+        metadata.Type.Should().Be(typeof(string));
     }
     
     [Fact]
@@ -63,11 +57,11 @@ public class PropertyMetadataRetrieverTests
     {
         var target = new ComplexObject { Field = "Test" };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, "Field");
+        var metadata = PropertyMetadataRetriever.Get(target, "Field");
 
-        name.Should().Be("Field");
-        value.Should().Be("Test");
-        type.Should().Be(typeof(string));
+        metadata.Name.Should().Be("Field");
+        metadata.Value.Should().Be("Test");
+        metadata.Type.Should().Be(typeof(string));
     }
 
     [Fact]
@@ -81,11 +75,11 @@ public class PropertyMetadataRetrieverTests
             }
         };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, "Prop.Prop");
+        var metadata = PropertyMetadataRetriever.Get(target, "Prop.Prop");
 
-        name.Should().Be("Prop");
-        value.Should().Be("NestedTest");
-        type.Should().Be(typeof(string));
+        metadata.Name.Should().Be("Prop");
+        metadata.Value.Should().Be("NestedTest");
+        metadata.Type.Should().Be(typeof(string));
     }
 
     [Fact]
@@ -99,11 +93,11 @@ public class PropertyMetadataRetrieverTests
             }
         };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, "Prop.Field");
+        var metadata = PropertyMetadataRetriever.Get(target, "Prop.Field");
         
-        name.Should().Be("Field");
-        value.Should().Be("NestedTest");
-        type.Should().Be(typeof(string));
+        metadata.Name.Should().Be("Field");
+        metadata.Value.Should().Be("NestedTest");
+        metadata.Type.Should().Be(typeof(string));
     }
 
     [Fact]
@@ -114,11 +108,11 @@ public class PropertyMetadataRetrieverTests
             ["Key"] = "Value"
         };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, "Key");
+        var metadata = PropertyMetadataRetriever.Get(target, "Key");
 
-        name.Should().Be("Key");
-        value.Should().Be("Value");
-        type.Should().Be(typeof(string));
+        metadata.Name.Should().Be("Key");
+        metadata.Value.Should().Be("Value");
+        metadata.Type.Should().Be(typeof(string));
     }
 
     [Fact]
@@ -129,11 +123,9 @@ public class PropertyMetadataRetrieverTests
             ["Key"] = "Value"
         };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, "NonExistentKey");
+        var metadata = PropertyMetadataRetriever.Get(target, "NonExistentKey");
 
-        name.Should().BeEmpty();
-        value.Should().Be(null);
-        type.Should().Be(typeof(object));
+        ShouldBeEmpty(metadata);
     }
 
     [Fact]
@@ -144,11 +136,11 @@ public class PropertyMetadataRetrieverTests
             ["Key"] =  new Dictionary<string, string> { ["NestedKey"] = "NestedValue" }
         };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, "Key.NestedKey");
+        var metadata = PropertyMetadataRetriever.Get(target, "Key.NestedKey");
 
-        name.Should().Be("NestedKey");
-        value.Should().Be("NestedValue");
-        type.Should().Be(typeof(string));
+        metadata.Name.Should().Be("NestedKey");
+        metadata.Value.Should().Be("NestedValue");
+        metadata.Type.Should().Be(typeof(string));
     }
 
     [Fact]
@@ -162,11 +154,11 @@ public class PropertyMetadataRetrieverTests
             }
         };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, "Prop.DictionaryKey");
+        var metadata = PropertyMetadataRetriever.Get(target, "Prop.DictionaryKey");
 
-        name.Should().Be("DictionaryKey");
-        value.Should().Be("DictionaryValue");
-        type.Should().Be(typeof(string));
+        metadata.Name.Should().Be("DictionaryKey");
+        metadata.Value.Should().Be("DictionaryValue");
+        metadata.Type.Should().Be(typeof(string));
     }
 
     [Fact]
@@ -180,11 +172,9 @@ public class PropertyMetadataRetrieverTests
             }
         };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, "Prop.NonExistentKey");
+        var metadata = PropertyMetadataRetriever.Get(target, "Prop.NonExistentKey");
 
-        name.Should().BeEmpty();
-        value.Should().Be(null);
-        type.Should().Be(typeof(object));
+        ShouldBeEmpty(metadata);
     }
 
     [Fact]
@@ -195,11 +185,11 @@ public class PropertyMetadataRetrieverTests
             ["ObjectKey"] = new ComplexObject { Prop = new ComplexObject() }
         };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, "ObjectKey.Prop");
+        var metadata = PropertyMetadataRetriever.Get(target, "ObjectKey.Prop");
 
-        name.Should().Be("Prop");
-        value.Should().BeEquivalentTo(new ComplexObject());
-        type.Should().Be(typeof(ComplexObject));
+        metadata.Name.Should().Be("Prop");
+        metadata.Value.Should().BeEquivalentTo(new ComplexObject());
+        metadata.Type.Should().Be(typeof(ComplexObject));
     }
 
     [Fact]
@@ -210,11 +200,9 @@ public class PropertyMetadataRetrieverTests
             ["ObjectKey"] =  new ComplexObject { Prop = "NestedObjectValue" }
         };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, "ObjectKey.NonExistentProp");
+        var metadata = PropertyMetadataRetriever.Get(target, "ObjectKey.NonExistentProp");
 
-        name.Should().BeEmpty();
-        value.Should().Be(null);
-        type.Should().Be(typeof(object));
+        ShouldBeEmpty(metadata);
     }
 
     [Fact]
@@ -228,14 +216,11 @@ public class PropertyMetadataRetrieverTests
             }
         };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(
-            target,
-            "Prop.NestedObjectKey.Prop"
-        );
+        var metadata = PropertyMetadataRetriever.Get(target, "Prop.NestedObjectKey.Prop");
 
-        name.Should().Be("Prop");
-        value.Should().Be("NestedObjectValue");
-        type.Should().Be(typeof(string));
+        metadata.Name.Should().Be("Prop");
+        metadata.Value.Should().Be("NestedObjectValue");
+        metadata.Type.Should().Be(typeof(string));
     }
 
     [Fact]
@@ -252,11 +237,18 @@ public class PropertyMetadataRetrieverTests
             }
         };
 
-        var (name, value, type) = PropertyMetadataRetriever.Get(target, "NestedObjectKey.Prop.NestedDictionaryKey");
+        var metadata = PropertyMetadataRetriever.Get(target, "NestedObjectKey.Prop.NestedDictionaryKey");
 
-        name.Should().Be("NestedDictionaryKey");
-        value.Should().Be("NestedDictionaryValue");
-        type.Should().Be(typeof(string));
+        metadata.Name.Should().Be("NestedDictionaryKey");
+        metadata.Value.Should().Be("NestedDictionaryValue");
+        metadata.Type.Should().Be(typeof(string));
+    }
+
+    private static void ShouldBeEmpty(PropertyMetadata metadata)
+    {
+        metadata.Name.Should().BeEmpty();
+        metadata.Value.Should().Be(null);
+        metadata.Type.Should().Be(typeof(object));
     }
 
     private sealed record ComplexObject

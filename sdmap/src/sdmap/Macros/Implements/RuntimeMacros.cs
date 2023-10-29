@@ -4,7 +4,6 @@ using sdmap.Compiler;
 using System;
 using System.Collections;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Text;
@@ -445,8 +444,8 @@ namespace sdmap.Macros.Implements
                 throw new ArgumentException("Variable is expected to be of type string.", nameof(syntax));
             }
 
-            var (name, _, type) = PropertyMetadataRetriever.Get(self, propertyAccess);
-            return new(name, type);
+            var metadata = PropertyMetadataRetriever.Get(self, propertyAccess);
+            return metadata.Exists ? new(metadata.Name, metadata.Type) : null;
         }
 
         public static object GetPropValue(object self, string prop) => PropertyMetadataRetriever.Get(self, prop).Value;
