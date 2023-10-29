@@ -1,0 +1,14 @@
+<Project>
+
+	<PropertyGroup>
+		<Version>0.17.0</Version>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageVersion>$(Version)</PackageVersion>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<AssemblyInformationalVersion>$(Version)</AssemblyInformationalVersion>
+		<FileVersion>$(Version)</FileVersion>
+	</PropertyGroup>
+
+</Project>
