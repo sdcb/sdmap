@@ -4,7 +4,6 @@ using sdmap.Compiler;
 using System;
 using System.Collections;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Text;
@@ -440,48 +439,16 @@ namespace sdmap.Macros.Implements
 
         public static QueryPropertyInfo GetProp(object self, object syntax)
         {
-            var props = (syntax as string).Split('.');
-            var fronts = props.Take(props.Length - 1);
-
-            if (self is IDictionary dicSelf)
+            if (syntax is not string propertyAccess)
             {
-                if (!dicSelf.Contains(syntax))
-                    return null;
-
-                var val = dicSelf[syntax];
-                if (val == null)
-                    return new QueryPropertyInfo(props[0], typeof(object));
-
-                return new QueryPropertyInfo(props[0], val.GetType());
+                throw new ArgumentException("Variable is expected to be of type string.", nameof(syntax));
             }
-            else
-            {
-                var frontValue = fronts.Aggregate(self, (s, p) =>
-                    s?.GetType().GetTypeInfo().GetProperty(p)?.GetValue(s));
 
-                var pi = frontValue
-                    ?.GetType()
-                    .GetTypeInfo()
-                    .GetProperty(props.Last());
-                if (pi == null) return null;
-
-                return new QueryPropertyInfo(pi.Name, pi.PropertyType);
-            }
+            var metadata = PropertyMetadataRetriever.Get(self, propertyAccess);
+            return metadata.Exists ? new(metadata.Name, metadata.Type) : null;
         }
 
-        public static object GetPropValue(object self, string prop)
-        {
-            if (self is IDictionary dicSelf)
-            {
-                return dicSelf[prop];
-            }
-            else
-            {
-                var props = prop.Split('.');
-                return props.Aggregate(self, (s, p) =>
-                    s?.GetType().GetTypeInfo().GetProperty(p)?.GetValue(s));
-            }
-        }
+        public static object GetPropValue(object self, string prop) => PropertyMetadataRetriever.Get(self, prop).Value;
 
         public static bool IsEmpty(object v)
         {
