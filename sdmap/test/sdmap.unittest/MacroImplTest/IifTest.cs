@@ -34,7 +34,7 @@ namespace sdmap.unittest.MacroImplTest
             var val = DynamicRuntimeMacros.Iif(OneCallContext.CreateEmpty(),
                 "",
                 new { A = new bool?() },
-                new object[] { "A", "true", "false" });
+                ["A", "true", "false"]);
             Assert.True(val.IsSuccess);
             Assert.Equal("false", val.Value);
         }

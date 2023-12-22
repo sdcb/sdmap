@@ -57,9 +57,6 @@ namespace sdmap.Macros.Implements
 
             var prop = GetProp(self, arguments[0]);
             if (prop == null) return RequirePropNotNull(arguments[0]);
-            
-            if (prop.PropertyType != typeof(bool) && prop.PropertyType != typeof(bool?))
-                return RequirePropType(prop, "bool");
 
             var test = (bool?)GetPropValue(self, (string)arguments[0]) ?? false;
             return test ?
