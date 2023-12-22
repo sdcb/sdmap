@@ -75,10 +75,10 @@ WS:
 	WHITE +     -> skip;
 
 BlockComment: 
-	'/*' .*? '*/';
+	'/*' .*? '*/' -> skip;
 
 LineComment: 
-	'//' ~[\r\n]*;
+	'//' ~[\r\n]* -> skip;
 
 Comma:
 	',';
