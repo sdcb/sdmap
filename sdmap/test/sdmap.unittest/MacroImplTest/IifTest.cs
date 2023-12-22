@@ -12,7 +12,7 @@ namespace sdmap.unittest.MacroImplTest
             var val = DynamicRuntimeMacros.Iif(OneCallContext.CreateEmpty(),
                 "",
                 new { A = true }, 
-                new object[] { "A", "true", "false" });
+                ["A", "true", "false"]);
             Assert.True(val.IsSuccess);
             Assert.Equal("true", val.Value);
         }
@@ -23,7 +23,7 @@ namespace sdmap.unittest.MacroImplTest
             var val = DynamicRuntimeMacros.Iif(OneCallContext.CreateEmpty(),
                 "",
                 new { A = new bool?(true) },
-                new object[] { "A", "true", "false" });
+                ["A", "true", "false"]);
             Assert.True(val.IsSuccess);
             Assert.Equal("true", val.Value);
         }
@@ -45,7 +45,7 @@ namespace sdmap.unittest.MacroImplTest
             var val = DynamicRuntimeMacros.Iif(OneCallContext.CreateEmpty(),
                 "",
                 new { A = new bool?() },
-                new object[] { "B", "true", "false" });
+                ["B", "true", "false"]);
             Assert.False(val.IsSuccess);
         }
     }

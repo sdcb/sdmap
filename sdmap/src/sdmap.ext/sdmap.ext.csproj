@@ -13,9 +13,6 @@ https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md</PackageReleaseNotes>
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/sdcb/sdmap</RepositoryUrl>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <Description>Useful extensions for sdmap/Dapper.</Description>
     <PackageProjectUrl>https://github.com/sdcb/sdmap</PackageProjectUrl>
     <Authors>sdcb</Authors>
@@ -23,8 +20,6 @@ https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
 

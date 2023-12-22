@@ -36,11 +36,11 @@ namespace sdmap.unittest.MacroTest
                 .Select(ToSdmapMacro)
                 .FirstOrDefault();
 
-            Assert.Equal(new[]
-            {
+            Assert.Equal(
+            [
                 SdmapTypes.Syntax, 
                 SdmapTypes.Sql
-            }, macro.Arguments);
+            ], macro.Arguments);
         }
     }
 }

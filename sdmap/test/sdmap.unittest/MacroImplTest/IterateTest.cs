@@ -53,27 +53,27 @@ namespace sdmap.unittest.MacroImplTest
         private Result<string> CallIterate(object self, string joiner, EmitFunction ef)
         {
             return DynamicRuntimeMacros.Iterate(OneCallContext.CreateByObj(self), 
-                "", self, new object[] { joiner, ef });
+                "", self, [joiner, ef]);
         }
 
         private Result<string> CallIterate(object self, string joiner, string text)
         {
             return DynamicRuntimeMacros.Iterate(OneCallContext.CreateByObj(self),
-                "", self, new object[] { joiner, text });
+                "", self, [joiner, text]);
         }
 
         private Result<string> CallEach(object self, 
             string prop, string joiner, EmitFunction ef)
         {
             return DynamicRuntimeMacros.Each(OneCallContext.CreateEmpty(),
-                "", self, new object[] { prop, joiner, ef });
+                "", self, [prop, joiner, ef]);
         }
 
         private Result<string> CallEach(object self, 
             string prop, string joiner, string text)
         {
             return DynamicRuntimeMacros.Each(OneCallContext.CreateEmpty(),
-                "", self, new object[] { prop, joiner, text });
+                "", self, [prop, joiner, text]);
         }
     }
 }

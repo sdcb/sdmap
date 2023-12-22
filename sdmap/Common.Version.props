@@ -2,6 +2,8 @@
 
 	<PropertyGroup>
 		<Version>0.17.0</Version>
+    <LangVersion>12</LangVersion>
+    <NoWarn>$(NoWarn);1591</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -9,6 +11,12 @@
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<AssemblyInformationalVersion>$(Version)</AssemblyInformationalVersion>
 		<FileVersion>$(Version)</FileVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 	</PropertyGroup>
 
 </Project>

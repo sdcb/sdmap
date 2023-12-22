@@ -45,7 +45,7 @@ namespace sdmap.unittest.MacroImplTest
             var val = DynamicRuntimeMacros.IsNotEmpty(OneCallContext.CreateEmpty(),
                 "",
                 new { A = DateTime.Now },
-                new object[] { "A", "Ok" });
+                ["A", "Ok"]);
             Assert.True(val.IsSuccess);
             Assert.Equal("Ok", val.Value);
         }
@@ -56,7 +56,7 @@ namespace sdmap.unittest.MacroImplTest
             var val = DynamicRuntimeMacros.IsNotEmpty(OneCallContext.CreateEmpty(),
                 "",
                 new { A = DateTime.Now },
-                new object[] { "ThePropertyName", "Ok" });
+                ["ThePropertyName", "Ok"]);
             Assert.True(val.IsFailure);
             Assert.Contains("ThePropertyName", val.Error);
         }

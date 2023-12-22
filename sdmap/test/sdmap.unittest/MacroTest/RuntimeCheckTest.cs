@@ -26,9 +26,9 @@ namespace sdmap.unittest.MacroTest
             var mockedMacro = new Macro
             {
                 Name = "Test",
-                Arguments = new[] {SdmapTypes.Date}
+                Arguments = [SdmapTypes.Date]
             };
-            var ok = RuntimeCheck(new object[] { DateTime.Now }, mockedMacro);
+            var ok = RuntimeCheck([DateTime.Now], mockedMacro);
 
             Assert.True(ok.IsSuccess);
         }
@@ -39,9 +39,9 @@ namespace sdmap.unittest.MacroTest
             var mockedMacro = new Macro
             {
                 Name = "Test",
-                Arguments = new[] { SdmapTypes.Date }
+                Arguments = [SdmapTypes.Date]
             };
-            var ok = RuntimeCheck(new object[] { new DateTime?(DateTime.Now) }, mockedMacro);
+            var ok = RuntimeCheck([new DateTime?(DateTime.Now)], mockedMacro);
 
             Assert.True(ok.IsSuccess);
         }
@@ -52,9 +52,9 @@ namespace sdmap.unittest.MacroTest
             var mockedMacro = new Macro
             {
                 Name = "Test",
-                Arguments = new[] { SdmapTypes.Date }
+                Arguments = [SdmapTypes.Date]
             };
-            var ok = RuntimeCheck(new object[] { 3 }, mockedMacro);
+            var ok = RuntimeCheck([3], mockedMacro);
 
             Assert.False(ok.IsSuccess);
             Assert.Equal("Macro 'Test' argument 1 requires Date but provides Int32.", ok.Error);
@@ -66,12 +66,12 @@ namespace sdmap.unittest.MacroTest
             var mockedMacro = new Macro
             {
                 Name = "Test",
-                Arguments = new[]
-                {
+                Arguments =
+                [
                     SdmapTypes.Syntax
-                }
+                ]
             };
-            var ok = RuntimeCheck(new object[] { "ZipCode" }, mockedMacro);
+            var ok = RuntimeCheck(["ZipCode"], mockedMacro);
 
             Assert.True(ok.IsSuccess);
         }

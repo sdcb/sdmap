@@ -53,14 +53,14 @@ namespace sdmap.unittest.MacroImplTest
         {
             if (val is int) val = Convert.ToDouble(val);
             return DynamicRuntimeMacros.IsEqual(OneCallContext.CreateEmpty(), 
-                "", self, new object[] { prop, val, result });
+                "", self, [prop, val, result]);
         }
 
         private Result<string> CallIsNotEqual(object self, string prop, object val, string result)
         {
             if (val is int) val = Convert.ToDouble(val);
             return DynamicRuntimeMacros.IsNotEqual(OneCallContext.CreateEmpty(), 
-                "", self, new object[] { prop, val, result });
+                "", self, [prop, val, result]);
         }
     }
 }

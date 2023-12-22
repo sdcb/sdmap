@@ -10,7 +10,7 @@ namespace sdmap.Macros
 {
     public class MacroManager
     {
-        public Dictionary<string, Macro> Methods { get; } = new Dictionary<string, Macro>();
+        public Dictionary<string, Macro> Methods { get; } = [];
 
         public MacroManager()
         {

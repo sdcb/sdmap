@@ -60,7 +60,7 @@ namespace sdmap.Compiler
 
         public static SdmapCompilerContext CreateEmpty()
         {
-            return CreateByContext(new Dictionary<string, SqlEmiter>());
+            return CreateByContext([]);
         }
 
         public static SdmapCompilerContext CreateByContext(Dictionary<string, SqlEmiter> context)

@@ -43,14 +43,14 @@ namespace sdmap.unittest.MacroImplTest
             string prop, string regex, string result)
         {
             return DynamicRuntimeMacros.IsLike(OneCallContext.CreateEmpty(),
-                "", self, new object[] { prop, regex, result });
+                "", self, [prop, regex, result]);
         }
 
         private Result<string> CallIsNotLike(object self,
             string prop, string regex, string result)
         {
             return DynamicRuntimeMacros.IsNotLike(OneCallContext.CreateEmpty(),
-                "", self, new object[] { prop, regex, result });
+                "", self, [prop, regex, result]);
         }
     }
 }

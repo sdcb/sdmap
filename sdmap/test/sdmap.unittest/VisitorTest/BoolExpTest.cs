@@ -161,7 +161,7 @@ namespace sdmap.unittest.VisitorTest
             var func = CompileExpression(code, ctx);
             var actual = func(new OneCallContext(ctx, new
             {
-                A = emptyArray ? new int[] { } : new[] { 1 }
+                A = emptyArray ? new int[] { } : [1]
             }));
             Assert.Equal(expected, actual);
         }

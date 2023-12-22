@@ -9,24 +9,16 @@
     <AssemblyName>sdmap</AssemblyName>
     <PackageId>sdmap</PackageId>
     <PackageTags>dynamic sql;ibatis</PackageTags>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes>https://github.com/sdcb/sdmap/blob/master/ReleaseNotes.md</PackageReleaseNotes>
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/sdcb/sdmap</RepositoryUrl>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <Authors>sdcb</Authors>
     <Copyright>MIT</Copyright>
     <PackageProjectUrl>https://github.com/sdcb/sdmap</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
 

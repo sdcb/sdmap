@@ -10,8 +10,8 @@ namespace sdmap.Compiler
         {
             Compiler = compilerContext;
             Obj = obj;
-            Defs = new List<SegmentDef>();
-            Deps = new HashSet<string>();
+            Defs = [];
+            Deps = [];
         }
 
         public OneCallContext(SdmapCompilerContext compilerContext, object obj,
@@ -29,7 +29,7 @@ namespace sdmap.Compiler
         public int Level { get; private set; }
 
         public List<object> Fragments { get; private set; }
-            = new List<object>();
+            = [];
 
         public bool IsRoot => Level == 0;
 
@@ -40,10 +40,10 @@ namespace sdmap.Compiler
         public object Obj { get; }
 
         public List<SegmentDef> Defs { get; }
-            = new List<SegmentDef>();
+            = [];
 
         public HashSet<string> Deps { get; }
-            = new HashSet<string>();
+            = [];
 
         public OneCallContext Dig(object newSelf)
         {
@@ -55,7 +55,7 @@ namespace sdmap.Compiler
 
         public OneCallContext DigNewFragments(object newSelf)
         {
-            return new OneCallContext(Compiler, newSelf, Defs, Deps, new List<object>())
+            return new OneCallContext(Compiler, newSelf, Defs, Deps, [])
             {
                 Level = Level + 1
             };
@@ -63,7 +63,7 @@ namespace sdmap.Compiler
 
         public OneCallContext DupNewFragments()
         {
-            return new OneCallContext(Compiler, Obj, Defs, Deps, new List<object>())
+            return new OneCallContext(Compiler, Obj, Defs, Deps, [])
             {
                 Level = Level + 1
             };

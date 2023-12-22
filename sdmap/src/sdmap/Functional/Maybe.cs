@@ -2,7 +2,7 @@
 
 namespace sdmap.Functional
 {
-    public struct Maybe<T> : IEquatable<Maybe<T>>
+    public readonly struct Maybe<T> : IEquatable<Maybe<T>>
             where T : class
     {
         private readonly T _value;
@@ -55,7 +55,7 @@ namespace sdmap.Functional
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Maybe<T>))
+            if (obj is not Maybe<T>)
                 return false;
 
             var other = (Maybe<T>)obj;
@@ -91,7 +91,7 @@ namespace sdmap.Functional
             if (HasValue)
                 return Value;
 
-            return default(T);
+            return default;
         }
 
         public K Unwrap<K>(Func<T, K> selector)
@@ -99,7 +99,7 @@ namespace sdmap.Functional
             if (HasValue)
                 return selector(Value);
 
-            return default(K);
+            return default;
         }
     }
 }
